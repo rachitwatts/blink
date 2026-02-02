@@ -71,31 +71,22 @@ final class BreakOverlayWindowController {
     }
 
     /// Hide break overlay from all screens
-    /// - Parameter animated: Whether to animate the dismissal
+    /// - Parameter animated: Whether to animate the dismissal (currently disabled for stability)
     func hideOverlay(animated: Bool = true) {
-        print("[OverlayController] Hiding overlay")
+        print("[OverlayController] Hiding overlay - window count: \(windows.count)")
 
-        let shouldAnimate = animated && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
-
-        for window in windows {
-            if shouldAnimate {
-                // Fade out animation
-                NSAnimationContext.runAnimationGroup { context in
-                    context.duration = 0.3
-                    window.animator().alphaValue = 0
-                } completionHandler: {
-                    window.orderOut(nil)
-                    window.close()
-                }
-            } else {
-                // Instant hide
-                window.orderOut(nil)
-                window.close()
-            }
-        }
-
+        // Capture and clear our references first
+        let windowsToClose = windows
         windows.removeAll()
         keyWindow = nil
+
+        for window in windowsToClose {
+            // Just order out and close - let AppKit handle cleanup naturally
+            // Don't manually nil contentView as it can cause double-release
+            window.orderOut(nil)
+        }
+
+        print("[OverlayController] Overlay hidden successfully")
     }
 
     // MARK: - Private: Window Creation
@@ -103,6 +94,7 @@ final class BreakOverlayWindowController {
     /// Create an overlay window for a specific screen
     private func createOverlayWindow(for screen: NSScreen) -> NSWindow {
         // Create window covering the entire screen
+        // Use screen.frame which gives position and size in global coordinates
         let window = KeyableWindow(
             contentRect: screen.frame,
             styleMask: [.borderless],
@@ -127,9 +119,18 @@ final class BreakOverlayWindowController {
         // Create hosting view with SwiftUI content
         let overlayView = BreakOverlayView()
         let hostingView = KeyableHostingView(rootView: overlayView)
-        hostingView.frame = NSRect(origin: .zero, size: screen.frame.size)
 
+        // Set the window's content view first
         window.contentView = hostingView
+
+        // Now set the frame to match the window's content rect (in window coordinates, origin is 0,0)
+        if let contentView = window.contentView {
+            hostingView.frame = contentView.bounds
+            hostingView.autoresizingMask = [.width, .height]
+        }
+
+        // Ensure window is exactly positioned and sized for this screen
+        window.setFrame(screen.frame, display: true)
 
         return window
     }

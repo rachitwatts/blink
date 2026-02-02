@@ -1,15 +1,22 @@
 import SwiftUI
+import Combine
 
 /// Full-screen break overlay content
 ///
 /// Shows countdown timer, calming message, and snooze/skip buttons.
 /// Uses a dark gradient background with soft purple glow.
+///
+/// NOTE: This view uses a LOCAL timer to avoid observation issues when the
+/// window is closed. It does NOT observe AppState to prevent crashes during teardown.
 struct BreakOverlayView: View {
 
     // MARK: - State
 
-    @ObservedObject private var appState = AppState.shared
-    @ObservedObject private var timerEngine = TimerEngine.shared
+    /// Local countdown - initialized from Settings, decremented by local timer
+    @State private var remainingSeconds: Int = Settings.shared.breakDurationSeconds
+
+    /// Local timer for countdown - fully owned by this view
+    @State private var countdownTimer: Timer? = nil
 
     /// Track last Esc press time for double-Esc detection
     @State private var lastEscTime: Date? = nil
@@ -32,7 +39,7 @@ struct BreakOverlayView: View {
                 Spacer()
 
                 // Large countdown timer
-                countdownTimer
+                countdownTimerView
 
                 // Calming message
                 messageText
@@ -53,6 +60,33 @@ struct BreakOverlayView: View {
         .onReceive(NotificationCenter.default.publisher(for: .breakOverlayEscPressed)) { _ in
             handleEscKey()
         }
+        .onAppear {
+            startLocalTimer()
+        }
+        .onDisappear {
+            stopLocalTimer()
+        }
+    }
+
+    // MARK: - Local Timer
+
+    private func startLocalTimer() {
+        // Use a simple Timer that decrements our local state
+        // Note: scheduledTimer already adds to current RunLoop
+        countdownTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [self] _ in
+            if remainingSeconds > 0 {
+                remainingSeconds -= 1
+            } else {
+                // Break complete - notify TimerEngine
+                stopLocalTimer()
+                TimerEngine.shared.completeBreak()
+            }
+        }
+    }
+
+    private func stopLocalTimer() {
+        countdownTimer?.invalidate()
+        countdownTimer = nil
     }
 
     // MARK: - Background
@@ -86,11 +120,11 @@ struct BreakOverlayView: View {
 
     // MARK: - Timer Display
 
-    private var countdownTimer: some View {
-        Text(formatTime(appState.breakRemainingSeconds))
+    private var countdownTimerView: some View {
+        Text(formatTime(remainingSeconds))
             .font(.system(size: 80, weight: .light, design: .monospaced))
             .foregroundColor(.white)
-            .accessibilityLabel("Time remaining: \(formatTimeAccessible(appState.breakRemainingSeconds))")
+            .accessibilityLabel("Time remaining: \(formatTimeAccessible(remainingSeconds))")
     }
 
     // MARK: - Message
@@ -149,26 +183,16 @@ struct BreakOverlayView: View {
 
     // MARK: - Actions
 
-    /// Snooze the break with optional animation
+    /// Snooze the break
     private func performSnooze() {
-        if reduceMotion {
-            timerEngine.snoozeBreak()
-        } else {
-            withAnimation(.easeOut(duration: 0.3)) {
-                timerEngine.snoozeBreak()
-            }
-        }
+        stopLocalTimer()
+        TimerEngine.shared.snoozeBreak()
     }
 
-    /// Skip the break with optional animation
+    /// Skip the break
     private func performSkip() {
-        if reduceMotion {
-            timerEngine.skipBreak()
-        } else {
-            withAnimation(.easeOut(duration: 0.3)) {
-                timerEngine.skipBreak()
-            }
-        }
+        stopLocalTimer()
+        TimerEngine.shared.skipBreak()
     }
 
     /// Handle Esc key press - implements double-Esc detection

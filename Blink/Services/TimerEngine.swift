@@ -26,7 +26,7 @@ final class TimerEngine: ObservableObject {
 
     // MARK: - Timer State
 
-    private var timer: Timer?
+    private var timerCancellable: AnyCancellable?
 
     /// Flag to reset work elapsed to 0 when user returns from long idle
     private var shouldResetOnNextActivity: Bool = false
@@ -53,7 +53,7 @@ final class TimerEngine: ObservableObject {
     /// Start the timer engine
     /// Call this once when the app launches
     func start() {
-        guard timer == nil else {
+        guard timerCancellable == nil else {
             print("[TimerEngine] Already running, ignoring start()")
             return
         }
@@ -65,8 +65,8 @@ final class TimerEngine: ObservableObject {
     /// Call this when the app is quitting
     func stop() {
         print("[TimerEngine] Stopping")
-        timer?.invalidate()
-        timer = nil
+        timerCancellable?.cancel()
+        timerCancellable = nil
     }
 
     // MARK: - Public API: Actions
@@ -117,6 +117,9 @@ final class TimerEngine: ObservableObject {
         appState.snoozeRemainingSeconds = settings.snoozeDurationSeconds
         appState.timerState = .snoozeRunning
         appState.isOverlayVisible = false
+
+        // Switch to active polling for accurate snooze countdown
+        scheduleTimer(interval: activePollingInterval)
     }
 
     /// Skip the current break and start a new work session
@@ -130,27 +133,32 @@ final class TimerEngine: ObservableObject {
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
+
+        // Switch to active polling for new work session
+        scheduleTimer(interval: activePollingInterval)
     }
 
     // MARK: - Private: Timer Management
 
     /// Schedule the timer with the given interval
     private func scheduleTimer(interval: TimeInterval) {
-        timer?.invalidate()
+        // Cancel existing timer
+        timerCancellable?.cancel()
         currentPollingInterval = interval
 
-        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
-            Task { @MainActor in
+        // Use Combine's Timer publisher - more robust and SwiftUI-friendly
+        timerCancellable = Timer.publish(every: interval, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
                 self?.tick()
             }
-        }
-
-        // Ensure timer runs even when menu is open
-        RunLoop.current.add(timer!, forMode: .common)
     }
 
     /// Called every tick - the heart of the timer logic
     private func tick() {
+        // Debug: log to file
+        logToFile("tick: state=\(appState.timerState), snoozeRemaining=\(appState.snoozeRemainingSeconds)")
+
         switch appState.timerState {
         case .workRunning:
             handleWorkRunningTick()
@@ -165,6 +173,24 @@ final class TimerEngine: ObservableObject {
 
         case .snoozeRunning:
             handleSnoozeRunningTick()
+        }
+    }
+
+    /// Debug helper: log to file
+    private func logToFile(_ message: String) {
+        let logPath = "/tmp/blink_debug.log"
+        let timestamp = Date().timeIntervalSince1970
+        let line = "\(timestamp): \(message)\n"
+        if let data = line.data(using: .utf8) {
+            if FileManager.default.fileExists(atPath: logPath) {
+                if let handle = FileHandle(forWritingAtPath: logPath) {
+                    handle.seekToEndOfFile()
+                    handle.write(data)
+                    handle.closeFile()
+                }
+            } else {
+                FileManager.default.createFile(atPath: logPath, contents: data, attributes: nil)
+            }
         }
     }
 
@@ -258,11 +284,14 @@ final class TimerEngine: ObservableObject {
     }
 
     /// Complete a break and start new work session
-    private func completeBreak() {
+    func completeBreak() {
         appState.workElapsedSeconds = 0
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
+
+        // Switch to active polling for new work session
+        scheduleTimer(interval: activePollingInterval)
     }
 
     // MARK: - Private: Adaptive Polling
