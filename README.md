@@ -99,6 +99,14 @@ xcodebuild -project Blink.xcodeproj -scheme Blink -configuration Release build
 ./scripts/build-dmg.sh --release
 ```
 
+### Run Tests
+
+```bash
+./scripts/run-tests.sh
+```
+
+See [TESTING.md](TESTING.md) for the complete test strategy.
+
 ## Project Structure
 
 ```
