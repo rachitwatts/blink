@@ -16,6 +16,9 @@ struct BlinkApp: App {
     /// Timer engine - must be retained to keep running
     @StateObject private var timerEngine = TimerEngine.shared
 
+    /// Cancellables for Combine subscriptions
+    @State private var cancellables = Set<AnyCancellable>()
+
     // MARK: - App Body
 
     var body: some Scene {
@@ -34,11 +37,31 @@ struct BlinkApp: App {
     // MARK: - Initialization
 
     init() {
-        // Start timer engine when app launches
-        // Using Task to ensure we're on MainActor
-        Task { @MainActor in
-            print("[BlinkApp] Starting timer engine")
-            TimerEngine.shared.start()
-        }
+        // Start timer engine
+        print("[BlinkApp] Initializing")
+        TimerEngine.shared.start()
+
+        // Setup overlay observer
+        AppState.shared.$isOverlayVisible
+            .receive(on: DispatchQueue.main)
+            .sink { isVisible in
+                if isVisible {
+                    print("[BlinkApp] Showing overlay")
+                    BreakOverlayWindowController.shared.showOverlay()
+                } else {
+                    print("[BlinkApp] Hiding overlay")
+                    BreakOverlayWindowController.shared.hideOverlay()
+                }
+            }
+            .store(in: &BlinkAppStorage.shared.cancellables)
     }
+}
+
+// MARK: - Storage for Cancellables
+
+/// Helper class to store cancellables (workaround for @State limitations in App)
+final class BlinkAppStorage {
+    static let shared = BlinkAppStorage()
+    var cancellables = Set<AnyCancellable>()
+    private init() {}
 }
