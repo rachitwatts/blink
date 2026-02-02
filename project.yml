@@ -1,6 +1,6 @@
 name: Blink
 options:
-  bundleIdPrefix: com.yourname
+  bundleIdPrefix: com.rachitwatts
   deploymentTarget:
     macOS: "14.0"
 
@@ -12,7 +12,7 @@ targets:
       - Blink
     settings:
       PRODUCT_NAME: Blink
-      PRODUCT_BUNDLE_IDENTIFIER: com.yourname.Blink
+      PRODUCT_BUNDLE_IDENTIFIER: com.rachitwatts.blink
       INFOPLIST_FILE: Blink/Info.plist
       SWIFT_VERSION: "5.9"
       MACOSX_DEPLOYMENT_TARGET: "14.0"
@@ -29,6 +29,7 @@ targets:
     dependencies:
       - target: Blink
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: com.yourname.BlinkTests
+      PRODUCT_BUNDLE_IDENTIFIER: com.rachitwatts.BlinkTests
       SWIFT_VERSION: "5.9"
       MACOSX_DEPLOYMENT_TARGET: "14.0"
+      GENERATE_INFOPLIST_FILE: YES

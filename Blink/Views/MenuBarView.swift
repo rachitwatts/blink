@@ -38,22 +38,20 @@ struct MenuBarView: View {
 
             Divider()
 
-            // MARK: Settings (placeholder for Milestone 3)
+            // MARK: Settings
 
             Button("Settings...") {
-                // Will be implemented in Milestone 3
-                print("[MenuBarView] Settings clicked (not implemented yet)")
+                SettingsWindowController.shared.showSettings()
             }
             .keyboardShortcut(",", modifiers: [.command])
 
             Divider()
 
-            // MARK: Launch at Login (placeholder for Milestone 3)
+            // MARK: Launch at Login
 
             Toggle("Launch at Login", isOn: $settings.launchAtLogin)
                 .onChange(of: settings.launchAtLogin) { _, newValue in
-                    // Will be implemented in Milestone 3
-                    print("[MenuBarView] Launch at Login: \(newValue) (not implemented yet)")
+                    LaunchAtLoginManager.shared.setEnabled(newValue)
                 }
 
             Divider()

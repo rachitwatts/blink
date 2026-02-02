@@ -37,9 +37,16 @@ struct BlinkApp: App {
     // MARK: - Initialization
 
     init() {
-        // Start timer engine
         print("[BlinkApp] Initializing")
+
+        // Start timer engine
         TimerEngine.shared.start()
+
+        // Start hotkey manager (lazy permission)
+        HotkeyManager.shared.startListening()
+
+        // Sync launch at login with settings
+        LaunchAtLoginManager.shared.syncWithSettings()
 
         // Setup overlay observer
         AppState.shared.$isOverlayVisible
@@ -54,6 +61,11 @@ struct BlinkApp: App {
                 }
             }
             .store(in: &BlinkAppStorage.shared.cancellables)
+
+        // Show onboarding if first launch (with slight delay for window to be ready)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            OnboardingWindowController.shared.showIfNeeded()
+        }
     }
 }
 
