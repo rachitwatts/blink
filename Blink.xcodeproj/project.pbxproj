@@ -13,6 +13,7 @@
 		44A45038B0F961D173826104 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3611BA1F7A16AA6199641486 /* Assets.xcassets */; };
 		4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1991D869152E867145645 /* BreakOverlayView.swift */; };
 		5387B639C73460184472E695 /* IdleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */; };
+		632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */; };
 		70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF789F55EB114BFCAAC4D66E /* Settings.swift */; };
 		97EE28B8EDAE0F79A9AA7F88 /* BlinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F63D98D8691B408F06D08 /* BlinkTests.swift */; };
 		AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF6E4483329D18D25EE4C8D /* AppState.swift */; };
@@ -34,6 +35,7 @@
 		0B47EB8B7273BB95141192DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		279F63D98D8691B408F06D08 /* BlinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkTests.swift; sourceTree = "<group>"; };
 		289903B92CFE24D5E706A4B8 /* TimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngine.swift; sourceTree = "<group>"; };
+		314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakOverlayWindowController.swift; sourceTree = "<group>"; };
 		35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		3611BA1F7A16AA6199641486 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48431B2C296BDB92BF0BB93C /* Blink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blink.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +57,14 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		49B6ED9B3C9CBA2DC28FBDEF /* Windows */ = {
+			isa = PBXGroup;
+			children = (
+				314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */,
+			);
+			path = Windows;
+			sourceTree = "<group>";
+		};
 		6B4DFF2978746EEAAA0E3700 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +82,7 @@
 				6B4DFF2978746EEAAA0E3700 /* Resources */,
 				3A270D15CC4BE237D818A9F7 /* Services */,
 				E60DBAEDB631B2250ACE8672 /* Views */,
+				49B6ED9B3C9CBA2DC28FBDEF /* Windows */,
 			);
 			path = Blink;
 			sourceTree = "<group>";
@@ -208,6 +219,7 @@
 				AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */,
 				25F8E55421DC2B55922B6CC4 /* BlinkApp.swift in Sources */,
 				4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */,
+				632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */,
 				5387B639C73460184472E695 /* IdleDetector.swift in Sources */,
 				0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */,
 				70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */,

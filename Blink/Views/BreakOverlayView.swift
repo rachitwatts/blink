@@ -50,6 +50,9 @@ struct BreakOverlayView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onReceive(NotificationCenter.default.publisher(for: .breakOverlayEscPressed)) { _ in
+            handleEscKey()
+        }
     }
 
     // MARK: - Background
