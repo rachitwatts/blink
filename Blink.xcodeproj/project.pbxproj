@@ -7,9 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */; };
 		25F8E55421DC2B55922B6CC4 /* BlinkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DBB159CA5CB427CCCADEF /* BlinkApp.swift */; };
+		30D30B4D9A2C6999BE0B1B2A /* TimerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B14229E5F2CC5BE38BBD8F /* TimerState.swift */; };
 		44A45038B0F961D173826104 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3611BA1F7A16AA6199641486 /* Assets.xcassets */; };
+		5387B639C73460184472E695 /* IdleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */; };
+		70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF789F55EB114BFCAAC4D66E /* Settings.swift */; };
 		97EE28B8EDAE0F79A9AA7F88 /* BlinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F63D98D8691B408F06D08 /* BlinkTests.swift */; };
+		AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF6E4483329D18D25EE4C8D /* AppState.swift */; };
+		EC39B00585F415089D82296C /* TimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289903B92CFE24D5E706A4B8 /* TimerEngine.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,13 +31,28 @@
 /* Begin PBXFileReference section */
 		0B47EB8B7273BB95141192DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		279F63D98D8691B408F06D08 /* BlinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkTests.swift; sourceTree = "<group>"; };
+		289903B92CFE24D5E706A4B8 /* TimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngine.swift; sourceTree = "<group>"; };
+		35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		3611BA1F7A16AA6199641486 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48431B2C296BDB92BF0BB93C /* Blink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blink.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDetector.swift; sourceTree = "<group>"; };
 		83CABA226B77C41C6ED8BE26 /* BlinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		989DBB159CA5CB427CCCADEF /* BlinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkApp.swift; sourceTree = "<group>"; };
+		AF789F55EB114BFCAAC4D66E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		D7B14229E5F2CC5BE38BBD8F /* TimerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerState.swift; sourceTree = "<group>"; };
+		FBF6E4483329D18D25EE4C8D /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		3A270D15CC4BE237D818A9F7 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */,
+				289903B92CFE24D5E706A4B8 /* TimerEngine.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		6B4DFF2978746EEAAA0E3700 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -45,7 +66,10 @@
 			children = (
 				989DBB159CA5CB427CCCADEF /* BlinkApp.swift */,
 				0B47EB8B7273BB95141192DE /* Info.plist */,
+				C9D3CC1439A512CB2F2EFA74 /* Models */,
 				6B4DFF2978746EEAAA0E3700 /* Resources */,
+				3A270D15CC4BE237D818A9F7 /* Services */,
+				E60DBAEDB631B2250ACE8672 /* Views */,
 			);
 			path = Blink;
 			sourceTree = "<group>";
@@ -59,6 +83,16 @@
 			);
 			sourceTree = "<group>";
 		};
+		C9D3CC1439A512CB2F2EFA74 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FBF6E4483329D18D25EE4C8D /* AppState.swift */,
+				AF789F55EB114BFCAAC4D66E /* Settings.swift */,
+				D7B14229E5F2CC5BE38BBD8F /* TimerState.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		E370FA75E2B9CA960A6CB41D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -66,6 +100,14 @@
 				83CABA226B77C41C6ED8BE26 /* BlinkTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E60DBAEDB631B2250ACE8672 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		ED4A683DB64EC1ACF4A0AB0F /* BlinkTests */ = {
@@ -160,7 +202,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */,
 				25F8E55421DC2B55922B6CC4 /* BlinkApp.swift in Sources */,
+				5387B639C73460184472E695 /* IdleDetector.swift in Sources */,
+				0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */,
+				70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */,
+				EC39B00585F415089D82296C /* TimerEngine.swift in Sources */,
+				30D30B4D9A2C6999BE0B1B2A /* TimerState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
