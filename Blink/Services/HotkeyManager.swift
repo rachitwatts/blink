@@ -118,7 +118,9 @@ final class HotkeyManager {
     /// Handle a global key event
     private func handleKeyEvent(_ event: NSEvent) {
         // Check for our modifier combination: Command + Shift
-        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        // Mask out CapsLock and Function keys to avoid false negatives
+        let ignoredFlags: NSEvent.ModifierFlags = [.capsLock, .function, .numericPad]
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting(ignoredFlags)
         let requiredFlags: NSEvent.ModifierFlags = [.command, .shift]
 
         guard flags == requiredFlags else { return }

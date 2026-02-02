@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 /// Settings view shown in a separate window
 ///
@@ -20,35 +21,35 @@ struct SettingsView: View {
     // MARK: - Body
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Title
-            Text("Settings")
-                .font(.headline)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                // Title
+                Text("Settings")
+                    .font(.headline)
 
-            Divider()
+                Divider()
 
-            // Timer Settings
-            timerSection
+                // Timer Settings
+                timerSection
 
-            Divider()
+                Divider()
 
-            // Display Settings
-            displaySection
+                // Display Settings
+                displaySection
 
-            Divider()
+                Divider()
 
-            // Advanced Settings (collapsible)
-            advancedSection
+                // Advanced Settings (collapsible)
+                advancedSection
 
-            Divider()
+                Divider()
 
-            // Keyboard Shortcuts Info
-            shortcutsSection
-
-            Spacer()
+                // Keyboard Shortcuts Info
+                shortcutsSection
+            }
+            .padding(20)
         }
-        .padding(20)
-        .frame(width: 340, height: 420)
+        .frame(width: 360, height: 480)
     }
 
     // MARK: - Timer Section
@@ -194,19 +195,28 @@ struct SettingsView: View {
                 }
             }
 
-            // Permission note
-            if !isAccessibilityEnabled() {
+            // Permission status and action
+            if isAccessibilityEnabled() {
+                HStack {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                    Text("Shortcuts enabled")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.top, 4)
+            } else {
                 HStack {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundColor(.orange)
-                    Text("Enable Accessibility to use global shortcuts")
+                    Text("Grant Accessibility permission for global shortcuts")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 .padding(.top, 4)
 
-                Button("Open System Settings") {
-                    openAccessibilitySettings()
+                Button("Enable Shortcuts") {
+                    requestAccessibilityPermission()
                 }
                 .font(.caption)
             }
@@ -217,15 +227,24 @@ struct SettingsView: View {
 
     /// Check if Accessibility permission is granted
     private func isAccessibilityEnabled() -> Bool {
-        // Check without prompting
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: false] as CFDictionary
         return AXIsProcessTrustedWithOptions(options)
     }
 
-    /// Open System Settings to Accessibility pane
-    private func openAccessibilitySettings() {
-        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
-            NSWorkspace.shared.open(url)
+    /// Request Accessibility permission and start listening if granted
+    private func requestAccessibilityPermission() {
+        // Prompt for permission
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        let granted = AXIsProcessTrustedWithOptions(options)
+
+        if granted {
+            // Start listening now that we have permission
+            HotkeyManager.shared.startListening()
+        } else {
+            // Open System Settings to Accessibility pane
+            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
+                NSWorkspace.shared.open(url)
+            }
         }
     }
 }
