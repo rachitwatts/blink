@@ -13,11 +13,18 @@
 		44A45038B0F961D173826104 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3611BA1F7A16AA6199641486 /* Assets.xcassets */; };
 		4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1991D869152E867145645 /* BreakOverlayView.swift */; };
 		5387B639C73460184472E695 /* IdleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */; };
+		56D66E151B92392FAD048551 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */; };
 		632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */; };
 		70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF789F55EB114BFCAAC4D66E /* Settings.swift */; };
-		97EE28B8EDAE0F79A9AA7F88 /* BlinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F63D98D8691B408F06D08 /* BlinkTests.swift */; };
+		78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F959148BA99247482E7877 /* SettingsTests.swift */; };
 		AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF6E4483329D18D25EE4C8D /* AppState.swift */; };
+		D3C6C248BD1267FCFC2CD3B2 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C848C558D50C6595E1828A3 /* HotkeyManager.swift */; };
+		DA5884368B97D20F9914F81E /* TimerEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E96408D496193EA27189E7 /* TimerEngineTests.swift */; };
+		DB4B706A1F3E34BD61B14EE3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B31CDA126203664640FFF96 /* SettingsView.swift */; };
+		E0EA58A9A2BC06DBB0D2AF0E /* OnboardingWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA777F6F2CA9EC950552 /* OnboardingWindowController.swift */; };
+		E1E630979D77348EA7DC5924 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */; };
 		EC39B00585F415089D82296C /* TimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289903B92CFE24D5E706A4B8 /* TimerEngine.swift */; };
+		F6D5ADCC1C92DFB776B5A660 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,17 +39,24 @@
 
 /* Begin PBXFileReference section */
 		00F1991D869152E867145645 /* BreakOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakOverlayView.swift; sourceTree = "<group>"; };
+		042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		0B47EB8B7273BB95141192DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		279F63D98D8691B408F06D08 /* BlinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkTests.swift; sourceTree = "<group>"; };
+		10F959148BA99247482E7877 /* SettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		289903B92CFE24D5E706A4B8 /* TimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngine.swift; sourceTree = "<group>"; };
 		314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakOverlayWindowController.swift; sourceTree = "<group>"; };
 		35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		3611BA1F7A16AA6199641486 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48431B2C296BDB92BF0BB93C /* Blink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blink.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B31CDA126203664640FFF96 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
 		5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDetector.swift; sourceTree = "<group>"; };
+		7E51DA777F6F2CA9EC950552 /* OnboardingWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWindowController.swift; sourceTree = "<group>"; };
 		83CABA226B77C41C6ED8BE26 /* BlinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		86E96408D496193EA27189E7 /* TimerEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngineTests.swift; sourceTree = "<group>"; };
 		989DBB159CA5CB427CCCADEF /* BlinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkApp.swift; sourceTree = "<group>"; };
+		9C848C558D50C6595E1828A3 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
 		AF789F55EB114BFCAAC4D66E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		D7B14229E5F2CC5BE38BBD8F /* TimerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerState.swift; sourceTree = "<group>"; };
 		FBF6E4483329D18D25EE4C8D /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -51,7 +65,9 @@
 		3A270D15CC4BE237D818A9F7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				9C848C558D50C6595E1828A3 /* HotkeyManager.swift */,
 				5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */,
+				57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */,
 				289903B92CFE24D5E706A4B8 /* TimerEngine.swift */,
 			);
 			path = Services;
@@ -61,6 +77,8 @@
 			isa = PBXGroup;
 			children = (
 				314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */,
+				7E51DA777F6F2CA9EC950552 /* OnboardingWindowController.swift */,
+				CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -120,6 +138,8 @@
 			children = (
 				00F1991D869152E867145645 /* BreakOverlayView.swift */,
 				35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */,
+				042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */,
+				4B31CDA126203664640FFF96 /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -127,7 +147,8 @@
 		ED4A683DB64EC1ACF4A0AB0F /* BlinkTests */ = {
 			isa = PBXGroup;
 			children = (
-				279F63D98D8691B408F06D08 /* BlinkTests.swift */,
+				10F959148BA99247482E7877 /* SettingsTests.swift */,
+				86E96408D496193EA27189E7 /* TimerEngineTests.swift */,
 			);
 			path = BlinkTests;
 			sourceTree = "<group>";
@@ -220,9 +241,15 @@
 				25F8E55421DC2B55922B6CC4 /* BlinkApp.swift in Sources */,
 				4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */,
 				632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */,
+				D3C6C248BD1267FCFC2CD3B2 /* HotkeyManager.swift in Sources */,
 				5387B639C73460184472E695 /* IdleDetector.swift in Sources */,
+				56D66E151B92392FAD048551 /* LaunchAtLoginManager.swift in Sources */,
 				0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */,
+				F6D5ADCC1C92DFB776B5A660 /* OnboardingView.swift in Sources */,
+				E0EA58A9A2BC06DBB0D2AF0E /* OnboardingWindowController.swift in Sources */,
 				70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */,
+				DB4B706A1F3E34BD61B14EE3 /* SettingsView.swift in Sources */,
+				E1E630979D77348EA7DC5924 /* SettingsWindowController.swift in Sources */,
 				EC39B00585F415089D82296C /* TimerEngine.swift in Sources */,
 				30D30B4D9A2C6999BE0B1B2A /* TimerState.swift in Sources */,
 			);
@@ -232,7 +259,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				97EE28B8EDAE0F79A9AA7F88 /* BlinkTests.swift in Sources */,
+				78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */,
+				DA5884368B97D20F9914F81E /* TimerEngineTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +336,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -326,6 +355,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
