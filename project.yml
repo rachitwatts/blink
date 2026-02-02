@@ -1,0 +1,34 @@
+name: Blink
+options:
+  bundleIdPrefix: com.yourname
+  deploymentTarget:
+    macOS: "14.0"
+
+targets:
+  Blink:
+    type: application
+    platform: macOS
+    sources:
+      - Blink
+    settings:
+      PRODUCT_NAME: Blink
+      PRODUCT_BUNDLE_IDENTIFIER: com.yourname.Blink
+      INFOPLIST_FILE: Blink/Info.plist
+      SWIFT_VERSION: "5.9"
+      MACOSX_DEPLOYMENT_TARGET: "14.0"
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      CURRENT_PROJECT_VERSION: "1"
+      MARKETING_VERSION: "1.0"
+      GENERATE_INFOPLIST_FILE: NO
+
+  BlinkTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - BlinkTests
+    dependencies:
+      - target: Blink
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.yourname.BlinkTests
+      SWIFT_VERSION: "5.9"
+      MACOSX_DEPLOYMENT_TARGET: "14.0"
