@@ -1,21 +1,6 @@
 import Foundation
 import SwiftUI
 
-/// Display mode for the menu bar timer
-enum DisplayMode: String, CaseIterable, Identifiable {
-    case elapsed = "elapsed"
-    case remaining = "remaining"
-
-    var id: String { rawValue }
-
-    var label: String {
-        switch self {
-        case .elapsed: return "Elapsed"
-        case .remaining: return "Remaining"
-        }
-    }
-}
-
 /// Centralized settings storage using UserDefaults via @AppStorage
 ///
 /// Usage: Access via `Settings.shared` singleton

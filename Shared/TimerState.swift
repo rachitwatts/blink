@@ -1,7 +1,8 @@
 import Foundation
 
 /// Represents the current state of the Blink timer
-enum TimerState: String, Equatable, CaseIterable {
+/// Shared between macOS and watchOS targets
+enum TimerState: String, Equatable, CaseIterable, Codable {
     /// User is working, timer counting up
     case workRunning
 

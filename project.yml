@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: com.rachitwatts
   deploymentTarget:
     macOS: "14.0"
+    watchOS: "10.0"
 
 targets:
   Blink:
@@ -10,6 +11,7 @@ targets:
     platform: macOS
     sources:
       - Blink
+      - Shared
     settings:
       PRODUCT_NAME: Blink
       PRODUCT_BUNDLE_IDENTIFIER: com.rachitwatts.blink
@@ -34,3 +36,33 @@ targets:
       MACOSX_DEPLOYMENT_TARGET: "14.0"
       GENERATE_INFOPLIST_FILE: YES
 
+  BlinkWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - BlinkWatch
+      - Shared
+    settings:
+      PRODUCT_NAME: BlinkWatch
+      PRODUCT_BUNDLE_IDENTIFIER: com.rachitwatts.blink.watch
+      INFOPLIST_FILE: BlinkWatch/Info.plist
+      SWIFT_VERSION: "5.9"
+      WATCHOS_DEPLOYMENT_TARGET: "10.0"
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      CURRENT_PROJECT_VERSION: "1"
+      MARKETING_VERSION: "1.0"
+      GENERATE_INFOPLIST_FILE: NO
+      SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+
+  BlinkWatchTests:
+    type: bundle.unit-test
+    platform: watchOS
+    sources:
+      - BlinkWatchTests
+    dependencies:
+      - target: BlinkWatch
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.rachitwatts.BlinkWatchTests
+      SWIFT_VERSION: "5.9"
+      WATCHOS_DEPLOYMENT_TARGET: "10.0"
+      GENERATE_INFOPLIST_FILE: YES
