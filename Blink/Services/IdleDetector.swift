@@ -1,13 +1,18 @@
 import Foundation
 import CoreGraphics
 
+/// Protocol for providing idle time, enabling test injection
+protocol IdleTimeProvider {
+    func getIdleTime() -> TimeInterval
+}
+
 /// Service for detecting system-wide idle time
 ///
 /// Idle time is measured as seconds since last keyboard/mouse/trackpad input.
 /// Uses CGEventSource which requires no special permissions.
 ///
 /// Usage: `IdleDetector.shared.getIdleTime()`
-final class IdleDetector {
+final class IdleDetector: IdleTimeProvider {
 
     // MARK: - Singleton
 

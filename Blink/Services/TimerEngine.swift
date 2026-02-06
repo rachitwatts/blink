@@ -22,7 +22,13 @@ final class TimerEngine: ObservableObject {
 
     private let appState = AppState.shared
     private let settings = Settings.shared
-    private let idleDetector = IdleDetector.shared
+    private var idleDetector: IdleTimeProvider = IdleDetector.shared
+
+    #if DEBUG
+    func setIdleDetector(_ provider: IdleTimeProvider) {
+        self.idleDetector = provider
+    }
+    #endif
 
     // MARK: - Timer State
 
@@ -155,7 +161,7 @@ final class TimerEngine: ObservableObject {
     }
 
     /// Called every tick - the heart of the timer logic
-    private func tick() {
+    func tick() {
         // Debug: log to file
         logToFile("tick: state=\(appState.timerState), snoozeRemaining=\(appState.snoozeRemainingSeconds)")
 

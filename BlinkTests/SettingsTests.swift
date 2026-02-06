@@ -44,6 +44,24 @@ final class SettingsTests: XCTestCase {
         XCTAssertEqual(settings.breakDurationSeconds, 600)
     }
 
+    func testSnoozeDurationSeconds() {
+        let settings = Settings.shared
+
+        settings.snoozeDurationMinutes = 8
+
+        XCTAssertEqual(settings.snoozeDurationSeconds, 480)
+    }
+
+    func testDisplayModeRoundTrip() {
+        let settings = Settings.shared
+
+        settings.displayMode = .remaining
+        XCTAssertEqual(settings.displayMode, .remaining)
+
+        settings.displayMode = .elapsed
+        XCTAssertEqual(settings.displayMode, .elapsed)
+    }
+
     // MARK: - Reset Tests
 
     func testResetToDefaults() {
