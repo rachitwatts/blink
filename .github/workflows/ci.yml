@@ -63,6 +63,15 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             | xcbeautify
 
+      - name: Find watchOS simulator
+        id: watch-sim
+        run: |
+          WATCH_SIM=$(xcrun simctl list devices available watchOS -j \
+            | python3 -c "import sys,json; devs=json.load(sys.stdin)['devices']; print(next(d['name'] for rt in devs for d in devs[rt] if d.get('isAvailable')))" 2>/dev/null \
+            || echo "Apple Watch Series 10 (46mm)")
+          echo "name=$WATCH_SIM" >> "$GITHUB_OUTPUT"
+          echo "Using watchOS simulator: $WATCH_SIM"
+
       - name: Build watchOS app
         run: |
           set -o pipefail
@@ -70,7 +79,7 @@ jobs:
             -project Blink.xcodeproj \
             -scheme BlinkWatch \
             -configuration Release \
-            -destination 'platform=watchOS Simulator,name=Apple Watch Series 9 (45mm)' \
+            -destination 'platform=watchOS Simulator,name=${{ steps.watch-sim.outputs.name }}' \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             | xcbeautify
@@ -81,7 +90,7 @@ jobs:
           xcodebuild test \
             -project Blink.xcodeproj \
             -scheme BlinkWatch \
-            -destination 'platform=watchOS Simulator,name=Apple Watch Series 9 (45mm)' \
+            -destination 'platform=watchOS Simulator,name=${{ steps.watch-sim.outputs.name }}' \
             -only-testing:BlinkWatchTests \
             -resultBundlePath build/TestResults-Watch.xcresult \
             CODE_SIGN_IDENTITY="" \

@@ -8,6 +8,7 @@ final class WatchTimerEngineTests: XCTestCase {
     // MARK: - Setup
 
     override func setUp() async throws {
+        WatchTimerEngine.shared.disableHardwareInteractions = true
         WatchAppState.shared.reset()
         WatchSettings.shared.resetToDefaults()
         WatchTimerEngine.shared.restartSession()

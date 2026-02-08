@@ -66,3 +66,19 @@ targets:
       SWIFT_VERSION: "5.9"
       WATCHOS_DEPLOYMENT_TARGET: "10.0"
       GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  Blink:
+    build:
+      targets:
+        Blink: all
+    test:
+      targets:
+        - BlinkTests
+  BlinkWatch:
+    build:
+      targets:
+        BlinkWatch: all
+    test:
+      targets:
+        - BlinkWatchTests

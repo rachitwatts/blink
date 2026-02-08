@@ -32,6 +32,12 @@ final class WatchTimerEngine: ObservableObject {
 
     private var extendedSession: WKExtendedRuntimeSession?
 
+    // MARK: - Test Support
+
+    /// Set to true to disable WatchKit hardware calls (haptics, extended sessions)
+    /// during unit tests where these APIs are unavailable.
+    var disableHardwareInteractions: Bool = false
+
     // MARK: - Initialization
 
     private init() {}
@@ -146,21 +152,21 @@ final class WatchTimerEngine: ObservableObject {
         appState.breakRemainingSeconds = settings.breakDurationSeconds
         appState.timerState = .breakRunning
 
-        // Haptic feedback
+        guard !disableHardwareInteractions else { return }
+
         if settings.hapticEnabled {
             WKInterfaceDevice.current().play(.notification)
         }
-
-        // Start extended runtime session so the app can run in the background
         startExtendedSession()
     }
 
     private func completeBreak() {
         appState.workElapsedSeconds = 0
         appState.timerState = .workRunning
-        endExtendedSession()
 
-        // Gentle haptic to signal break is over
+        guard !disableHardwareInteractions else { return }
+
+        endExtendedSession()
         if settings.hapticEnabled {
             WKInterfaceDevice.current().play(.success)
         }
@@ -169,6 +175,7 @@ final class WatchTimerEngine: ObservableObject {
     // MARK: - Private: Extended Runtime Session
 
     private func startExtendedSession() {
+        guard !disableHardwareInteractions else { return }
         guard extendedSession == nil else { return }
         let session = WKExtendedRuntimeSession()
         session.start()
@@ -176,6 +183,7 @@ final class WatchTimerEngine: ObservableObject {
     }
 
     private func endExtendedSession() {
+        guard !disableHardwareInteractions else { return }
         extendedSession?.invalidate()
         extendedSession = nil
     }
