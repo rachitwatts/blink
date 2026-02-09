@@ -32,8 +32,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew install xcodegen xcbeautify
-          brew link xcodegen xcbeautify 2>/dev/null || true
+          brew install xcodegen xcbeautify || true
+          brew link --overwrite xcodegen xcbeautify 2>/dev/null || true
 
       - name: Generate Xcode project
         run: xcodegen generate
