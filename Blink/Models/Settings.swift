@@ -62,6 +62,9 @@ final class Settings: ObservableObject {
     /// Whether to play sound when break starts
     @AppStorage("soundEnabled") var soundEnabled: Bool = false
 
+    /// Whether to lock screen when break completes (requires user to be idle)
+    @AppStorage("lockScreenAfterBreak") var lockScreenAfterBreak: Bool = false
+
     /// Whether to launch app at login
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = true
 
@@ -102,6 +105,7 @@ final class Settings: ObservableObject {
         idleResetThreshold = 300
         displayModeRaw = DisplayMode.elapsed.rawValue
         soundEnabled = false
+        lockScreenAfterBreak = false
         launchAtLogin = true
         hasCompletedOnboarding = false
     }

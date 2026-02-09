@@ -297,6 +297,14 @@ final class TimerEngine: ObservableObject {
             return
         }
 
+        // Lock screen if enabled and user is idle
+        if settings.lockScreenAfterBreak {
+            let isIdle = idleDetector.getIdleTime() >= TimeInterval(settings.idleIgnoreThreshold)
+            if isIdle {
+                ScreenLockService.lockScreen()
+            }
+        }
+
         appState.workElapsedSeconds = 0
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
