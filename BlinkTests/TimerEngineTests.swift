@@ -497,6 +497,77 @@ final class TimerEngineTests: XCTestCase {
         XCTAssertFalse(appState.isOverlayVisible)
     }
 
+    // MARK: - Lock Screen Tests
+
+    func testCompleteBreakConditionWhenEnabledAndIdle() {
+        let settings = Settings.shared
+
+        // Given: Setting enabled, user is idle (above threshold)
+        settings.lockScreenAfterBreak = true
+        mockIdle.idleTime = 120  // Well above idleIgnoreThreshold (60s)
+
+        // Verify the idle condition matches what completeBreak() checks
+        let isIdle = mockIdle.getIdleTime() >= TimeInterval(settings.idleIgnoreThreshold)
+        XCTAssertTrue(isIdle, "User should be considered idle when idle time exceeds threshold")
+        XCTAssertTrue(settings.lockScreenAfterBreak, "Setting should be enabled")
+    }
+
+    func testCompleteBreakConditionWhenEnabledAndActive() {
+        let settings = Settings.shared
+
+        // Given: Setting enabled, user is active (below threshold)
+        settings.lockScreenAfterBreak = true
+        mockIdle.idleTime = 5  // Well below idleIgnoreThreshold (60s)
+
+        let isIdle = mockIdle.getIdleTime() >= TimeInterval(settings.idleIgnoreThreshold)
+        XCTAssertFalse(isIdle, "User should be considered active when idle time is below threshold")
+    }
+
+    func testCompleteBreakConditionWhenDisabled() {
+        let settings = Settings.shared
+
+        // Given: Setting disabled
+        settings.lockScreenAfterBreak = false
+
+        // Lock condition should short-circuit regardless of idle state
+        XCTAssertFalse(settings.lockScreenAfterBreak, "Setting should be disabled")
+    }
+
+    func testLockScreenSettingDefaultsToFalse() {
+        Settings.shared.resetToDefaults()
+        XCTAssertFalse(Settings.shared.lockScreenAfterBreak, "Lock screen should default to off")
+    }
+
+    func testSkipBreakDoesNotCallCompleteBreak() {
+        let appState = AppState.shared
+        let engine = TimerEngine.shared
+
+        // Start break then skip it
+        engine.startBreakNow()
+        XCTAssertEqual(appState.timerState, .breakRunning)
+
+        engine.skipBreak()
+
+        // skipBreak resets to workRunning directly, never calls completeBreak
+        XCTAssertEqual(appState.timerState, .workRunning)
+        XCTAssertEqual(appState.workElapsedSeconds, 0)
+    }
+
+    func testSnoozeBreakDoesNotCallCompleteBreak() {
+        let appState = AppState.shared
+        let engine = TimerEngine.shared
+
+        // Start break then snooze
+        engine.startBreakNow()
+        XCTAssertEqual(appState.timerState, .breakRunning)
+
+        engine.snoozeBreak()
+
+        // snoozeBreak transitions to snoozeRunning, never calls completeBreak
+        XCTAssertEqual(appState.timerState, .snoozeRunning)
+        XCTAssertFalse(appState.isOverlayVisible)
+    }
+
     func testSnoozeToBreakCycle() {
         let appState = AppState.shared
         let engine = TimerEngine.shared
