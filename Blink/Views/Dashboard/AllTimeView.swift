@@ -14,7 +14,7 @@ struct AllTimeView: View {
     @State private var eyeHealthMetrics: EyeHealthMetrics?
 
     var body: some View {
-        if totalSessions == 0 && firstEventDate == nil {
+        if totalSessions == 0 && overallCompliance == 0 && totalFocusSeconds == 0 {
             VStack(spacing: 12) {
                 Image(systemName: "chart.bar.xaxis")
                     .font(.system(size: 48))
@@ -227,7 +227,7 @@ struct AllTimeView: View {
             let count = daySessionCounts[day] ?? 0
             if count >= 4 {
                 currentStreak += 1
-            } else if dayOffset > 0 {
+            } else {
                 break
             }
         }

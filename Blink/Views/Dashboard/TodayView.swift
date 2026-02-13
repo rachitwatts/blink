@@ -126,7 +126,8 @@ struct TodayView: View {
     // MARK: - Body
 
     var body: some View {
-        if events.isEmpty {
+        let sessionEvents = events.filter { $0.type == .sessionCompleted || $0.type == .sessionReset || $0.type == .breakCompleted || $0.type == .breakSkipped || $0.type == .breakSnoozed }
+        if sessionEvents.isEmpty {
             VStack(spacing: 12) {
                 Image(systemName: "chart.bar.xaxis")
                     .font(.system(size: 48))

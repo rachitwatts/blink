@@ -301,10 +301,13 @@ final class TimerEngine: ObservableObject {
         if appState.snoozeRemainingSeconds > 0 {
             appState.snoozeRemainingSeconds -= 1
         } else {
-            // Snooze expired - show break overlay again
+            // Snooze expired - show break overlay again (same break, not a new one)
             print("[TimerEngine] Snooze expired, showing break overlay")
             AnalyticsService.shared.recordSnoozeExpired(breakId: currentBreakId)
-            triggerBreak()
+            // Resume the existing break without recording a new breakStarted
+            appState.breakRemainingSeconds = settings.breakDurationSeconds
+            appState.timerState = .breakRunning
+            appState.isOverlayVisible = true
         }
     }
 
