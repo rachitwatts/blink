@@ -88,6 +88,13 @@ struct SettingsView: View {
 
             // Sound toggle
             Toggle("Play sound when break starts", isOn: $settings.soundEnabled)
+
+            // Lock screen toggle
+            Toggle("Lock screen after break", isOn: $settings.lockScreenAfterBreak)
+
+            Text("Locks when break ends and you're away")
+                .font(.caption)
+                .foregroundColor(.secondary)
         }
     }
 
