@@ -122,7 +122,7 @@ struct WeekView: View {
                         Text("Break Compliance")
                             .font(.headline)
 
-                        Chart(dailyStats) { day in
+                        Chart(dailyStats.filter { $0.totalBreaks > 0 }) { day in
                             LineMark(
                                 x: .value("Day", day.date, unit: .day),
                                 y: .value("Compliance", day.breakCompliance * 100)

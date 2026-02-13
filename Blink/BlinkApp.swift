@@ -94,6 +94,22 @@ struct BlinkApp: App {
             OnboardingWindowController.shared.showIfNeeded()
         }
 
+        // Persist in-progress session when app terminates
+        NotificationCenter.default.addObserver(
+            forName: NSApplication.willTerminateNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            let appState = AppState.shared
+            if appState.workElapsedSeconds > 0 &&
+                (appState.timerState == .workRunning || appState.timerState == .workPaused) {
+                AnalyticsService.shared.recordSessionReset(
+                    elapsed: appState.workElapsedSeconds, reason: "app_quit"
+                )
+            }
+            AnalyticsService.shared.recordAppQuit(totalActiveSeconds: appState.workElapsedSeconds)
+        }
+
         // Score flash timer - show eye health grade every 5 minutes during work
         Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
             Task { @MainActor in

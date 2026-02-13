@@ -164,8 +164,7 @@ struct TodayView: View {
                                 .font(.headline)
                             TimelineView(
                                 segments: timelineSegments,
-                                dayStart: timelineSegments.first?.startTime
-                                    ?? Calendar.current.startOfDay(for: Date()),
+                                dayStart: Calendar.current.startOfDay(for: Date()),
                                 dayEnd: Date()
                             )
                         }
