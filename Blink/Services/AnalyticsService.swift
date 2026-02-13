@@ -1,6 +1,13 @@
 import Foundation
 import SwiftData
 
+/// Summary of today's analytics for menu bar display
+struct TodaySummary {
+    let focusTimeFormatted: String
+    let sessionsCompleted: Int
+    let eyeHealthGrade: String
+}
+
 /// Singleton service that records and queries analytics events
 ///
 /// All event recording is fire-and-forget: failures are logged but never
@@ -217,6 +224,31 @@ final class AnalyticsService {
 
         try context.save()
         print("[AnalyticsService] All analytics data reset")
+    }
+
+    // MARK: - Today Summary
+
+    /// Quick summary of today's analytics for menu bar display
+    func todaySummary() -> TodaySummary {
+        let events = eventsForToday()
+
+        let focusSeconds = events
+            .filter { $0.type == .sessionCompleted || $0.type == .sessionReset }
+            .compactMap { $0.durationSeconds }
+            .reduce(0, +)
+
+        let hours = focusSeconds / 3600
+        let minutes = (focusSeconds % 3600) / 60
+        let focusFormatted = hours > 0 ? "\(hours)h \(minutes)m" : "\(minutes)m"
+
+        let sessions = events.filter { $0.type == .sessionCompleted }.count
+        let metrics = EyeHealthCalculator.calculate(from: events)
+
+        return TodaySummary(
+            focusTimeFormatted: focusFormatted,
+            sessionsCompleted: sessions,
+            eyeHealthGrade: metrics.grade
+        )
     }
 
     // MARK: - Private

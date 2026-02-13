@@ -35,6 +35,9 @@ final class AppState: ObservableObject {
     /// Whether the settings window is currently shown
     @Published var isSettingsVisible: Bool = false
 
+    /// Whether the menu bar is flashing the eye health score
+    @Published var showingScore: Bool = false
+
     // MARK: - Dependencies
 
     /// Reference to settings for computing display values

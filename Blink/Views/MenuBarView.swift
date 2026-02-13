@@ -19,6 +19,16 @@ struct MenuBarView: View {
 
     var body: some View {
         Group {
+            // MARK: Today Summary
+
+            let summary = AnalyticsService.shared.todaySummary()
+            Text("Today: \(summary.focusTimeFormatted) \u{00B7} \(summary.sessionsCompleted) sessions \u{00B7} \(summary.eyeHealthGrade)")
+                .font(.system(size: 11))
+                .foregroundColor(.secondary)
+                .padding(.bottom, 4)
+
+            Divider()
+
             // MARK: Timer Controls
 
             // Pause/Resume toggle

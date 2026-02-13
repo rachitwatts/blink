@@ -27,10 +27,15 @@ struct BlinkApp: App {
         MenuBarExtra {
             MenuBarView()
         } label: {
-            // Display the timer as text
-            // Uses monospaced digits for stable width
-            Text(appState.menuBarTitle)
-                .monospacedDigit()
+            // Display timer or eye health score flash
+            // Score flashes briefly every 5 minutes during work
+            if appState.showingScore {
+                Text(AnalyticsService.shared.todaySummary().eyeHealthGrade)
+                    .monospacedDigit()
+            } else {
+                Text(appState.menuBarTitle)
+                    .monospacedDigit()
+            }
         }
         .menuBarExtraStyle(.menu)
     }
@@ -87,6 +92,25 @@ struct BlinkApp: App {
         // Show onboarding if first launch (with slight delay for window to be ready)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             OnboardingWindowController.shared.showIfNeeded()
+        }
+
+        // Score flash timer - show eye health grade every 5 minutes during work
+        Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
+            Task { @MainActor in
+                // Only flash during work sessions
+                guard AppState.shared.timerState == .workRunning else { return }
+
+                // Only flash if there are events today
+                let events = AnalyticsService.shared.eventsForToday()
+                guard !events.isEmpty else { return }
+
+                AppState.shared.showingScore = true
+
+                // Hide after 5 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    AppState.shared.showingScore = false
+                }
+            }
         }
     }
 }
