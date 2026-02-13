@@ -111,7 +111,19 @@ struct AllTimeView: View {
     private func loadData() {
         let allEvents = AnalyticsService.shared.allEvents()
 
-        guard !allEvents.isEmpty else { return }
+        guard !allEvents.isEmpty else {
+            totalFocusSeconds = 0
+            totalSessions = 0
+            overallCompliance = 0
+            heatmapDays = []
+            firstEventDate = nil
+            currentStreak = 0
+            bestStreak = 0
+            bestDaySeconds = 0
+            bestDayDate = nil
+            eyeHealthMetrics = nil
+            return
+        }
 
         firstEventDate = allEvents.first?.timestamp
 

@@ -9,6 +9,7 @@ struct WeeklyStats: Identifiable {
     let focusSeconds: Int
     let sessionsCompleted: Int
     let breakCompliance: Double  // 0.0 to 1.0
+    let totalBreaks: Int
 }
 
 /// Month tab content for the analytics dashboard
@@ -30,8 +31,9 @@ struct MonthView: View {
     }
 
     private var overallCompliance: Int {
-        guard !weeklyStats.isEmpty else { return 100 }
-        let avg = weeklyStats.map(\.breakCompliance).reduce(0, +) / Double(weeklyStats.count)
+        let weeksWithBreaks = weeklyStats.filter { $0.totalBreaks > 0 }
+        guard !weeksWithBreaks.isEmpty else { return 100 }
+        let avg = weeksWithBreaks.map(\.breakCompliance).reduce(0, +) / Double(weeksWithBreaks.count)
         return Int(avg * 100)
     }
 
@@ -204,7 +206,8 @@ struct MonthView: View {
                 startDate: weekStart,
                 focusSeconds: focusSec,
                 sessionsCompleted: sessions,
-                breakCompliance: compliance
+                breakCompliance: compliance,
+                totalBreaks: totalBreaks
             ))
 
             weekNum += 1
