@@ -15,6 +15,7 @@
 		37AE47172E9BA021933E4BAA /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5805D0FFE3D68E06036E9624 /* TodayView.swift */; };
 		392771A9BFECC03DF04CA680 /* ScreenLockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F216EAFA3B9F1BEFF27C83 /* ScreenLockService.swift */; };
 		4129E9924D67A65E4915D44F /* SessionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */; };
+		42E7968DE2C785D54769C32A /* EyeHealthCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */; };
 		44A45038B0F961D173826104 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3611BA1F7A16AA6199641486 /* Assets.xcassets */; };
 		4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1991D869152E867145645 /* BreakOverlayView.swift */; };
 		5387B639C73460184472E695 /* IdleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */; };
@@ -27,6 +28,7 @@
 		78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F959148BA99247482E7877 /* SettingsTests.swift */; };
 		800B4C3B5C9CC910FF0E3270 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18329DE3828BB763D21CF688 /* WeekView.swift */; };
 		A28573DB47843BB7BE40F320 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */; };
+		A2D25850B165CAA891EE1B03 /* InsightTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1EC3310B24818DC6EF078 /* InsightTipView.swift */; };
 		AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF6E4483329D18D25EE4C8D /* AppState.swift */; };
 		ADD6E0073DA1C9ABA1674175 /* AllTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A1794267E2C1A35324FC /* AllTimeView.swift */; };
 		BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BD162119285851B944B178 /* DashboardWindowController.swift */; };
@@ -57,6 +59,8 @@
 		0B47EB8B7273BB95141192DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		10F959148BA99247482E7877 /* SettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		18329DE3828BB763D21CF688 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
+		2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthCalculator.swift; sourceTree = "<group>"; };
+		23B1EC3310B24818DC6EF078 /* InsightTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightTipView.swift; sourceTree = "<group>"; };
 		24F216EAFA3B9F1BEFF27C83 /* ScreenLockService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLockService.swift; sourceTree = "<group>"; };
 		26A391242EBB4D85082A17B4 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		289903B92CFE24D5E706A4B8 /* TimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngine.swift; sourceTree = "<group>"; };
@@ -94,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */,
+				2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */,
 				9C848C558D50C6595E1828A3 /* HotkeyManager.swift */,
 				5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */,
 				57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */,
@@ -151,6 +156,7 @@
 				43D3A1794267E2C1A35324FC /* AllTimeView.swift */,
 				26A391242EBB4D85082A17B4 /* DashboardView.swift */,
 				F0FEB2A9AB2CD68D70760DDB /* HeatmapView.swift */,
+				23B1EC3310B24818DC6EF078 /* InsightTipView.swift */,
 				6E8491C3E02C2563330E0344 /* MonthView.swift */,
 				C4A1ECC4BB78ABCED93570E3 /* SessionLogView.swift */,
 				F00172653033246D12BB1077 /* StatCardView.swift */,
@@ -295,9 +301,11 @@
 				632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */,
 				061DA0427EA238BE85F0484D /* DashboardView.swift in Sources */,
 				BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */,
+				42E7968DE2C785D54769C32A /* EyeHealthCalculator.swift in Sources */,
 				1FE36C49979D50150D7AFD3A /* HeatmapView.swift in Sources */,
 				D3C6C248BD1267FCFC2CD3B2 /* HotkeyManager.swift in Sources */,
 				5387B639C73460184472E695 /* IdleDetector.swift in Sources */,
+				A2D25850B165CAA891EE1B03 /* InsightTipView.swift in Sources */,
 				56D66E151B92392FAD048551 /* LaunchAtLoginManager.swift in Sources */,
 				0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */,
 				BDCC35F58C8ADC5000C29EC6 /* MonthView.swift in Sources */,

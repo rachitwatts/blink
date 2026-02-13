@@ -17,6 +17,7 @@ struct WeeklyStats: Identifiable {
 /// compliance line chart, summary stat cards, and best week insight.
 struct MonthView: View {
     @State private var weeklyStats: [WeeklyStats] = []
+    @State private var eyeHealthMetrics: EyeHealthMetrics?
 
     // MARK: - Computed Stats
 
@@ -64,6 +65,11 @@ struct MonthView: View {
                         value: "\(overallCompliance)%",
                         label: "Break",
                         sublabel: "Compliance"
+                    )
+                    StatCardView(
+                        value: eyeHealthMetrics?.grade ?? "\u{2014}",
+                        label: "Eye",
+                        sublabel: "Health"
                     )
                 }
 
@@ -190,6 +196,9 @@ struct MonthView: View {
         }
 
         weeklyStats = weeks
+
+        // Calculate eye health from the full 30-day range
+        eyeHealthMetrics = EyeHealthCalculator.calculate(from: allEvents)
     }
 
     // MARK: - Helpers

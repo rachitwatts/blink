@@ -7,6 +7,7 @@ import SwiftUI
 /// Data is loaded from AnalyticsService on appear.
 struct TodayView: View {
     @State private var events: [SessionEvent] = []
+    @State private var eyeHealthMetrics: EyeHealthMetrics?
 
     // MARK: - Computed Stats
 
@@ -137,7 +138,7 @@ struct TodayView: View {
                     StatCardView(value: focusTimeFormatted, label: "Focus", sublabel: "Time")
                     StatCardView(value: "\(sessionsCompleted)", label: "Sessions", sublabel: "Completed")
                     StatCardView(value: "\(breakCompliancePercent)%", label: "Break", sublabel: "Compliance")
-                    StatCardView(value: "—", label: "Eye", sublabel: "Health")
+                    StatCardView(value: eyeHealthMetrics?.grade ?? "—", label: "Eye", sublabel: "Health")
                 }
 
                 // Timeline
@@ -157,6 +158,11 @@ struct TodayView: View {
                 // Session log
                 SessionLogView(entries: sessionLogEntries)
 
+                // Contextual tip when eye health is poor
+                if let tip = eyeHealthMetrics?.tip {
+                    InsightTipView(tip: tip)
+                }
+
                 Spacer()
             }
             .padding(20)
@@ -168,5 +174,6 @@ struct TodayView: View {
 
     private func loadData() {
         events = AnalyticsService.shared.eventsForToday()
+        eyeHealthMetrics = EyeHealthCalculator.calculate(from: events)
     }
 }

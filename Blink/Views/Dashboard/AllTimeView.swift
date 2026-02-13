@@ -11,6 +11,7 @@ struct AllTimeView: View {
     @State private var bestStreak = 0
     @State private var bestDaySeconds = 0
     @State private var bestDayDate: Date?
+    @State private var eyeHealthMetrics: EyeHealthMetrics?
 
     var body: some View {
         ScrollView {
@@ -42,7 +43,7 @@ struct AllTimeView: View {
                         sublabel: "Compliance"
                     )
                     StatCardView(
-                        value: "\u{2014}",
+                        value: eyeHealthMetrics?.grade ?? "\u{2014}",
                         label: "Eye",
                         sublabel: "Health"
                     )
@@ -107,6 +108,8 @@ struct AllTimeView: View {
         let totalBreaks = breaksCompleted + breaksSkipped
         overallCompliance = totalBreaks > 0 ? Int((Double(breaksCompleted) / Double(totalBreaks)) * 100) : 100
 
+        eyeHealthMetrics = EyeHealthCalculator.calculate(from: allEvents)
+
         buildHeatmapData(from: allEvents)
         calculateStreaksAndBestDay(from: allEvents)
     }
@@ -114,13 +117,19 @@ struct AllTimeView: View {
     private func buildHeatmapData(from events: [SessionEvent]) {
         let calendar = Calendar.current
 
+        // Group events by day
         var daySessionCounts: [Date: Int] = [:]
+        var dayEvents: [Date: [SessionEvent]] = [:]
 
-        for event in events where event.type == .sessionCompleted {
+        for event in events {
             let day = calendar.startOfDay(for: event.timestamp)
-            daySessionCounts[day, default: 0] += 1
+            dayEvents[day, default: []].append(event)
+            if event.type == .sessionCompleted {
+                daySessionCounts[day, default: 0] += 1
+            }
         }
 
+        // Build last 90 days of heatmap with per-day eye health grades
         let today = calendar.startOfDay(for: Date())
         var days: [HeatmapDay] = []
 
@@ -128,10 +137,19 @@ struct AllTimeView: View {
             guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
             let sessionCount = daySessionCounts[date] ?? 0
 
+            // Calculate eye health grade for this day if there are events
+            let eventsForDay = dayEvents[date] ?? []
+            let grade: String?
+            if !eventsForDay.isEmpty {
+                grade = EyeHealthCalculator.calculate(from: eventsForDay).grade
+            } else {
+                grade = nil
+            }
+
             days.append(HeatmapDay(
                 date: date,
                 value: sessionCount,
-                eyeHealthGrade: nil
+                eyeHealthGrade: grade
             ))
         }
 

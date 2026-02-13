@@ -18,6 +18,7 @@ struct DailyStats: Identifiable {
 /// Weekend days are visually dimmed in the bar chart.
 struct WeekView: View {
     @State private var dailyStats: [DailyStats] = []
+    @State private var eyeHealthMetrics: EyeHealthMetrics?
 
     // MARK: - Computed Stats
 
@@ -76,6 +77,11 @@ struct WeekView: View {
                         value: "\(overallCompliance)%",
                         label: "Break",
                         sublabel: "Compliance"
+                    )
+                    StatCardView(
+                        value: eyeHealthMetrics?.grade ?? "\u{2014}",
+                        label: "Eye",
+                        sublabel: "Health"
                     )
                 }
 
@@ -188,6 +194,12 @@ struct WeekView: View {
         }
 
         dailyStats = stats
+
+        // Calculate eye health from the week's events
+        let weekStart = calendar.date(byAdding: .day, value: -6, to: today)!
+        let weekEnd = calendar.date(byAdding: .day, value: 1, to: today)!
+        let weekEvents = AnalyticsService.shared.eventsForDateRange(from: weekStart, to: weekEnd)
+        eyeHealthMetrics = EyeHealthCalculator.calculate(from: weekEvents)
     }
 
     // MARK: - Helpers
