@@ -117,8 +117,12 @@ final class EyeHealthCalculator {
             if event.type == .breakSkipped {
                 count += 1
                 maxCount = max(maxCount, count)
-            } else if event.type == .breakCompleted || event.type == .breakStarted {
+            } else if event.type == .breakCompleted {
+                // A completed break ends the skip streak
                 break
+            } else if event.type == .breakStarted {
+                // Ignore breakStarted — it precedes both skips and completions
+                continue
             } else {
                 // Non-break event interrupts the consecutive skip run
                 if count > 0 {
