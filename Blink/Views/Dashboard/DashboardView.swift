@@ -54,7 +54,7 @@ struct DashboardView: View {
             case .month:
                 MonthView()
             case .allTime:
-                PlaceholderTabView(title: "All Time", message: "Coming in Phase 4")
+                AllTimeView()
             }
         }
     }
