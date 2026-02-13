@@ -50,9 +50,9 @@ struct DashboardView: View {
             case .today:
                 TodayView()
             case .week:
-                PlaceholderTabView(title: "Week", message: "Coming in Phase 3")
+                WeekView()
             case .month:
-                PlaceholderTabView(title: "Month", message: "Coming in Phase 3")
+                MonthView()
             case .allTime:
                 PlaceholderTabView(title: "All Time", message: "Coming in Phase 4")
             }
