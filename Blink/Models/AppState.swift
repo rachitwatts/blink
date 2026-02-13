@@ -117,5 +117,6 @@ final class AppState: ObservableObject {
         snoozeRemainingSeconds = 0
         isOverlayVisible = false
         isSettingsVisible = false
+        showingScore = false
     }
 }

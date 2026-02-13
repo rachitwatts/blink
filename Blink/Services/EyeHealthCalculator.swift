@@ -124,11 +124,9 @@ final class EyeHealthCalculator {
                 // Ignore breakStarted — it precedes both skips and completions
                 continue
             } else {
-                // Non-break event interrupts the consecutive skip run
-                if count > 0 {
-                    maxCount = max(maxCount, count)
-                    count = 0
-                }
+                // Ignore work-session events (sessionCompleted, sessionReset, etc.)
+                // between break attempts — only breakCompleted ends a skip streak
+                continue
             }
         }
 
