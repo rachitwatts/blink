@@ -37,6 +37,9 @@ final class TimerEngine: ObservableObject {
     /// Flag to reset work elapsed to 0 when user returns from long idle
     private var shouldResetOnNextActivity: Bool = false
 
+    /// Identifier for the current break (used to correlate snooze events)
+    private var currentBreakId: String = UUID().uuidString
+
     // MARK: - Adaptive Polling
 
     /// Polling interval when user is active (1 second)
@@ -83,10 +86,12 @@ final class TimerEngine: ObservableObject {
         case .workRunning:
             print("[TimerEngine] Pausing")
             appState.timerState = .workPaused
+            AnalyticsService.shared.recordPauseToggled(newState: "paused")
 
         case .workPaused:
             print("[TimerEngine] Resuming")
             appState.timerState = .workRunning
+            AnalyticsService.shared.recordPauseToggled(newState: "resumed")
 
         case .breakRunning, .snoozeRunning:
             // Cannot pause during break or snooze
@@ -97,6 +102,11 @@ final class TimerEngine: ObservableObject {
     /// Restart the work session from zero
     func restartSession() {
         print("[TimerEngine] Restarting session")
+        if appState.workElapsedSeconds > 0 {
+            AnalyticsService.shared.recordSessionReset(
+                elapsed: appState.workElapsedSeconds, reason: "manual_restart"
+            )
+        }
         appState.workElapsedSeconds = 0
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
@@ -110,7 +120,7 @@ final class TimerEngine: ObservableObject {
             return
         }
         print("[TimerEngine] Starting break now (manual)")
-        triggerBreak()
+        triggerBreak(isManual: true)
     }
 
     /// Snooze the current break
@@ -123,6 +133,10 @@ final class TimerEngine: ObservableObject {
         appState.snoozeRemainingSeconds = settings.snoozeDurationSeconds
         appState.timerState = .snoozeRunning
         appState.isOverlayVisible = false
+        AnalyticsService.shared.recordBreakSnoozed(
+            snoozeDuration: settings.snoozeDurationSeconds,
+            breakId: currentBreakId
+        )
 
         // Switch to active polling for accurate snooze countdown
         scheduleTimer(interval: activePollingInterval)
@@ -135,6 +149,7 @@ final class TimerEngine: ObservableObject {
             return
         }
         print("[TimerEngine] Skipping break, starting new session")
+        AnalyticsService.shared.recordBreakSkipped(remainingSeconds: appState.breakRemainingSeconds)
         appState.workElapsedSeconds = 0
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
@@ -219,6 +234,9 @@ final class TimerEngine: ObservableObject {
             // Check if returning from long idle
             if shouldResetOnNextActivity {
                 print("[TimerEngine] Returning from long idle, resetting session")
+                AnalyticsService.shared.recordSessionReset(
+                    elapsed: appState.workElapsedSeconds, reason: "idle_timeout"
+                )
                 appState.workElapsedSeconds = 0
                 shouldResetOnNextActivity = false
             }
@@ -239,6 +257,9 @@ final class TimerEngine: ObservableObject {
             // Will reset session when user returns
             if !shouldResetOnNextActivity {
                 print("[TimerEngine] Long idle detected (\(Int(idleSeconds))s), will reset on return")
+                AnalyticsService.shared.recordIdleDetected(
+                    idleDuration: Int(idleSeconds), action: "will_reset"
+                )
                 shouldResetOnNextActivity = true
             }
         }
@@ -246,6 +267,10 @@ final class TimerEngine: ObservableObject {
         // Check if work duration reached - trigger break
         if appState.workElapsedSeconds >= settings.workDurationSeconds {
             print("[TimerEngine] Work duration reached (\(appState.workElapsedSeconds)s), triggering break")
+            AnalyticsService.shared.recordSessionCompleted(
+                actualDuration: appState.workElapsedSeconds,
+                configuredDuration: settings.workDurationSeconds
+            )
             triggerBreak()
         }
     }
@@ -268,6 +293,7 @@ final class TimerEngine: ObservableObject {
         } else {
             // Snooze expired - show break overlay again
             print("[TimerEngine] Snooze expired, showing break overlay")
+            AnalyticsService.shared.recordSnoozeExpired(breakId: currentBreakId)
             triggerBreak()
         }
     }
@@ -275,7 +301,13 @@ final class TimerEngine: ObservableObject {
     // MARK: - Private: State Transitions
 
     /// Trigger a break - show overlay and start countdown
-    private func triggerBreak() {
+    /// - Parameter isManual: true if triggered by user via "Start Break Now"
+    private func triggerBreak(isManual: Bool = false) {
+        currentBreakId = UUID().uuidString
+        AnalyticsService.shared.recordBreakStarted(
+            trigger: isManual ? "manual" : "auto",
+            configuredDuration: settings.breakDurationSeconds
+        )
         appState.breakRemainingSeconds = settings.breakDurationSeconds
         appState.timerState = .breakRunning
         appState.isOverlayVisible = true
@@ -296,6 +328,9 @@ final class TimerEngine: ObservableObject {
             print("[TimerEngine] completeBreak() ignored - not in breakRunning state (state: \(appState.timerState))")
             return
         }
+
+        let breakDuration = settings.breakDurationSeconds - appState.breakRemainingSeconds
+        AnalyticsService.shared.recordBreakCompleted(actualDuration: breakDuration)
 
         // Lock screen if enabled and user is idle
         if settings.lockScreenAfterBreak {

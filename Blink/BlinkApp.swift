@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import Combine
 
 /// Main entry point for the Blink app
@@ -41,6 +42,27 @@ struct BlinkApp: App {
 
         // Start timer engine
         TimerEngine.shared.start()
+
+        // Configure SwiftData for analytics
+        do {
+            let appSupport = FileManager.default.urls(
+                for: .applicationSupportDirectory, in: .userDomainMask
+            ).first!
+            let blinkDir = appSupport.appendingPathComponent("Blink", isDirectory: true)
+
+            // Ensure directory exists
+            try FileManager.default.createDirectory(at: blinkDir, withIntermediateDirectories: true)
+
+            let schema = Schema([SessionEvent.self])
+            let config = ModelConfiguration(url: blinkDir.appendingPathComponent("analytics.store"))
+            let container = try ModelContainer(for: schema, configurations: config)
+            AnalyticsService.shared.configure(with: container)
+            DashboardWindowController.shared.configure(with: container)
+            AnalyticsService.shared.recordAppLaunched()
+            print("[BlinkApp] SwiftData configured for analytics")
+        } catch {
+            print("[BlinkApp] Failed to configure SwiftData: \(error)")
+        }
 
         // Start hotkey manager (lazy permission)
         HotkeyManager.shared.startListening()

@@ -45,6 +45,11 @@ struct MenuBarView: View {
             }
             .keyboardShortcut(",", modifiers: [.command])
 
+            Button("Dashboard...") {
+                DashboardWindowController.shared.showDashboard()
+            }
+            .keyboardShortcut("d", modifiers: [.command])
+
             Divider()
 
             // MARK: Launch at Login
