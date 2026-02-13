@@ -243,10 +243,12 @@ final class TimerEngine: ObservableObject {
 
             // Check if returning from long idle
             if shouldResetOnNextActivity {
-                print("[TimerEngine] Returning from long idle, resetting session")
-                AnalyticsService.shared.recordSessionReset(
-                    elapsed: appState.workElapsedSeconds, reason: "idle_timeout"
-                )
+                if appState.workElapsedSeconds > 0 {
+                    print("[TimerEngine] Returning from long idle, resetting session")
+                    AnalyticsService.shared.recordSessionReset(
+                        elapsed: appState.workElapsedSeconds, reason: "idle_timeout"
+                    )
+                }
                 appState.workElapsedSeconds = 0
                 shouldResetOnNextActivity = false
             }

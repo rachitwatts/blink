@@ -14,7 +14,7 @@ struct AllTimeView: View {
     @State private var eyeHealthMetrics: EyeHealthMetrics?
 
     var body: some View {
-        if totalSessions == 0 && overallCompliance == 0 && totalFocusSeconds == 0 {
+        if totalSessions == 0 && totalFocusSeconds == 0 {
             VStack(spacing: 12) {
                 Image(systemName: "chart.bar.xaxis")
                     .font(.system(size: 48))

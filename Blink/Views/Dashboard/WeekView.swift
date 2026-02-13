@@ -8,6 +8,7 @@ struct DailyStats: Identifiable {
     let focusSeconds: Int
     let sessionsCompleted: Int
     let breakCompliance: Double  // 0.0 to 1.0
+    let totalBreaks: Int
     let isWeekend: Bool
 }
 
@@ -31,9 +32,9 @@ struct WeekView: View {
     }
 
     private var overallCompliance: Int {
-        let daysWithData = dailyStats.filter { $0.breakCompliance >= 0 }
-        guard !daysWithData.isEmpty else { return 100 }
-        let avg = daysWithData.map(\.breakCompliance).reduce(0, +) / Double(daysWithData.count)
+        let daysWithBreaks = dailyStats.filter { $0.totalBreaks > 0 }
+        guard !daysWithBreaks.isEmpty else { return 100 }
+        let avg = daysWithBreaks.map(\.breakCompliance).reduce(0, +) / Double(daysWithBreaks.count)
         return Int(avg * 100)
     }
 
@@ -205,6 +206,7 @@ struct WeekView: View {
                 focusSeconds: focusSec,
                 sessionsCompleted: sessions,
                 breakCompliance: compliance,
+                totalBreaks: totalBreaks,
                 isWeekend: isWeekend
             ))
         }
