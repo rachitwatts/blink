@@ -14,6 +14,7 @@ struct MenuBarView: View {
     @ObservedObject private var appState = AppState.shared
     @ObservedObject private var timerEngine = TimerEngine.shared
     @ObservedObject private var settings = Settings.shared
+    @State private var summary: TodaySummary?
 
     // MARK: - Body
 
@@ -21,11 +22,12 @@ struct MenuBarView: View {
         Group {
             // MARK: Today Summary
 
-            let summary = AnalyticsService.shared.todaySummary()
-            Text("Today: \(summary.focusTimeFormatted) \u{00B7} \(summary.sessionsCompleted) sessions \u{00B7} \(summary.eyeHealthGrade)")
-                .font(.system(size: 11))
-                .foregroundColor(.secondary)
-                .padding(.bottom, 4)
+            if let summary {
+                Text("Today: \(summary.focusTimeFormatted) \u{00B7} \(summary.sessionsCompleted) sessions \u{00B7} \(summary.eyeHealthGrade)")
+                    .font(.system(size: 11))
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 4)
+            }
 
             Divider()
 
@@ -78,6 +80,7 @@ struct MenuBarView: View {
             }
             .keyboardShortcut("q")
         }
+        .onAppear { refreshSummary() }
     }
 
     // MARK: - Pause/Resume Button
@@ -91,6 +94,12 @@ struct MenuBarView: View {
         }
         .keyboardShortcut("p", modifiers: [.command])
         .disabled(isBreak)
+    }
+
+    // MARK: - Data Loading
+
+    private func refreshSummary() {
+        summary = AnalyticsService.shared.todaySummary()
     }
 }
 

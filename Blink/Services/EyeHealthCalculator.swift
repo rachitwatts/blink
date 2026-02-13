@@ -21,7 +21,13 @@ final class EyeHealthCalculator {
         let breaksStarted = events.filter { $0.type == .breakStarted }.count
 
         let totalBreaks = breaksCompleted + breaksSkipped
-        let breakCompliance = totalBreaks > 0 ? Double(breaksCompleted) / Double(totalBreaks) : 1.0
+
+        // No break outcomes yet — grade is unavailable
+        guard totalBreaks > 0 else {
+            return EyeHealthMetrics(breakCompliance: 0.0, snoozeRate: 0.0, grade: "—", tip: nil)
+        }
+
+        let breakCompliance = Double(breaksCompleted) / Double(totalBreaks)
         let snoozeRate = breaksStarted > 0 ? min(1.0, Double(breaksSnoozed) / Double(breaksStarted)) : 0.0
 
         let grade = calculateGrade(breakCompliance: breakCompliance, snoozeRate: snoozeRate)

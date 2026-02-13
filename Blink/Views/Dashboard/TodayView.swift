@@ -60,7 +60,12 @@ struct TodayView: View {
                 ))
             case .sessionReset:
                 let duration = (event.durationSeconds ?? 0) / 60
-                let reason = event.reason == "idle_timeout" ? "idle reset" : "manual restart"
+                let reason: String
+                switch event.reason {
+                case "idle_timeout": reason = "idle reset"
+                case "app_quit": reason = "app quit"
+                default: reason = "manual restart"
+                }
                 entries.append(SessionLogEntry(
                     timestamp: event.timestamp,
                     icon: "↩️",

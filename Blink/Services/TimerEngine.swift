@@ -40,6 +40,9 @@ final class TimerEngine: ObservableObject {
     /// Identifier for the current break (used to correlate snooze events)
     private var currentBreakId: String = UUID().uuidString
 
+    /// Configured break duration captured when break starts (avoids mid-break settings changes)
+    private var configuredBreakDuration: Int = 0
+
     // MARK: - Adaptive Polling
 
     /// Polling interval when user is active (1 second)
@@ -311,7 +314,7 @@ final class TimerEngine: ObservableObject {
             print("[TimerEngine] Snooze expired, showing break overlay")
             AnalyticsService.shared.recordSnoozeExpired(breakId: currentBreakId)
             // Resume the existing break without recording a new breakStarted
-            appState.breakRemainingSeconds = settings.breakDurationSeconds
+            appState.breakRemainingSeconds = configuredBreakDuration
             appState.timerState = .breakRunning
             appState.isOverlayVisible = true
         }
@@ -323,11 +326,12 @@ final class TimerEngine: ObservableObject {
     /// - Parameter isManual: true if triggered by user via "Start Break Now"
     private func triggerBreak(isManual: Bool = false) {
         currentBreakId = UUID().uuidString
+        configuredBreakDuration = settings.breakDurationSeconds
         AnalyticsService.shared.recordBreakStarted(
             trigger: isManual ? "manual" : "auto",
-            configuredDuration: settings.breakDurationSeconds
+            configuredDuration: configuredBreakDuration
         )
-        appState.breakRemainingSeconds = settings.breakDurationSeconds
+        appState.breakRemainingSeconds = configuredBreakDuration
         appState.timerState = .breakRunning
         appState.isOverlayVisible = true
 
@@ -348,7 +352,7 @@ final class TimerEngine: ObservableObject {
             return
         }
 
-        let breakDuration = settings.breakDurationSeconds - appState.breakRemainingSeconds
+        let breakDuration = configuredBreakDuration - appState.breakRemainingSeconds
         AnalyticsService.shared.recordBreakCompleted(actualDuration: breakDuration)
 
         // Lock screen if enabled and user is idle
