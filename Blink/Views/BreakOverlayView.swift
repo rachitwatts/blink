@@ -105,19 +105,26 @@ struct BreakOverlayView: View {
 
     // MARK: - Buttons
 
+    /// Fixed width for both buttons to ensure visual symmetry
+    private let buttonWidth: CGFloat = 140
+
     private var buttonRow: some View {
-        HStack(spacing: 30) {
+        HStack(spacing: 20) {
             // Snooze button
             Button(action: {
                 performSnooze()
             }) {
-                Text("Snooze 5 min")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 28)
-                    .padding(.vertical, 14)
-                    .background(Color.white.opacity(0.15))
-                    .cornerRadius(10)
+                HStack(spacing: 8) {
+                    Image(systemName: "moon.zzz")
+                        .font(.system(size: 14, weight: .semibold))
+                    Text("Snooze")
+                        .font(.system(size: 14, weight: .semibold))
+                }
+                .foregroundColor(.white)
+                .frame(width: buttonWidth)
+                .padding(.vertical, 10)
+                .background(Color.white.opacity(0.15))
+                .cornerRadius(8)
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Snooze for 5 minutes")
@@ -127,13 +134,17 @@ struct BreakOverlayView: View {
             Button(action: {
                 performSkip()
             }) {
-                Text("Skip")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white.opacity(0.8))
-                    .padding(.horizontal, 28)
-                    .padding(.vertical, 14)
-                    .background(Color.white.opacity(0.08))
-                    .cornerRadius(10)
+                HStack(spacing: 8) {
+                    Image(systemName: "forward.fill")
+                        .font(.system(size: 14, weight: .medium))
+                    Text("Skip")
+                        .font(.system(size: 14, weight: .medium))
+                }
+                .foregroundColor(.white.opacity(0.8))
+                .frame(width: buttonWidth)
+                .padding(.vertical, 10)
+                .background(Color.white.opacity(0.08))
+                .cornerRadius(8)
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Skip break")
@@ -144,7 +155,7 @@ struct BreakOverlayView: View {
     // MARK: - Hints
 
     private var hintText: some View {
-        Text("Esc = Snooze 5 min  •  Esc Esc = Skip")
+        Text("Esc = Snooze  •  Esc Esc = Skip")
             .font(.system(size: 13))
             .foregroundColor(.white.opacity(0.4))
     }
