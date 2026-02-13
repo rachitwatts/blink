@@ -38,6 +38,9 @@ final class AppState: ObservableObject {
     /// Whether the menu bar is flashing the eye health score
     @Published var showingScore: Bool = false
 
+    /// Cached eye health grade for score flash (set when flash starts)
+    @Published var scoreFlashGrade: String = "—"
+
     // MARK: - Dependencies
 
     /// Reference to settings for computing display values
@@ -118,5 +121,6 @@ final class AppState: ObservableObject {
         isOverlayVisible = false
         isSettingsVisible = false
         showingScore = false
+        scoreFlashGrade = "—"
     }
 }

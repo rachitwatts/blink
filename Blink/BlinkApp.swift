@@ -30,7 +30,7 @@ struct BlinkApp: App {
             // Display timer or eye health score flash
             // Score flashes briefly every 5 minutes during work only
             if appState.showingScore && appState.timerState == .workRunning {
-                Text(AnalyticsService.shared.todaySummary().eyeHealthGrade)
+                Text(appState.scoreFlashGrade)
                     .monospacedDigit()
             } else {
                 Text(appState.menuBarTitle)
@@ -121,6 +121,7 @@ struct BlinkApp: App {
                 let hasSessionActivity = events.contains { $0.type == .sessionCompleted || $0.type == .breakCompleted || $0.type == .breakSkipped }
                 guard hasSessionActivity else { return }
 
+                AppState.shared.scoreFlashGrade = AnalyticsService.shared.todaySummary().eyeHealthGrade
                 AppState.shared.showingScore = true
 
                 // Hide after 5 seconds
