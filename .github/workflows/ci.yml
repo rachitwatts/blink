@@ -31,7 +31,9 @@ jobs:
             brew-${{ runner.os }}-xcodegen-xcbeautify-
 
       - name: Install dependencies
-        run: brew install xcodegen xcbeautify
+        run: |
+          brew install xcodegen xcbeautify
+          brew link xcodegen xcbeautify 2>/dev/null || true
 
       - name: Generate Xcode project
         run: xcodegen generate
