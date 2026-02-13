@@ -1,22 +1,16 @@
 import SwiftUI
-import Combine
 
 /// Full-screen break overlay content
 ///
 /// Shows countdown timer, calming message, and snooze/skip buttons.
 /// Uses a dark gradient background with soft purple glow.
-///
-/// NOTE: This view uses a LOCAL timer to avoid observation issues when the
-/// window is closed. It does NOT observe AppState to prevent crashes during teardown.
+/// Observes `AppState.breakRemainingSeconds` for the countdown display.
 struct BreakOverlayView: View {
 
     // MARK: - State
 
-    /// Local countdown - initialized from Settings, decremented by local timer
-    @State private var remainingSeconds: Int = Settings.shared.breakDurationSeconds
-
-    /// Local timer for countdown - fully owned by this view
-    @State private var countdownTimer: Timer? = nil
+    /// Shared app state - provides breakRemainingSeconds for countdown display
+    @ObservedObject private var appState = AppState.shared
 
     /// Track last Esc press time for double-Esc detection
     @State private var lastEscTime: Date? = nil
@@ -60,33 +54,6 @@ struct BreakOverlayView: View {
         .onReceive(NotificationCenter.default.publisher(for: .breakOverlayEscPressed)) { _ in
             handleEscKey()
         }
-        .onAppear {
-            startLocalTimer()
-        }
-        .onDisappear {
-            stopLocalTimer()
-        }
-    }
-
-    // MARK: - Local Timer
-
-    private func startLocalTimer() {
-        // Use a simple Timer that decrements our local state
-        // Note: scheduledTimer already adds to current RunLoop
-        countdownTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [self] _ in
-            if remainingSeconds > 0 {
-                remainingSeconds -= 1
-            } else {
-                // Break complete - notify TimerEngine
-                stopLocalTimer()
-                TimerEngine.shared.completeBreak()
-            }
-        }
-    }
-
-    private func stopLocalTimer() {
-        countdownTimer?.invalidate()
-        countdownTimer = nil
     }
 
     // MARK: - Background
@@ -98,7 +65,7 @@ struct BreakOverlayView: View {
                 colors: [
                     Color(red: 0.05, green: 0.05, blue: 0.12),
                     Color(red: 0.08, green: 0.06, blue: 0.15),
-                    Color(red: 0.05, green: 0.05, blue: 0.12)
+                    Color(red: 0.05, green: 0.05, blue: 0.12),
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -108,7 +75,7 @@ struct BreakOverlayView: View {
             RadialGradient(
                 colors: [
                     Color.purple.opacity(0.15),
-                    Color.clear
+                    Color.clear,
                 ],
                 center: .center,
                 startRadius: 100,
@@ -121,10 +88,11 @@ struct BreakOverlayView: View {
     // MARK: - Timer Display
 
     private var countdownTimerView: some View {
-        Text(formatTime(remainingSeconds))
+        Text(formatTime(appState.breakRemainingSeconds))
             .font(.system(size: 80, weight: .light, design: .monospaced))
             .foregroundColor(.white)
-            .accessibilityLabel("Time remaining: \(formatTimeAccessible(remainingSeconds))")
+            .accessibilityLabel(
+                "Time remaining: \(formatTimeAccessible(appState.breakRemainingSeconds))")
     }
 
     // MARK: - Message
@@ -185,13 +153,11 @@ struct BreakOverlayView: View {
 
     /// Snooze the break
     private func performSnooze() {
-        stopLocalTimer()
         TimerEngine.shared.snoozeBreak()
     }
 
     /// Skip the break
     private func performSkip() {
-        stopLocalTimer()
         TimerEngine.shared.skipBreak()
     }
 
@@ -200,7 +166,8 @@ struct BreakOverlayView: View {
         let now = Date()
 
         if let lastTime = lastEscTime,
-           now.timeIntervalSince(lastTime) < doubleEscWindow {
+            now.timeIntervalSince(lastTime) < doubleEscWindow
+        {
             // Double Esc detected - Skip
             print("[BreakOverlay] Double Esc detected, skipping")
             lastEscTime = nil

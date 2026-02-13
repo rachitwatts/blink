@@ -396,6 +396,22 @@ final class TimerEngineTests: XCTestCase {
         XCTAssertFalse(appState.isOverlayVisible)
     }
 
+    func testCompleteBreakIgnoredWhenNotInBreakState() {
+        let appState = AppState.shared
+        let engine = TimerEngine.shared
+
+        // Set up a work session in progress
+        appState.timerState = .workRunning
+        appState.workElapsedSeconds = 500
+
+        // Calling completeBreak() should be a no-op when not in breakRunning
+        engine.completeBreak()
+
+        // State should be unchanged - guard prevents reset
+        XCTAssertEqual(appState.timerState, .workRunning)
+        XCTAssertEqual(appState.workElapsedSeconds, 500)
+    }
+
     // Snooze tick
 
     func testSnoozeTickDecrementsRemaining() {

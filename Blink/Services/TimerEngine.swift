@@ -291,6 +291,12 @@ final class TimerEngine: ObservableObject {
 
     /// Complete a break and start new work session
     func completeBreak() {
+        // Guard against duplicate calls (e.g. stale timer firing after state already changed)
+        guard appState.timerState == .breakRunning else {
+            print("[TimerEngine] completeBreak() ignored - not in breakRunning state (state: \(appState.timerState))")
+            return
+        }
+
         appState.workElapsedSeconds = 0
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
