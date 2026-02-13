@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import Combine
 
 /// Main entry point for the Blink app
@@ -26,10 +27,15 @@ struct BlinkApp: App {
         MenuBarExtra {
             MenuBarView()
         } label: {
-            // Display the timer as text
-            // Uses monospaced digits for stable width
-            Text(appState.menuBarTitle)
-                .monospacedDigit()
+            // Display timer or eye health score flash
+            // Score flashes briefly every 5 minutes during work only
+            if appState.showingScore && appState.timerState == .workRunning {
+                Text(appState.scoreFlashGrade)
+                    .monospacedDigit()
+            } else {
+                Text(appState.menuBarTitle)
+                    .monospacedDigit()
+            }
         }
         .menuBarExtraStyle(.menu)
     }
@@ -41,6 +47,27 @@ struct BlinkApp: App {
 
         // Start timer engine
         TimerEngine.shared.start()
+
+        // Configure SwiftData for analytics
+        do {
+            let appSupport = FileManager.default.urls(
+                for: .applicationSupportDirectory, in: .userDomainMask
+            ).first!
+            let blinkDir = appSupport.appendingPathComponent("Blink", isDirectory: true)
+
+            // Ensure directory exists
+            try FileManager.default.createDirectory(at: blinkDir, withIntermediateDirectories: true)
+
+            let schema = Schema([SessionEvent.self])
+            let config = ModelConfiguration(url: blinkDir.appendingPathComponent("analytics.store"))
+            let container = try ModelContainer(for: schema, configurations: config)
+            AnalyticsService.shared.configure(with: container)
+            DashboardWindowController.shared.configure(with: container)
+            AnalyticsService.shared.recordAppLaunched()
+            print("[BlinkApp] SwiftData configured for analytics")
+        } catch {
+            print("[BlinkApp] Failed to configure SwiftData: \(error)")
+        }
 
         // Start hotkey manager (lazy permission)
         HotkeyManager.shared.startListening()
@@ -65,6 +92,43 @@ struct BlinkApp: App {
         // Show onboarding if first launch (with slight delay for window to be ready)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             OnboardingWindowController.shared.showIfNeeded()
+        }
+
+        // Persist in-progress session when app terminates
+        NotificationCenter.default.addObserver(
+            forName: NSApplication.willTerminateNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            let appState = AppState.shared
+            if appState.workElapsedSeconds > 0 &&
+                (appState.timerState == .workRunning || appState.timerState == .workPaused) {
+                AnalyticsService.shared.recordSessionReset(
+                    elapsed: appState.workElapsedSeconds, reason: "app_quit"
+                )
+            }
+            AnalyticsService.shared.recordAppQuit(totalActiveSeconds: appState.workElapsedSeconds)
+        }
+
+        // Score flash timer - show eye health grade every 5 minutes during work
+        Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
+            Task { @MainActor in
+                // Only flash during work sessions
+                guard AppState.shared.timerState == .workRunning else { return }
+
+                // Only flash if there are session/break events today (not just appLaunched)
+                let events = AnalyticsService.shared.eventsForToday()
+                let hasSessionActivity = events.contains { $0.type == .sessionCompleted || $0.type == .breakCompleted || $0.type == .breakSkipped }
+                guard hasSessionActivity else { return }
+
+                AppState.shared.scoreFlashGrade = AnalyticsService.shared.todaySummary().eyeHealthGrade
+                AppState.shared.showingScore = true
+
+                // Hide after 5 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    AppState.shared.showingScore = false
+                }
+            }
         }
     }
 }

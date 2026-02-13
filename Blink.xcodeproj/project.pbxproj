@@ -7,10 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		061DA0427EA238BE85F0484D /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A391242EBB4D85082A17B4 /* DashboardView.swift */; };
 		0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */; };
+		1FE36C49979D50150D7AFD3A /* HeatmapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEB2A9AB2CD68D70760DDB /* HeatmapView.swift */; };
 		25F8E55421DC2B55922B6CC4 /* BlinkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DBB159CA5CB427CCCADEF /* BlinkApp.swift */; };
 		30D30B4D9A2C6999BE0B1B2A /* TimerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B14229E5F2CC5BE38BBD8F /* TimerState.swift */; };
+		37AE47172E9BA021933E4BAA /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5805D0FFE3D68E06036E9624 /* TodayView.swift */; };
 		392771A9BFECC03DF04CA680 /* ScreenLockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F216EAFA3B9F1BEFF27C83 /* ScreenLockService.swift */; };
+		4129E9924D67A65E4915D44F /* SessionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */; };
+		42E7968DE2C785D54769C32A /* EyeHealthCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */; };
 		44A45038B0F961D173826104 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3611BA1F7A16AA6199641486 /* Assets.xcassets */; };
 		4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1991D869152E867145645 /* BreakOverlayView.swift */; };
 		5387B639C73460184472E695 /* IdleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */; };
@@ -18,8 +23,17 @@
 		5ABFB2E35715D42FFB42D99C /* TimerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D227434466D7C6840A638063 /* TimerStateTests.swift */; };
 		632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */; };
 		70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF789F55EB114BFCAAC4D66E /* Settings.swift */; };
+		73AB7B338DB82417D3186C82 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B03EA8B0225251705AB7B3D /* TimelineView.swift */; };
+		73E03BFD01CE99F321993218 /* StatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00172653033246D12BB1077 /* StatCardView.swift */; };
 		78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F959148BA99247482E7877 /* SettingsTests.swift */; };
+		800B4C3B5C9CC910FF0E3270 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18329DE3828BB763D21CF688 /* WeekView.swift */; };
+		A28573DB47843BB7BE40F320 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */; };
+		A2D25850B165CAA891EE1B03 /* InsightTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1EC3310B24818DC6EF078 /* InsightTipView.swift */; };
 		AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF6E4483329D18D25EE4C8D /* AppState.swift */; };
+		ADD6E0073DA1C9ABA1674175 /* AllTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A1794267E2C1A35324FC /* AllTimeView.swift */; };
+		BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BD162119285851B944B178 /* DashboardWindowController.swift */; };
+		BDCC35F58C8ADC5000C29EC6 /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8491C3E02C2563330E0344 /* MonthView.swift */; };
+		CD862C41CDF9479F9357C069 /* SessionLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A1ECC4BB78ABCED93570E3 /* SessionLogView.swift */; };
 		D3C6C248BD1267FCFC2CD3B2 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C848C558D50C6595E1828A3 /* HotkeyManager.swift */; };
 		DA5884368B97D20F9914F81E /* TimerEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E96408D496193EA27189E7 /* TimerEngineTests.swift */; };
 		DB4B706A1F3E34BD61B14EE3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B31CDA126203664640FFF96 /* SettingsView.swift */; };
@@ -44,24 +58,38 @@
 		042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		0B47EB8B7273BB95141192DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		10F959148BA99247482E7877 /* SettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
+		18329DE3828BB763D21CF688 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
+		2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthCalculator.swift; sourceTree = "<group>"; };
+		23B1EC3310B24818DC6EF078 /* InsightTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightTipView.swift; sourceTree = "<group>"; };
 		24F216EAFA3B9F1BEFF27C83 /* ScreenLockService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLockService.swift; sourceTree = "<group>"; };
+		26A391242EBB4D85082A17B4 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		289903B92CFE24D5E706A4B8 /* TimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngine.swift; sourceTree = "<group>"; };
 		314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakOverlayWindowController.swift; sourceTree = "<group>"; };
 		35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		3611BA1F7A16AA6199641486 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		43D3A1794267E2C1A35324FC /* AllTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTimeView.swift; sourceTree = "<group>"; };
 		48431B2C296BDB92BF0BB93C /* Blink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B31CDA126203664640FFF96 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
+		5805D0FFE3D68E06036E9624 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDetector.swift; sourceTree = "<group>"; };
+		6E8491C3E02C2563330E0344 /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
+		7B03EA8B0225251705AB7B3D /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		7E51DA777F6F2CA9EC950552 /* OnboardingWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWindowController.swift; sourceTree = "<group>"; };
 		83CABA226B77C41C6ED8BE26 /* BlinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86E96408D496193EA27189E7 /* TimerEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngineTests.swift; sourceTree = "<group>"; };
 		989DBB159CA5CB427CCCADEF /* BlinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkApp.swift; sourceTree = "<group>"; };
 		9C848C558D50C6595E1828A3 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
+		AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEvent.swift; sourceTree = "<group>"; };
 		AF789F55EB114BFCAAC4D66E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		C4A1ECC4BB78ABCED93570E3 /* SessionLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionLogView.swift; sourceTree = "<group>"; };
+		C4BD162119285851B944B178 /* DashboardWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardWindowController.swift; sourceTree = "<group>"; };
 		CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		D227434466D7C6840A638063 /* TimerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerStateTests.swift; sourceTree = "<group>"; };
 		D7B14229E5F2CC5BE38BBD8F /* TimerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerState.swift; sourceTree = "<group>"; };
+		DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		F00172653033246D12BB1077 /* StatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCardView.swift; sourceTree = "<group>"; };
+		F0FEB2A9AB2CD68D70760DDB /* HeatmapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatmapView.swift; sourceTree = "<group>"; };
 		FBF6E4483329D18D25EE4C8D /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,6 +97,8 @@
 		3A270D15CC4BE237D818A9F7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */,
+				2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */,
 				9C848C558D50C6595E1828A3 /* HotkeyManager.swift */,
 				5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */,
 				57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */,
@@ -82,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */,
+				C4BD162119285851B944B178 /* DashboardWindowController.swift */,
 				7E51DA777F6F2CA9EC950552 /* OnboardingWindowController.swift */,
 				CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */,
 			);
@@ -119,10 +150,28 @@
 			);
 			sourceTree = "<group>";
 		};
+		C74D77E33801AE8DF7BDC67F /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				43D3A1794267E2C1A35324FC /* AllTimeView.swift */,
+				26A391242EBB4D85082A17B4 /* DashboardView.swift */,
+				F0FEB2A9AB2CD68D70760DDB /* HeatmapView.swift */,
+				23B1EC3310B24818DC6EF078 /* InsightTipView.swift */,
+				6E8491C3E02C2563330E0344 /* MonthView.swift */,
+				C4A1ECC4BB78ABCED93570E3 /* SessionLogView.swift */,
+				F00172653033246D12BB1077 /* StatCardView.swift */,
+				7B03EA8B0225251705AB7B3D /* TimelineView.swift */,
+				5805D0FFE3D68E06036E9624 /* TodayView.swift */,
+				18329DE3828BB763D21CF688 /* WeekView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
 		C9D3CC1439A512CB2F2EFA74 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				FBF6E4483329D18D25EE4C8D /* AppState.swift */,
+				AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */,
 				AF789F55EB114BFCAAC4D66E /* Settings.swift */,
 				D7B14229E5F2CC5BE38BBD8F /* TimerState.swift */,
 			);
@@ -145,6 +194,7 @@
 				35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */,
 				042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */,
 				4B31CDA126203664640FFF96 /* SettingsView.swift */,
+				C74D77E33801AE8DF7BDC67F /* Dashboard */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -243,22 +293,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADD6E0073DA1C9ABA1674175 /* AllTimeView.swift in Sources */,
+				A28573DB47843BB7BE40F320 /* AnalyticsService.swift in Sources */,
 				AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */,
 				25F8E55421DC2B55922B6CC4 /* BlinkApp.swift in Sources */,
 				4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */,
 				632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */,
+				061DA0427EA238BE85F0484D /* DashboardView.swift in Sources */,
+				BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */,
+				42E7968DE2C785D54769C32A /* EyeHealthCalculator.swift in Sources */,
+				1FE36C49979D50150D7AFD3A /* HeatmapView.swift in Sources */,
 				D3C6C248BD1267FCFC2CD3B2 /* HotkeyManager.swift in Sources */,
 				5387B639C73460184472E695 /* IdleDetector.swift in Sources */,
+				A2D25850B165CAA891EE1B03 /* InsightTipView.swift in Sources */,
 				56D66E151B92392FAD048551 /* LaunchAtLoginManager.swift in Sources */,
 				0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */,
+				BDCC35F58C8ADC5000C29EC6 /* MonthView.swift in Sources */,
 				F6D5ADCC1C92DFB776B5A660 /* OnboardingView.swift in Sources */,
 				E0EA58A9A2BC06DBB0D2AF0E /* OnboardingWindowController.swift in Sources */,
 				392771A9BFECC03DF04CA680 /* ScreenLockService.swift in Sources */,
+				4129E9924D67A65E4915D44F /* SessionEvent.swift in Sources */,
+				CD862C41CDF9479F9357C069 /* SessionLogView.swift in Sources */,
 				70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */,
 				DB4B706A1F3E34BD61B14EE3 /* SettingsView.swift in Sources */,
 				E1E630979D77348EA7DC5924 /* SettingsWindowController.swift in Sources */,
+				73E03BFD01CE99F321993218 /* StatCardView.swift in Sources */,
+				73AB7B338DB82417D3186C82 /* TimelineView.swift in Sources */,
 				EC39B00585F415089D82296C /* TimerEngine.swift in Sources */,
 				30D30B4D9A2C6999BE0B1B2A /* TimerState.swift in Sources */,
+				37AE47172E9BA021933E4BAA /* TodayView.swift in Sources */,
+				800B4C3B5C9CC910FF0E3270 /* WeekView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,7 +517,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rachitwatts.blink;
 				PRODUCT_NAME = Blink;
 				SDKROOT = macosx;
@@ -474,7 +538,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rachitwatts.blink;
 				PRODUCT_NAME = Blink;
 				SDKROOT = macosx;
