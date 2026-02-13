@@ -56,28 +56,29 @@ fi
 
 echo "Creating DMG..."
 
-# Create staging directory
-STAGING_DIR="$BUILD_DIR/dmg-staging"
-rm -rf "$STAGING_DIR"
-mkdir -p "$STAGING_DIR"
+# Remove old DMGs if they exist
+rm -f "$BUILD_DIR/$DMG_NAME" "$BUILD_DIR/Blink-rw.dmg"
 
-# Copy app and create Applications symlink
-cp -R "$APP_PATH" "$STAGING_DIR/"
-ln -sf /Applications "$STAGING_DIR/Applications"
-
-# Remove old DMG if exists
-rm -f "$BUILD_DIR/$DMG_NAME"
-
-# Create DMG
+# Create a writable DMG, mount it, copy files, then convert to compressed.
+# This preserves the Applications symlink (hdiutil -srcfolder can drop symlinks).
 hdiutil create \
+    -size 100m \
+    -fs HFS+ \
     -volname "Blink" \
-    -srcfolder "$STAGING_DIR" \
-    -ov \
-    -format UDZO \
-    "$BUILD_DIR/$DMG_NAME"
+    "$BUILD_DIR/Blink-rw.dmg"
 
-# Clean up
-rm -rf "$STAGING_DIR"
+MOUNT_DIR=$(hdiutil attach "$BUILD_DIR/Blink-rw.dmg" -nobrowse | grep '/Volumes/' | sed 's/.*\(\/Volumes\/.*\)/\1/')
+cp -R "$APP_PATH" "$MOUNT_DIR/"
+ln -s /Applications "$MOUNT_DIR/Applications"
+hdiutil detach "$MOUNT_DIR"
+
+# Convert to compressed read-only DMG
+hdiutil convert "$BUILD_DIR/Blink-rw.dmg" \
+    -format UDZO \
+    -o "$BUILD_DIR/$DMG_NAME"
+
+# Clean up writable DMG
+rm -f "$BUILD_DIR/Blink-rw.dmg"
 
 echo ""
 echo "✓ DMG created: $BUILD_DIR/$DMG_NAME"
