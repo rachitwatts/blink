@@ -22,7 +22,7 @@ final class EyeHealthCalculator {
 
         let totalBreaks = breaksCompleted + breaksSkipped
         let breakCompliance = totalBreaks > 0 ? Double(breaksCompleted) / Double(totalBreaks) : 1.0
-        let snoozeRate = breaksStarted > 0 ? Double(breaksSnoozed) / Double(breaksStarted) : 0.0
+        let snoozeRate = breaksStarted > 0 ? min(1.0, Double(breaksSnoozed) / Double(breaksStarted)) : 0.0
 
         let grade = calculateGrade(breakCompliance: breakCompliance, snoozeRate: snoozeRate)
         let tip = generateTip(

@@ -156,10 +156,11 @@ struct AllTimeView: View {
             guard let date = calendar.date(byAdding: .day, value: -dayOffset, to: today) else { continue }
             let sessionCount = daySessionCounts[date] ?? 0
 
-            // Calculate eye health grade for this day if there are events
+            // Calculate eye health grade only for days with session/break activity
             let eventsForDay = dayEvents[date] ?? []
+            let hasActivity = eventsForDay.contains { $0.type == .sessionCompleted || $0.type == .breakCompleted || $0.type == .breakSkipped }
             let grade: String?
-            if !eventsForDay.isEmpty {
+            if hasActivity {
                 grade = EyeHealthCalculator.calculate(from: eventsForDay).grade
             } else {
                 grade = nil
