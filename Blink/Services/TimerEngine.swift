@@ -102,7 +102,10 @@ final class TimerEngine: ObservableObject {
     /// Restart the work session from zero
     func restartSession() {
         print("[TimerEngine] Restarting session")
-        if appState.workElapsedSeconds > 0 {
+        // Only log reset if we're in a work state (not break/snooze where
+        // the work duration was already logged as sessionCompleted)
+        if appState.workElapsedSeconds > 0 &&
+            (appState.timerState == .workRunning || appState.timerState == .workPaused) {
             AnalyticsService.shared.recordSessionReset(
                 elapsed: appState.workElapsedSeconds, reason: "manual_restart"
             )
@@ -120,6 +123,13 @@ final class TimerEngine: ObservableObject {
             return
         }
         print("[TimerEngine] Starting break now (manual)")
+        // Record the in-progress work duration before transitioning to break
+        if appState.workElapsedSeconds > 0 {
+            AnalyticsService.shared.recordSessionCompleted(
+                actualDuration: appState.workElapsedSeconds,
+                configuredDuration: settings.workDurationSeconds
+            )
+        }
         triggerBreak(isManual: true)
     }
 

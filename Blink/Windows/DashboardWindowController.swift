@@ -36,8 +36,8 @@ final class DashboardWindowController {
 
     /// Show the dashboard window, or bring it to front if already open
     func showDashboard() {
-        // If window exists and is visible, bring to front
-        if let existingWindow = window, existingWindow.isVisible {
+        // If window exists, bring to front (reuse even if closed)
+        if let existingWindow = window {
             existingWindow.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
             return
