@@ -18,6 +18,12 @@ struct SettingsView: View {
     /// Track if advanced section is expanded
     @State private var isAdvancedExpanded: Bool = false
 
+    /// Analytics reset confirmation
+    @State private var showResetConfirmation = false
+    @State private var resetConfirmationText = ""
+    @State private var showResetError = false
+    @State private var resetErrorMessage = ""
+
     // MARK: - Body
 
     var body: some View {
@@ -46,10 +52,66 @@ struct SettingsView: View {
 
                 // Keyboard Shortcuts Info
                 shortcutsSection
+
+                Divider()
+
+                // Analytics Data
+                analyticsSection
             }
             .padding(20)
         }
-        .frame(width: 360, height: 480)
+        .frame(width: 360, height: 540)
+        .sheet(isPresented: $showResetConfirmation) {
+            VStack(spacing: 16) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 40))
+                    .foregroundColor(.yellow)
+
+                Text("Reset Analytics Data")
+                    .font(.headline)
+
+                Text("This will permanently delete all your analytics history. This action cannot be undone.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+
+                Text("Type RESET to confirm:")
+                    .font(.caption)
+
+                TextField("", text: $resetConfirmationText)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 150)
+
+                HStack(spacing: 12) {
+                    Button("Cancel") {
+                        resetConfirmationText = ""
+                        showResetConfirmation = false
+                    }
+
+                    Button("Delete All Data") {
+                        if resetConfirmationText == "RESET" {
+                            do {
+                                try AnalyticsService.shared.resetAllData()
+                                resetConfirmationText = ""
+                                showResetConfirmation = false
+                            } catch {
+                                resetErrorMessage = error.localizedDescription
+                                showResetError = true
+                            }
+                        }
+                    }
+                    .disabled(resetConfirmationText != "RESET")
+                    .foregroundColor(.red)
+                }
+            }
+            .padding(24)
+            .frame(width: 350)
+        }
+        .alert("Reset Failed", isPresented: $showResetError) {
+            Button("OK") {}
+        } message: {
+            Text(resetErrorMessage)
+        }
     }
 
     // MARK: - Timer Section
@@ -227,6 +289,25 @@ struct SettingsView: View {
                 }
                 .font(.caption)
             }
+        }
+    }
+
+    // MARK: - Analytics Section
+
+    private var analyticsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Analytics")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
+            Text("Analytics data is stored locally on this Mac.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            Button("Reset All Analytics Data...") {
+                showResetConfirmation = true
+            }
+            .foregroundColor(.red)
         }
     }
 
