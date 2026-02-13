@@ -87,7 +87,8 @@ struct AllTimeView: View {
                             .foregroundColor(.secondary)
 
                         if totalSessions > 0 {
-                            let avgPerDay = totalFocusSeconds / max(1, Calendar.current.dateComponents([.day], from: firstEventDate ?? Date(), to: Date()).day ?? 1)
+                            let daySpan = (Calendar.current.dateComponents([.day], from: firstEventDate ?? Date(), to: Date()).day ?? 0) + 1
+                            let avgPerDay = totalFocusSeconds / max(1, daySpan)
                             Text("Avg Focus/Day: \(formatDuration(avgPerDay))")
                                 .font(.callout)
                                 .foregroundColor(.secondary)

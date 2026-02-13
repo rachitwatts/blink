@@ -117,8 +117,14 @@ final class EyeHealthCalculator {
             if event.type == .breakSkipped {
                 count += 1
                 maxCount = max(maxCount, count)
-            } else if event.type == .breakCompleted {
+            } else if event.type == .breakCompleted || event.type == .breakStarted {
                 break
+            } else {
+                // Non-break event interrupts the consecutive skip run
+                if count > 0 {
+                    maxCount = max(maxCount, count)
+                    count = 0
+                }
             }
         }
 

@@ -100,9 +100,10 @@ struct BlinkApp: App {
                 // Only flash during work sessions
                 guard AppState.shared.timerState == .workRunning else { return }
 
-                // Only flash if there are events today
+                // Only flash if there are session/break events today (not just appLaunched)
                 let events = AnalyticsService.shared.eventsForToday()
-                guard !events.isEmpty else { return }
+                let hasSessionActivity = events.contains { $0.type == .sessionCompleted || $0.type == .breakCompleted || $0.type == .breakSkipped }
+                guard hasSessionActivity else { return }
 
                 AppState.shared.showingScore = true
 
