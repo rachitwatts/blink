@@ -14,78 +14,96 @@ struct AllTimeView: View {
     @State private var eyeHealthMetrics: EyeHealthMetrics?
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                if let firstDate = firstEventDate {
-                    Text("Since \(firstDate, format: .dateTime.month().day().year())")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                } else {
-                    Text("All Time")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                }
-
-                HStack(spacing: 12) {
-                    StatCardView(
-                        value: formatDurationLong(totalFocusSeconds),
-                        label: "Focused",
-                        sublabel: "Lifetime"
-                    )
-                    StatCardView(
-                        value: "\(totalSessions)",
-                        label: "Sessions",
-                        sublabel: "Completed"
-                    )
-                    StatCardView(
-                        value: "\(overallCompliance)%",
-                        label: "Break",
-                        sublabel: "Compliance"
-                    )
-                    StatCardView(
-                        value: eyeHealthMetrics?.grade ?? "\u{2014}",
-                        label: "Eye",
-                        sublabel: "Health"
-                    )
-                }
-
-                HeatmapView(days: heatmapDays, mode: $heatmapMode)
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Insights")
-                        .font(.headline)
-
-                    if let bestDate = bestDayDate {
-                        Text("Best Day: \(formatDuration(bestDaySeconds)) (\(bestDate, format: .dateTime.month().day()))")
-                            .font(.callout)
-                            .foregroundColor(.secondary)
-                    }
-
-                    Text("Current Streak: \(currentStreak) days with 4+ sessions")
-                        .font(.callout)
-                        .foregroundColor(.secondary)
-
-                    Text("Best Streak: \(bestStreak) days")
-                        .font(.callout)
-                        .foregroundColor(.secondary)
-
-                    if totalSessions > 0 {
-                        let avgPerDay = totalFocusSeconds / max(1, Calendar.current.dateComponents([.day], from: firstEventDate ?? Date(), to: Date()).day ?? 1)
-                        Text("Avg Focus/Day: \(formatDuration(avgPerDay))")
-                            .font(.callout)
-                            .foregroundColor(.secondary)
-                    }
-                }
-                .padding()
-                .background(Color(nsColor: .controlBackgroundColor))
-                .cornerRadius(8)
-
-                Spacer()
+        if totalSessions == 0 && firstEventDate == nil {
+            VStack(spacing: 12) {
+                Image(systemName: "chart.bar.xaxis")
+                    .font(.system(size: 48))
+                    .foregroundColor(.secondary)
+                Text("No Analytics Data")
+                    .font(.headline)
+                Text("Complete your first focus session to start tracking.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
             }
-            .padding(20)
-        }
-        .onAppear {
-            loadData()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onAppear {
+                loadData()
+            }
+        } else {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    if let firstDate = firstEventDate {
+                        Text("Since \(firstDate, format: .dateTime.month().day().year())")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                    } else {
+                        Text("All Time")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                    }
+
+                    HStack(spacing: 12) {
+                        StatCardView(
+                            value: formatDurationLong(totalFocusSeconds),
+                            label: "Focused",
+                            sublabel: "Lifetime"
+                        )
+                        StatCardView(
+                            value: "\(totalSessions)",
+                            label: "Sessions",
+                            sublabel: "Completed"
+                        )
+                        StatCardView(
+                            value: "\(overallCompliance)%",
+                            label: "Break",
+                            sublabel: "Compliance"
+                        )
+                        StatCardView(
+                            value: eyeHealthMetrics?.grade ?? "\u{2014}",
+                            label: "Eye",
+                            sublabel: "Health"
+                        )
+                    }
+
+                    HeatmapView(days: heatmapDays, mode: $heatmapMode)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Insights")
+                            .font(.headline)
+
+                        if let bestDate = bestDayDate {
+                            Text("Best Day: \(formatDuration(bestDaySeconds)) (\(bestDate, format: .dateTime.month().day()))")
+                                .font(.callout)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Text("Current Streak: \(currentStreak) days with 4+ sessions")
+                            .font(.callout)
+                            .foregroundColor(.secondary)
+
+                        Text("Best Streak: \(bestStreak) days")
+                            .font(.callout)
+                            .foregroundColor(.secondary)
+
+                        if totalSessions > 0 {
+                            let avgPerDay = totalFocusSeconds / max(1, Calendar.current.dateComponents([.day], from: firstEventDate ?? Date(), to: Date()).day ?? 1)
+                            Text("Avg Focus/Day: \(formatDuration(avgPerDay))")
+                                .font(.callout)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .padding()
+                    .background(Color(nsColor: .controlBackgroundColor))
+                    .cornerRadius(8)
+
+                    Spacer()
+                }
+                .padding(20)
+            }
+            .onAppear {
+                loadData()
+            }
         }
     }
 

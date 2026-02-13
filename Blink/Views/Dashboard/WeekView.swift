@@ -54,106 +54,122 @@ struct WeekView: View {
     // MARK: - Body
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Header
-                Text("Last 7 Days")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-
-                // Stat cards
-                HStack(spacing: 12) {
-                    StatCardView(
-                        value: formatDuration(totalFocusSeconds),
-                        label: "Total Focus",
-                        sublabel: "Time"
-                    )
-                    StatCardView(
-                        value: "\(totalSessions)",
-                        label: "Sessions",
-                        sublabel: "Completed"
-                    )
-                    StatCardView(
-                        value: "\(overallCompliance)%",
-                        label: "Break",
-                        sublabel: "Compliance"
-                    )
-                    StatCardView(
-                        value: eyeHealthMetrics?.grade ?? "\u{2014}",
-                        label: "Eye",
-                        sublabel: "Health"
-                    )
-                }
-
-                // Daily focus time bar chart
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Daily Focus Time")
-                        .font(.headline)
-
-                    Chart(dailyStats) { day in
-                        BarMark(
-                            x: .value("Focus", day.focusSeconds / 60),
-                            y: .value("Day", day.date, unit: .day)
-                        )
-                        .foregroundStyle(day.isWeekend ? Color.gray.opacity(0.5) : Color.blue)
-                    }
-                    .chartXAxisLabel("Minutes")
-                    .frame(height: 200)
-                }
-
-                // Break compliance line chart
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Break Compliance")
-                        .font(.headline)
-
-                    Chart(dailyStats) { day in
-                        LineMark(
-                            x: .value("Day", day.date, unit: .day),
-                            y: .value("Compliance", day.breakCompliance * 100)
-                        )
-                        .foregroundStyle(Color.green)
-
-                        PointMark(
-                            x: .value("Day", day.date, unit: .day),
-                            y: .value("Compliance", day.breakCompliance * 100)
-                        )
-                        .foregroundStyle(Color.green)
-                    }
-                    .chartYAxisLabel("%")
-                    .chartYScale(domain: 0...100)
-                    .frame(height: 150)
-                }
-
-                // Insights
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Insights")
-                        .font(.headline)
-
-                    if let best = mostProductiveDay, best.focusSeconds > 0 {
-                        let dayName = best.date.formatted(.dateTime.weekday(.wide))
-                        Text("Most productive day: \(dayName) with \(formatDuration(best.focusSeconds))")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-
-                    if avgWeekdayFocusSeconds > 0 {
-                        Text("Avg weekday focus: \(formatDuration(avgWeekdayFocusSeconds))")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-
-                    if dailyStats.allSatisfy({ $0.focusSeconds == 0 }) {
-                        Text("No focus sessions recorded this week.")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                }
-
-                Spacer()
+        if dailyStats.allSatisfy({ $0.focusSeconds == 0 }) && !dailyStats.isEmpty {
+            VStack(spacing: 12) {
+                Image(systemName: "chart.bar.xaxis")
+                    .font(.system(size: 48))
+                    .foregroundColor(.secondary)
+                Text("No Data This Week")
+                    .font(.headline)
+                Text("Use Blink for a few days to see weekly trends.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
             }
-            .padding(20)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onAppear { loadData() }
+        } else {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Header
+                    Text("Last 7 Days")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+
+                    // Stat cards
+                    HStack(spacing: 12) {
+                        StatCardView(
+                            value: formatDuration(totalFocusSeconds),
+                            label: "Total Focus",
+                            sublabel: "Time"
+                        )
+                        StatCardView(
+                            value: "\(totalSessions)",
+                            label: "Sessions",
+                            sublabel: "Completed"
+                        )
+                        StatCardView(
+                            value: "\(overallCompliance)%",
+                            label: "Break",
+                            sublabel: "Compliance"
+                        )
+                        StatCardView(
+                            value: eyeHealthMetrics?.grade ?? "\u{2014}",
+                            label: "Eye",
+                            sublabel: "Health"
+                        )
+                    }
+
+                    // Daily focus time bar chart
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Daily Focus Time")
+                            .font(.headline)
+
+                        Chart(dailyStats) { day in
+                            BarMark(
+                                x: .value("Focus", day.focusSeconds / 60),
+                                y: .value("Day", day.date, unit: .day)
+                            )
+                            .foregroundStyle(day.isWeekend ? Color.gray.opacity(0.5) : Color.blue)
+                        }
+                        .chartXAxisLabel("Minutes")
+                        .frame(height: 200)
+                    }
+
+                    // Break compliance line chart
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Break Compliance")
+                            .font(.headline)
+
+                        Chart(dailyStats) { day in
+                            LineMark(
+                                x: .value("Day", day.date, unit: .day),
+                                y: .value("Compliance", day.breakCompliance * 100)
+                            )
+                            .foregroundStyle(Color.green)
+
+                            PointMark(
+                                x: .value("Day", day.date, unit: .day),
+                                y: .value("Compliance", day.breakCompliance * 100)
+                            )
+                            .foregroundStyle(Color.green)
+                        }
+                        .chartYAxisLabel("%")
+                        .chartYScale(domain: 0...100)
+                        .frame(height: 150)
+                    }
+
+                    // Insights
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Insights")
+                            .font(.headline)
+
+                        if let best = mostProductiveDay, best.focusSeconds > 0 {
+                            let dayName = best.date.formatted(.dateTime.weekday(.wide))
+                            Text("Most productive day: \(dayName) with \(formatDuration(best.focusSeconds))")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+
+                        if avgWeekdayFocusSeconds > 0 {
+                            Text("Avg weekday focus: \(formatDuration(avgWeekdayFocusSeconds))")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+
+                        if dailyStats.allSatisfy({ $0.focusSeconds == 0 }) {
+                            Text("No focus sessions recorded this week.")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                    Spacer()
+                }
+                .padding(20)
+            }
+            .onAppear { loadData() }
         }
-        .onAppear { loadData() }
     }
 
     // MARK: - Data Loading

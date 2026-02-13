@@ -126,48 +126,64 @@ struct TodayView: View {
     // MARK: - Body
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Date header
-                Text(Date(), format: .dateTime.weekday(.wide).month().day())
-                    .font(.title2)
-                    .fontWeight(.semibold)
-
-                // Stat cards
-                HStack(spacing: 12) {
-                    StatCardView(value: focusTimeFormatted, label: "Focus", sublabel: "Time")
-                    StatCardView(value: "\(sessionsCompleted)", label: "Sessions", sublabel: "Completed")
-                    StatCardView(value: "\(breakCompliancePercent)%", label: "Break", sublabel: "Compliance")
-                    StatCardView(value: eyeHealthMetrics?.grade ?? "—", label: "Eye", sublabel: "Health")
-                }
-
-                // Timeline
-                if !timelineSegments.isEmpty {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Timeline")
-                            .font(.headline)
-                        TimelineView(
-                            segments: timelineSegments,
-                            dayStart: timelineSegments.first?.startTime
-                                ?? Calendar.current.startOfDay(for: Date()),
-                            dayEnd: Date()
-                        )
-                    }
-                }
-
-                // Session log
-                SessionLogView(entries: sessionLogEntries)
-
-                // Contextual tip when eye health is poor
-                if let tip = eyeHealthMetrics?.tip {
-                    InsightTipView(tip: tip)
-                }
-
-                Spacer()
+        if events.isEmpty {
+            VStack(spacing: 12) {
+                Image(systemName: "chart.bar.xaxis")
+                    .font(.system(size: 48))
+                    .foregroundColor(.secondary)
+                Text("No Sessions Yet")
+                    .font(.headline)
+                Text("Complete your first focus session to see analytics.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
             }
-            .padding(20)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onAppear { loadData() }
+        } else {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Date header
+                    Text(Date(), format: .dateTime.weekday(.wide).month().day())
+                        .font(.title2)
+                        .fontWeight(.semibold)
+
+                    // Stat cards
+                    HStack(spacing: 12) {
+                        StatCardView(value: focusTimeFormatted, label: "Focus", sublabel: "Time")
+                        StatCardView(value: "\(sessionsCompleted)", label: "Sessions", sublabel: "Completed")
+                        StatCardView(value: "\(breakCompliancePercent)%", label: "Break", sublabel: "Compliance")
+                        StatCardView(value: eyeHealthMetrics?.grade ?? "—", label: "Eye", sublabel: "Health")
+                    }
+
+                    // Timeline
+                    if !timelineSegments.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Timeline")
+                                .font(.headline)
+                            TimelineView(
+                                segments: timelineSegments,
+                                dayStart: timelineSegments.first?.startTime
+                                    ?? Calendar.current.startOfDay(for: Date()),
+                                dayEnd: Date()
+                            )
+                        }
+                    }
+
+                    // Session log
+                    SessionLogView(entries: sessionLogEntries)
+
+                    // Contextual tip when eye health is poor
+                    if let tip = eyeHealthMetrics?.tip {
+                        InsightTipView(tip: tip)
+                    }
+
+                    Spacer()
+                }
+                .padding(20)
+            }
+            .onAppear { loadData() }
         }
-        .onAppear { loadData() }
     }
 
     // MARK: - Data Loading

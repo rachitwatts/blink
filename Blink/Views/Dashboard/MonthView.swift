@@ -42,100 +42,116 @@ struct MonthView: View {
     // MARK: - Body
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Header
-                Text("Last 30 Days")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-
-                // Stat cards
-                HStack(spacing: 12) {
-                    StatCardView(
-                        value: formatDuration(totalFocusSeconds),
-                        label: "Total Focus",
-                        sublabel: "Time"
-                    )
-                    StatCardView(
-                        value: "\(totalSessions)",
-                        label: "Sessions",
-                        sublabel: "Completed"
-                    )
-                    StatCardView(
-                        value: "\(overallCompliance)%",
-                        label: "Break",
-                        sublabel: "Compliance"
-                    )
-                    StatCardView(
-                        value: eyeHealthMetrics?.grade ?? "\u{2014}",
-                        label: "Eye",
-                        sublabel: "Health"
-                    )
-                }
-
-                // Weekly focus time bar chart
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Weekly Focus Time")
-                        .font(.headline)
-
-                    Chart(weeklyStats) { week in
-                        BarMark(
-                            x: .value("Week", weekLabel(for: week)),
-                            y: .value("Focus", week.focusSeconds / 60)
-                        )
-                        .foregroundStyle(Color.blue)
-                    }
-                    .chartYAxisLabel("Minutes")
-                    .frame(height: 200)
-                }
-
-                // Weekly compliance line chart
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Weekly Break Compliance")
-                        .font(.headline)
-
-                    Chart(weeklyStats) { week in
-                        LineMark(
-                            x: .value("Week", weekLabel(for: week)),
-                            y: .value("Compliance", week.breakCompliance * 100)
-                        )
-                        .foregroundStyle(Color.green)
-
-                        PointMark(
-                            x: .value("Week", weekLabel(for: week)),
-                            y: .value("Compliance", week.breakCompliance * 100)
-                        )
-                        .foregroundStyle(Color.green)
-                    }
-                    .chartYAxisLabel("%")
-                    .chartYScale(domain: 0...100)
-                    .frame(height: 150)
-                }
-
-                // Insights
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Insights")
-                        .font(.headline)
-
-                    if let best = bestWeek, best.focusSeconds > 0 {
-                        let label = weekLabel(for: best)
-                        Text("Best week: \(label) with \(formatDuration(best.focusSeconds))")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-
-                    if weeklyStats.allSatisfy({ $0.focusSeconds == 0 }) {
-                        Text("No focus sessions recorded in the last 30 days.")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                }
-
-                Spacer()
+        if weeklyStats.allSatisfy({ $0.focusSeconds == 0 }) && !weeklyStats.isEmpty {
+            VStack(spacing: 12) {
+                Image(systemName: "chart.bar.xaxis")
+                    .font(.system(size: 48))
+                    .foregroundColor(.secondary)
+                Text("No Data This Month")
+                    .font(.headline)
+                Text("Use Blink for a few weeks to see monthly trends.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
             }
-            .padding(20)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onAppear { loadData() }
+        } else {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Header
+                    Text("Last 30 Days")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+
+                    // Stat cards
+                    HStack(spacing: 12) {
+                        StatCardView(
+                            value: formatDuration(totalFocusSeconds),
+                            label: "Total Focus",
+                            sublabel: "Time"
+                        )
+                        StatCardView(
+                            value: "\(totalSessions)",
+                            label: "Sessions",
+                            sublabel: "Completed"
+                        )
+                        StatCardView(
+                            value: "\(overallCompliance)%",
+                            label: "Break",
+                            sublabel: "Compliance"
+                        )
+                        StatCardView(
+                            value: eyeHealthMetrics?.grade ?? "\u{2014}",
+                            label: "Eye",
+                            sublabel: "Health"
+                        )
+                    }
+
+                    // Weekly focus time bar chart
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Weekly Focus Time")
+                            .font(.headline)
+
+                        Chart(weeklyStats) { week in
+                            BarMark(
+                                x: .value("Week", weekLabel(for: week)),
+                                y: .value("Focus", week.focusSeconds / 60)
+                            )
+                            .foregroundStyle(Color.blue)
+                        }
+                        .chartYAxisLabel("Minutes")
+                        .frame(height: 200)
+                    }
+
+                    // Weekly compliance line chart
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Weekly Break Compliance")
+                            .font(.headline)
+
+                        Chart(weeklyStats) { week in
+                            LineMark(
+                                x: .value("Week", weekLabel(for: week)),
+                                y: .value("Compliance", week.breakCompliance * 100)
+                            )
+                            .foregroundStyle(Color.green)
+
+                            PointMark(
+                                x: .value("Week", weekLabel(for: week)),
+                                y: .value("Compliance", week.breakCompliance * 100)
+                            )
+                            .foregroundStyle(Color.green)
+                        }
+                        .chartYAxisLabel("%")
+                        .chartYScale(domain: 0...100)
+                        .frame(height: 150)
+                    }
+
+                    // Insights
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Insights")
+                            .font(.headline)
+
+                        if let best = bestWeek, best.focusSeconds > 0 {
+                            let label = weekLabel(for: best)
+                            Text("Best week: \(label) with \(formatDuration(best.focusSeconds))")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+
+                        if weeklyStats.allSatisfy({ $0.focusSeconds == 0 }) {
+                            Text("No focus sessions recorded in the last 30 days.")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                    Spacer()
+                }
+                .padding(20)
+            }
+            .onAppear { loadData() }
         }
-        .onAppear { loadData() }
     }
 
     // MARK: - Data Loading
