@@ -40,6 +40,11 @@ struct SettingsView: View {
 
                 Divider()
 
+                // Nudge Settings
+                nudgeSection
+
+                Divider()
+
                 // Display Settings
                 displaySection
 
@@ -60,7 +65,7 @@ struct SettingsView: View {
             }
             .padding(20)
         }
-        .frame(width: 360, height: 540)
+        .frame(width: 360, height: 680)
         .sheet(isPresented: $showResetConfirmation) {
             VStack(spacing: 16) {
                 Image(systemName: "exclamationmark.triangle.fill")
@@ -157,6 +162,83 @@ struct SettingsView: View {
             Text("Locks when break ends and you're away")
                 .font(.caption)
                 .foregroundColor(.secondary)
+        }
+    }
+
+    // MARK: - Nudge Section
+
+    private var nudgeSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Nudges")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
+            Toggle("Enable micro-nudges", isOn: $settings.nudgesEnabled)
+
+            Text("Gentle reminders to blink, fix posture, and stretch")
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            if settings.nudgesEnabled {
+                // Per-type toggles with frequency
+                nudgeTypeRow(
+                    label: "Blink",
+                    icon: "eye",
+                    enabled: $settings.blinkNudgeEnabled,
+                    interval: $settings.blinkNudgeIntervalMinutes,
+                    range: 5...20
+                )
+
+                nudgeTypeRow(
+                    label: "Posture",
+                    icon: "figure.stand",
+                    enabled: $settings.postureNudgeEnabled,
+                    interval: $settings.postureNudgeIntervalMinutes,
+                    range: 10...45
+                )
+
+                nudgeTypeRow(
+                    label: "Neck stretch",
+                    icon: "figure.cooldown",
+                    enabled: $settings.neckStretchNudgeEnabled,
+                    interval: $settings.neckStretchNudgeIntervalMinutes,
+                    range: 15...60
+                )
+            }
+        }
+    }
+
+    private func nudgeTypeRow(
+        label: String,
+        icon: String,
+        enabled: Binding<Bool>,
+        interval: Binding<Int>,
+        range: ClosedRange<Int>
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Image(systemName: icon)
+                    .frame(width: 16)
+                    .foregroundColor(.purple.opacity(0.8))
+                Toggle(label, isOn: enabled)
+            }
+
+            if enabled.wrappedValue {
+                HStack {
+                    Text("Every")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Stepper(
+                        "\(interval.wrappedValue) min",
+                        value: interval,
+                        in: range,
+                        step: 5
+                    )
+                    .font(.caption)
+                    .frame(width: 110)
+                }
+                .padding(.leading, 24)
+            }
         }
     }
 

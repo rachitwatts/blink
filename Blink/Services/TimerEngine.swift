@@ -155,6 +155,9 @@ final class TimerEngine: ObservableObject {
             breakId: currentBreakId
         )
 
+        // Increase nudge frequency after snooze as a gentle compensatory mechanism
+        NudgeEngine.shared.activateSnoozeBoost()
+
         // Switch to active polling for accurate snooze countdown
         scheduleTimer(interval: activePollingInterval)
     }
@@ -197,14 +200,18 @@ final class TimerEngine: ObservableObject {
         // Debug: log to file
         logToFile("tick: state=\(appState.timerState), snoozeRemaining=\(appState.snoozeRemainingSeconds)")
 
+        let idleSeconds = idleDetector.getIdleTime()
+
         switch appState.timerState {
         case .workRunning:
             handleWorkRunningTick()
+            // Nudge engine piggybacks on the work tick
+            NudgeEngine.shared.tick(idleSeconds: idleSeconds)
 
         case .workPaused:
             // Do nothing - timer is paused
             // But still check idle for adaptive polling
-            updatePollingInterval(forIdleTime: idleDetector.getIdleTime())
+            updatePollingInterval(forIdleTime: idleSeconds)
 
         case .breakRunning:
             handleBreakRunningTick()
@@ -334,6 +341,9 @@ final class TimerEngine: ObservableObject {
         appState.breakRemainingSeconds = configuredBreakDuration
         appState.timerState = .breakRunning
         appState.isOverlayVisible = true
+
+        // Dismiss any visible nudge before showing break overlay
+        NudgeEngine.shared.dismissNudge()
 
         // Play sound if enabled
         if settings.soundEnabled {

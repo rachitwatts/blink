@@ -65,6 +65,24 @@ final class Settings: ObservableObject {
     /// Whether to lock screen when break completes (requires user to be idle)
     @AppStorage("lockScreenAfterBreak") var lockScreenAfterBreak: Bool = false
 
+    // MARK: - Nudge Settings
+
+    /// Master toggle for micro-nudges (default: off)
+    @AppStorage("nudgesEnabled") var nudgesEnabled: Bool = false
+
+    /// Individual nudge type toggles
+    @AppStorage("blinkNudgeEnabled") var blinkNudgeEnabled: Bool = true
+    @AppStorage("postureNudgeEnabled") var postureNudgeEnabled: Bool = true
+    @AppStorage("neckStretchNudgeEnabled") var neckStretchNudgeEnabled: Bool = true
+
+    /// Nudge frequency intervals in minutes
+    @AppStorage("blinkNudgeIntervalMinutes") var blinkNudgeIntervalMinutes: Int = 10
+    @AppStorage("postureNudgeIntervalMinutes") var postureNudgeIntervalMinutes: Int = 25
+    @AppStorage("neckStretchNudgeIntervalMinutes") var neckStretchNudgeIntervalMinutes: Int = 35
+
+    /// How long nudges stay visible in seconds (default: 6)
+    @AppStorage("nudgeDisplayDurationSeconds") var nudgeDisplayDurationSeconds: Int = 6
+
     /// Whether to launch app at login
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = true
 
@@ -106,6 +124,14 @@ final class Settings: ObservableObject {
         displayModeRaw = DisplayMode.elapsed.rawValue
         soundEnabled = false
         lockScreenAfterBreak = false
+        nudgesEnabled = false
+        blinkNudgeEnabled = true
+        postureNudgeEnabled = true
+        neckStretchNudgeEnabled = true
+        blinkNudgeIntervalMinutes = 10
+        postureNudgeIntervalMinutes = 25
+        neckStretchNudgeIntervalMinutes = 35
+        nudgeDisplayDurationSeconds = 6
         launchAtLogin = true
         hasCompletedOnboarding = false
     }

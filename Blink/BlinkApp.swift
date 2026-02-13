@@ -45,8 +45,9 @@ struct BlinkApp: App {
     init() {
         print("[BlinkApp] Initializing")
 
-        // Start timer engine
+        // Start timer engine and nudge engine
         TimerEngine.shared.start()
+        NudgeEngine.shared.start()
 
         // Configure SwiftData for analytics
         do {
@@ -85,6 +86,16 @@ struct BlinkApp: App {
                 } else {
                     print("[BlinkApp] Hiding overlay")
                     BreakOverlayWindowController.shared.hideOverlay()
+                }
+            }
+            .store(in: &BlinkAppStorage.shared.cancellables)
+
+        // Setup nudge dismiss observer - hide window when nudge is dismissed
+        NudgeEngine.shared.$activeNudge
+            .receive(on: DispatchQueue.main)
+            .sink { nudgeType in
+                if nudgeType == nil {
+                    NudgeWindowController.shared.hideNudge()
                 }
             }
             .store(in: &BlinkAppStorage.shared.cancellables)
