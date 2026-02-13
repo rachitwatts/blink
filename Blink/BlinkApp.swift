@@ -28,8 +28,8 @@ struct BlinkApp: App {
             MenuBarView()
         } label: {
             // Display timer or eye health score flash
-            // Score flashes briefly every 5 minutes during work
-            if appState.showingScore {
+            // Score flashes briefly every 5 minutes during work only
+            if appState.showingScore && appState.timerState == .workRunning {
                 Text(AnalyticsService.shared.todaySummary().eyeHealthGrade)
                     .monospacedDigit()
             } else {

@@ -102,6 +102,10 @@ final class TimerEngine: ObservableObject {
     /// Restart the work session from zero
     func restartSession() {
         print("[TimerEngine] Restarting session")
+        // If restarting during a break or snooze, record it as a skipped break
+        if appState.timerState == .breakRunning || appState.timerState == .snoozeRunning {
+            AnalyticsService.shared.recordBreakSkipped(remainingSeconds: appState.breakRemainingSeconds)
+        }
         // Only log reset if we're in a work state (not break/snooze where
         // the work duration was already logged as sessionCompleted)
         if appState.workElapsedSeconds > 0 &&
