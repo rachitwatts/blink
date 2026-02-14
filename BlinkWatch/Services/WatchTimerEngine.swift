@@ -133,7 +133,8 @@ final class WatchTimerEngine: ObservableObject {
     private func handleBreakTick() {
         if appState.breakRemainingSeconds > 0 {
             appState.breakRemainingSeconds -= 1
-        } else {
+        }
+        if appState.breakRemainingSeconds <= 0 {
             completeBreak()
         }
     }
@@ -141,7 +142,8 @@ final class WatchTimerEngine: ObservableObject {
     private func handleSnoozeTick() {
         if appState.snoozeRemainingSeconds > 0 {
             appState.snoozeRemainingSeconds -= 1
-        } else {
+        }
+        if appState.snoozeRemainingSeconds <= 0 {
             triggerBreak()
         }
     }

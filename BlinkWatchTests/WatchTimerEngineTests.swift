@@ -277,11 +277,10 @@ final class WatchTimerEngineTests: XCTestCase {
         XCTAssertEqual(appState.timerState, .breakRunning)
         XCTAssertEqual(appState.breakRemainingSeconds, settings.breakDurationSeconds)
 
-        // Tick through entire break duration + 1 to complete
+        // Tick through entire break duration to complete
         for _ in 0..<settings.breakDurationSeconds {
             engine.tick()
         }
-        engine.tick()
 
         XCTAssertEqual(appState.timerState, .workRunning)
         XCTAssertEqual(appState.workElapsedSeconds, 0)
@@ -301,11 +300,10 @@ final class WatchTimerEngineTests: XCTestCase {
         XCTAssertEqual(appState.timerState, .snoozeRunning)
         XCTAssertEqual(appState.snoozeRemainingSeconds, settings.snoozeDurationSeconds)
 
-        // Tick through snooze + 1 to re-trigger
+        // Tick through snooze to re-trigger break
         for _ in 0..<settings.snoozeDurationSeconds {
             engine.tick()
         }
-        engine.tick()
 
         XCTAssertEqual(appState.timerState, .breakRunning)
     }
