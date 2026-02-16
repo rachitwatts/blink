@@ -57,9 +57,10 @@ final class WatchSettings: ObservableObject {
     /// Used for conflict resolution: only apply if the remote timestamp is newer.
     private(set) var lastAppliedRemoteAt: TimeInterval = 0
 
-    /// Whether we are currently applying remote settings.
-    /// Used to suppress re-publishing settings that arrived from sync.
-    private(set) var isApplyingRemote: Bool = false
+    /// Timestamp of the last remote settings apply.
+    /// The debounced Combine observer checks this to avoid re-publishing
+    /// settings that arrived from sync.
+    private(set) var lastRemoteApplyAt: TimeInterval = 0
 
     /// Publish current settings to iCloud KVS for the Mac to receive.
     func publishToSync(_ syncManager: any SyncManagerProtocol) {
@@ -84,9 +85,7 @@ final class WatchSettings: ObservableObject {
         guard remote.changedAt > lastAppliedRemoteAt,
               remote.changedAt > lastPublishedAt else { return false }
 
-        isApplyingRemote = true
-        defer { isApplyingRemote = false }
-
+        lastRemoteApplyAt = Date().timeIntervalSince1970
         lastAppliedRemoteAt = remote.changedAt
         workDurationMinutes = remote.workDurationMinutes
         breakDurationMinutes = remote.breakDurationMinutes
@@ -105,6 +104,6 @@ final class WatchSettings: ObservableObject {
         hapticEnabled = true
         lastPublishedAt = 0
         lastAppliedRemoteAt = 0
-        isApplyingRemote = false
+        lastRemoteApplyAt = 0
     }
 }

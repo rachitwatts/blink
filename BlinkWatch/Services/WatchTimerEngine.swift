@@ -158,6 +158,8 @@ final class WatchTimerEngine: ObservableObject {
         // Apply locally immediately for responsiveness
         appState.snoozeRemainingSeconds = settings.snoozeDurationSeconds
         appState.timerState = .snoozeRunning
+        // Clear synced payload so tick() uses local mode until Mac acknowledges
+        lastSyncPayload = nil
         // Publish action to Mac via iCloud KVS
         if let syncManager {
             syncManager.publishWatchAction(SyncAction(
@@ -175,6 +177,8 @@ final class WatchTimerEngine: ObservableObject {
         appState.workElapsedSeconds = 0
         appState.timerState = .workRunning
         endExtendedSession()
+        // Clear synced payload so tick() uses local mode until Mac acknowledges
+        lastSyncPayload = nil
         // Publish action to Mac via iCloud KVS
         if let syncManager {
             syncManager.publishWatchAction(SyncAction(
@@ -221,8 +225,11 @@ final class WatchTimerEngine: ObservableObject {
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self, let syncManager = self.syncManager else { return }
-                // Don't re-publish settings that came from a remote device
-                guard !self.settings.isApplyingRemote else { return }
+                // Don't re-publish settings that came from a remote device.
+                // Check timestamp rather than a flag because the debounce fires
+                // after applyRemoteSettings returns (flag would already be cleared).
+                let timeSinceRemoteApply = Date().timeIntervalSince1970 - self.settings.lastRemoteApplyAt
+                guard timeSinceRemoteApply > 1.0 else { return }
                 self.settings.publishToSync(syncManager)
             }
     }
