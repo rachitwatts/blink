@@ -156,17 +156,25 @@ final class WatchTimerEngineTests: XCTestCase {
         XCTAssertEqual(appState.breakRemainingSeconds, 59)
     }
 
-    func testBreakTickCompletesAtZero() {
+    func testBreakTickStaysAtZero() {
+        // Break reaching zero does NOT auto-complete. The UI shows BreakEndedView
+        // with escalating haptics. The user dismisses manually via skipBreak().
         let appState = WatchAppState.shared
         let engine = WatchTimerEngine.shared
 
         appState.timerState = .breakRunning
-        appState.breakRemainingSeconds = 0
+        appState.breakRemainingSeconds = 1
 
         engine.tick()
 
-        XCTAssertEqual(appState.timerState, .workRunning)
-        XCTAssertEqual(appState.workElapsedSeconds, 0)
+        // breakRemaining decremented to 0, but state stays breakRunning
+        XCTAssertEqual(appState.breakRemainingSeconds, 0)
+        XCTAssertEqual(appState.timerState, .breakRunning)
+
+        // Additional ticks keep state at breakRunning with 0 remaining
+        engine.tick()
+        XCTAssertEqual(appState.breakRemainingSeconds, 0)
+        XCTAssertEqual(appState.timerState, .breakRunning)
     }
 
     func testSnoozeTickDecrementsRemaining() {
@@ -277,10 +285,17 @@ final class WatchTimerEngineTests: XCTestCase {
         XCTAssertEqual(appState.timerState, .breakRunning)
         XCTAssertEqual(appState.breakRemainingSeconds, settings.breakDurationSeconds)
 
-        // Tick through entire break duration to complete
+        // Tick through entire break duration — break stays at zero
+        // (UI handles showing BreakEndedView, user dismisses via skipBreak)
         for _ in 0..<settings.breakDurationSeconds {
             engine.tick()
         }
+
+        XCTAssertEqual(appState.timerState, .breakRunning)
+        XCTAssertEqual(appState.breakRemainingSeconds, 0)
+
+        // User dismisses break-ended view which calls skipBreak()
+        engine.skipBreak()
 
         XCTAssertEqual(appState.timerState, .workRunning)
         XCTAssertEqual(appState.workElapsedSeconds, 0)
