@@ -80,8 +80,9 @@ final class WatchSettings: ObservableObject {
     /// Returns true if settings were applied, false if they were ignored (stale).
     @discardableResult
     func applyRemoteSettings(_ remote: SyncSettings) -> Bool {
-        // Only apply if remote timestamp is newer than what we last applied
-        guard remote.changedAt > lastAppliedRemoteAt else { return false }
+        // Reject if remote is older than what we last applied or last published locally
+        guard remote.changedAt > lastAppliedRemoteAt,
+              remote.changedAt > lastPublishedAt else { return false }
 
         isApplyingRemote = true
         defer { isApplyingRemote = false }

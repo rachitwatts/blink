@@ -20,6 +20,7 @@ struct BlinkWatchApp: App {
 
     init() {
         WatchTimerEngine.shared.start()
+        WatchTimerEngine.shared.setupSync()
     }
 }
 
