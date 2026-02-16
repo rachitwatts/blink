@@ -79,6 +79,54 @@ final class Settings: ObservableObject {
         // Private to enforce singleton pattern
     }
 
+    // MARK: - Sync
+
+    /// Timestamp of the last local settings change that was published.
+    /// Used to prevent infinite sync loops: when we receive a remote settings
+    /// payload that we ourselves published, we ignore it.
+    var lastPublishedAt: TimeInterval = 0
+
+    /// Timestamp of the last applied remote settings.
+    /// Used for conflict resolution: only apply if the remote timestamp is newer.
+    private(set) var lastAppliedRemoteAt: TimeInterval = 0
+
+    /// Whether we are currently applying remote settings.
+    /// Used to suppress re-publishing settings that arrived from sync.
+    private(set) var isApplyingRemote: Bool = false
+
+    /// Publish current settings to iCloud KVS for the watch to receive.
+    func publishToSync(_ syncManager: any SyncManagerProtocol) {
+        let now = Date().timeIntervalSince1970
+        let syncSettings = SyncSettings(
+            workDurationMinutes: workDurationMinutes,
+            breakDurationMinutes: breakDurationMinutes,
+            snoozeDurationMinutes: snoozeDurationMinutes,
+            displayMode: displayMode.rawValue,
+            changedAt: now
+        )
+        lastPublishedAt = now
+        syncManager.publishSettings(syncSettings)
+    }
+
+    /// Apply settings received from the watch (or another device).
+    /// Only applies if the remote timestamp is newer than the last applied remote settings.
+    /// Returns true if settings were applied, false if they were ignored (stale).
+    @discardableResult
+    func applyRemoteSettings(_ remote: SyncSettings) -> Bool {
+        // Only apply if remote timestamp is newer than what we last applied
+        guard remote.changedAt > lastAppliedRemoteAt else { return false }
+
+        isApplyingRemote = true
+        defer { isApplyingRemote = false }
+
+        lastAppliedRemoteAt = remote.changedAt
+        workDurationMinutes = remote.workDurationMinutes
+        breakDurationMinutes = remote.breakDurationMinutes
+        snoozeDurationMinutes = remote.snoozeDurationMinutes
+        displayMode = DisplayMode(rawValue: remote.displayMode) ?? .elapsed
+        return true
+    }
+
     // MARK: - Reset
 
     /// Reset all settings to defaults (useful for testing)
@@ -93,5 +141,8 @@ final class Settings: ObservableObject {
         lockScreenAfterBreak = false
         launchAtLogin = true
         hasCompletedOnboarding = false
+        lastPublishedAt = 0
+        lastAppliedRemoteAt = 0
+        isApplyingRemote = false
     }
 }

@@ -24,15 +24,26 @@ final class TimerEngine: ObservableObject {
     private let settings = Settings.shared
     private var idleDetector: IdleTimeProvider = IdleDetector.shared
 
+    /// Sync manager for publishing state to watch via iCloud KVS.
+    /// Nil when sync is disabled (e.g., during tests).
+    private var syncManager: (any SyncManagerProtocol)?
+
     #if DEBUG
     func setIdleDetector(_ provider: IdleTimeProvider) {
         self.idleDetector = provider
+    }
+
+    /// Replace or disable the sync manager for testing.
+    /// Pass nil to disable sync entirely.
+    func setSyncManager(_ manager: (any SyncManagerProtocol)?) {
+        self.syncManager = manager
     }
     #endif
 
     // MARK: - Timer State
 
     private var timerCancellable: AnyCancellable?
+    private var settingsSyncCancellable: AnyCancellable?
 
     /// Flag to reset work elapsed to 0 when user returns from long idle
     private var shouldResetOnNextActivity: Bool = false
@@ -58,6 +69,76 @@ final class TimerEngine: ObservableObject {
 
     private init() {
         // Private to enforce singleton pattern
+    }
+
+    // MARK: - Sync
+
+    /// Set up iCloud KVS sync for watch communication.
+    /// Call once after start(). Skipped automatically when syncManager is nil (tests).
+    func setupSync() {
+        guard syncManager == nil else { return } // Already configured (e.g., injected in tests)
+        let manager = ICloudSyncManager()
+        syncManager = manager
+        configureSyncCallbacks()
+        observeSettingsChanges()
+        manager.startObserving()
+        // Publish initial state so watch picks up current Mac state
+        publishSyncPayload()
+        settings.publishToSync(manager)
+    }
+
+    /// Wire up callbacks for incoming watch actions and settings.
+    private func configureSyncCallbacks() {
+        syncManager?.onWatchActionReceived = { [weak self] action in
+            Task { @MainActor in
+                guard let self else { return }
+                switch action.action {
+                case .snooze:
+                    self.snoozeBreak()
+                case .skipBreak:
+                    self.skipBreak()
+                }
+            }
+        }
+
+        syncManager?.onSettingsReceived = { [weak self] remote in
+            Task { @MainActor in
+                guard let self else { return }
+                self.settings.applyRemoteSettings(remote)
+            }
+        }
+    }
+
+    /// Observe Settings changes via Combine and publish to iCloud KVS.
+    /// Skips publishing when the change originated from a remote sync
+    /// (to prevent infinite publish → receive → publish loops).
+    private func observeSettingsChanges() {
+        settingsSyncCancellable = settings.objectWillChange
+            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
+            .sink { [weak self] _ in
+                guard let self, let syncManager = self.syncManager else { return }
+                // Don't re-publish settings that came from a remote device
+                guard !self.settings.isApplyingRemote else { return }
+                self.settings.publishToSync(syncManager)
+            }
+    }
+
+    /// Build and publish the current timer state to iCloud KVS.
+    private func publishSyncPayload() {
+        guard let syncManager else { return }
+        syncManager.publishTimerState(buildSyncPayload())
+    }
+
+    /// Build a SyncPayload from the current app state.
+    private func buildSyncPayload() -> SyncPayload {
+        SyncPayload(
+            timerState: appState.timerState,
+            stateChangedAt: Date().timeIntervalSince1970,
+            workElapsedAtChange: appState.workElapsedSeconds,
+            breakRemainingAtChange: appState.breakRemainingSeconds,
+            snoozeRemainingAtChange: appState.snoozeRemainingSeconds,
+            sourceDevice: "mac"
+        )
     }
 
     // MARK: - Public API: Lifecycle
@@ -90,11 +171,13 @@ final class TimerEngine: ObservableObject {
             print("[TimerEngine] Pausing")
             appState.timerState = .workPaused
             AnalyticsService.shared.recordPauseToggled(newState: "paused")
+            publishSyncPayload()
 
         case .workPaused:
             print("[TimerEngine] Resuming")
             appState.timerState = .workRunning
             AnalyticsService.shared.recordPauseToggled(newState: "resumed")
+            publishSyncPayload()
 
         case .breakRunning, .snoozeRunning:
             // Cannot pause during break or snooze
@@ -121,6 +204,7 @@ final class TimerEngine: ObservableObject {
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
+        publishSyncPayload()
     }
 
     /// Manually trigger a break (Start Break Now)
@@ -154,6 +238,7 @@ final class TimerEngine: ObservableObject {
             snoozeDuration: settings.snoozeDurationSeconds,
             breakId: currentBreakId
         )
+        publishSyncPayload()
 
         // Switch to active polling for accurate snooze countdown
         scheduleTimer(interval: activePollingInterval)
@@ -171,6 +256,7 @@ final class TimerEngine: ObservableObject {
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
+        publishSyncPayload()
 
         // Switch to active polling for new work session
         scheduleTimer(interval: activePollingInterval)
@@ -317,6 +403,7 @@ final class TimerEngine: ObservableObject {
             appState.breakRemainingSeconds = configuredBreakDuration
             appState.timerState = .breakRunning
             appState.isOverlayVisible = true
+            publishSyncPayload()
         }
     }
 
@@ -334,6 +421,7 @@ final class TimerEngine: ObservableObject {
         appState.breakRemainingSeconds = configuredBreakDuration
         appState.timerState = .breakRunning
         appState.isOverlayVisible = true
+        publishSyncPayload()
 
         // Play sound if enabled
         if settings.soundEnabled {
@@ -367,6 +455,7 @@ final class TimerEngine: ObservableObject {
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
+        publishSyncPayload()
 
         // Switch to active polling for new work session
         scheduleTimer(interval: activePollingInterval)
