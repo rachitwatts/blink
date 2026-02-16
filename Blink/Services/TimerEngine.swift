@@ -354,6 +354,13 @@ final class TimerEngine: ObservableObject {
             // This handles the adaptive polling correctly
             appState.workElapsedSeconds += Int(currentPollingInterval)
 
+            // Publish periodic heartbeat for watch sync (every 10 active seconds).
+            // Without this, the watch marks the connection as offline after 30s
+            // because the Mac only publishes on state transitions.
+            if appState.workElapsedSeconds % 10 == 0 {
+                publishSyncPayload()
+            }
+
         } else if idleSeconds < idleReset {
             // MEDIUM IDLE (stepped away temporarily)
             // Don't count this time, but don't reset either

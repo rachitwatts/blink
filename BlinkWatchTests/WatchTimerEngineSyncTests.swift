@@ -281,7 +281,7 @@ final class WatchTimerEngineSyncTests: XCTestCase {
 
     // MARK: - Synced Tick Mode Tests
 
-    func testTickInSyncedModeRecomputesFromPayload() {
+    func testTickInSyncedModeIncrementsWorkLocally() {
         let engine = WatchTimerEngine.shared
         let appState = WatchAppState.shared
 
@@ -297,12 +297,12 @@ final class WatchTimerEngineSyncTests: XCTestCase {
         )
         engine.handleRemoteState(payload)
 
-        // Tick in synced mode — should recompute from payload
+        // Tick in synced mode — should increment locally so display stays alive
         engine.tick()
 
-        // Work elapsed is NOT extrapolated (Mac uses idle-aware timing),
-        // so it stays at the synced value.
-        XCTAssertEqual(appState.workElapsedSeconds, 600)
+        // Work elapsed increments by 1 per tick (Mac snapshots arrive on
+        // state transitions and periodic heartbeats to correct drift).
+        XCTAssertEqual(appState.workElapsedSeconds, 601)
     }
 
     func testTickInLocalModeIncrementsIndependently() {

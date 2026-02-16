@@ -138,12 +138,16 @@ final class WatchTimerEngine: ObservableObject {
         case .breakRunning, .snoozeRunning:
             break
         }
+        // Clear synced payload so tick() uses local mode until Mac acknowledges
+        lastSyncPayload = nil
     }
 
     func restartSession() {
         appState.workElapsedSeconds = 0
         appState.timerState = .workRunning
         endExtendedSession()
+        // Clear synced payload so tick() uses local mode until Mac acknowledges
+        lastSyncPayload = nil
     }
 
     func startBreakNow() {
@@ -151,6 +155,8 @@ final class WatchTimerEngine: ObservableObject {
             return
         }
         triggerBreak()
+        // Clear synced payload so tick() uses local mode until Mac acknowledges
+        lastSyncPayload = nil
     }
 
     func snoozeBreak() {
@@ -289,8 +295,19 @@ final class WatchTimerEngine: ObservableObject {
     func tick() {
         updateOfflineStatus()
         if isSyncConfigured, !isOffline, let payload = lastSyncPayload {
-            // Synced mode: recompute from the last received payload's timestamps
-            applyPayload(payload)
+            // Synced mode: recompute from the last received payload's timestamps.
+            // For workRunning, increment locally between Mac updates so the
+            // display stays alive (Mac only publishes on state transitions
+            // and periodic heartbeats, not every second).
+            switch payload.timerState {
+            case .workRunning:
+                appState.workElapsedSeconds += 1
+            case .workPaused:
+                break // Paused — display stays frozen
+            default:
+                // Break/snooze — recompute countdown from payload timestamps
+                applyPayload(payload)
+            }
         } else {
             // Local/offline mode: original independent tick logic
             switch appState.timerState {

@@ -339,4 +339,41 @@ final class TimerEngineSyncTests: XCTestCase {
         TimerEngine.shared.togglePause()
         TimerEngine.shared.restartSession()
     }
+
+    // MARK: - Heartbeat Publishing
+
+    func testHeartbeatPublishesEveryTenSeconds() {
+        let engine = TimerEngine.shared
+        let appState = AppState.shared
+
+        // Set work elapsed to 9 (just before heartbeat threshold)
+        appState.workElapsedSeconds = 9
+        mockSync.reset()
+
+        // Tick at active idle — increments to 10, should trigger heartbeat
+        mockIdle.idleTime = 0
+        engine.tick()
+
+        XCTAssertEqual(appState.workElapsedSeconds, 10)
+        XCTAssertEqual(mockSync.publishedPayloads.count, 1,
+            "Should publish heartbeat when work elapsed hits multiple of 10")
+        XCTAssertEqual(mockSync.lastPayload!.timerState, .workRunning)
+    }
+
+    func testNoHeartbeatBetweenIntervals() {
+        let engine = TimerEngine.shared
+        let appState = AppState.shared
+
+        // Set work elapsed to 10 (just after heartbeat)
+        appState.workElapsedSeconds = 10
+        mockSync.reset()
+
+        // Tick — increments to 11, should NOT trigger heartbeat
+        mockIdle.idleTime = 0
+        engine.tick()
+
+        XCTAssertEqual(appState.workElapsedSeconds, 11)
+        XCTAssertEqual(mockSync.publishedPayloads.count, 0,
+            "Should not publish heartbeat between 10-second intervals")
+    }
 }
