@@ -65,6 +65,13 @@ final class TimerEngine: ObservableObject {
     /// Current polling interval
     private var currentPollingInterval: TimeInterval = 1.0
 
+    // MARK: - Sync Heartbeat
+
+    /// Accumulated time since last heartbeat publication.
+    /// Uses polling interval increments (not wall clock) so heartbeats
+    /// fire even during Mac idle periods when work time isn't advancing.
+    private var secondsSinceLastHeartbeat: TimeInterval = 0
+
     // MARK: - Initialization
 
     private init() {
@@ -154,6 +161,7 @@ final class TimerEngine: ObservableObject {
             return
         }
         print("[TimerEngine] Starting with \(activePollingInterval)s interval")
+        secondsSinceLastHeartbeat = 0
         scheduleTimer(interval: activePollingInterval)
     }
 
@@ -207,6 +215,8 @@ final class TimerEngine: ObservableObject {
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
+        secondsSinceLastHeartbeat = 0
+        scheduleTimer(interval: activePollingInterval)
         publishSyncPayload()
     }
 
@@ -286,6 +296,16 @@ final class TimerEngine: ObservableObject {
         // Debug: log to file
         logToFile("tick: state=\(appState.timerState), snoozeRemaining=\(appState.snoozeRemainingSeconds)")
 
+        // Periodic heartbeat for watch sync — fires in any state to keep
+        // the watch from flipping to offline/local mode during Mac idle.
+        // Uses polling interval (not work time) so it fires even when the
+        // Mac isn't incrementing work elapsed (medium idle, paused, break).
+        secondsSinceLastHeartbeat += currentPollingInterval
+        if secondsSinceLastHeartbeat >= 10 {
+            secondsSinceLastHeartbeat = 0
+            publishSyncPayload()
+        }
+
         switch appState.timerState {
         case .workRunning:
             handleWorkRunningTick()
@@ -353,13 +373,6 @@ final class TimerEngine: ObservableObject {
             // Note: We add the polling interval, not just 1 second
             // This handles the adaptive polling correctly
             appState.workElapsedSeconds += Int(currentPollingInterval)
-
-            // Publish periodic heartbeat for watch sync (every 10 active seconds).
-            // Without this, the watch marks the connection as offline after 30s
-            // because the Mac only publishes on state transitions.
-            if appState.workElapsedSeconds % 10 == 0 {
-                publishSyncPayload()
-            }
 
         } else if idleSeconds < idleReset {
             // MEDIUM IDLE (stepped away temporarily)

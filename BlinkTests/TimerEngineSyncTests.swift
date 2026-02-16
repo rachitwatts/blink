@@ -342,38 +342,50 @@ final class TimerEngineSyncTests: XCTestCase {
 
     // MARK: - Heartbeat Publishing
 
-    func testHeartbeatPublishesEveryTenSeconds() {
+    func testHeartbeatPublishesEveryTenTicks() {
         let engine = TimerEngine.shared
-        let appState = AppState.shared
-
-        // Set work elapsed to 9 (just before heartbeat threshold)
-        appState.workElapsedSeconds = 9
         mockSync.reset()
-
-        // Tick at active idle — increments to 10, should trigger heartbeat
         mockIdle.idleTime = 0
-        engine.tick()
 
-        XCTAssertEqual(appState.workElapsedSeconds, 10)
+        // Tick 9 times — counter accumulates but no heartbeat yet
+        for _ in 1...9 {
+            engine.tick()
+        }
+        XCTAssertEqual(mockSync.publishedPayloads.count, 0,
+            "Should not publish heartbeat before 10 ticks")
+
+        // 10th tick — heartbeat fires
+        engine.tick()
         XCTAssertEqual(mockSync.publishedPayloads.count, 1,
-            "Should publish heartbeat when work elapsed hits multiple of 10")
+            "Should publish heartbeat on 10th tick")
         XCTAssertEqual(mockSync.lastPayload!.timerState, .workRunning)
     }
 
-    func testNoHeartbeatBetweenIntervals() {
+    func testHeartbeatFiresDuringIdlePeriod() {
         let engine = TimerEngine.shared
-        let appState = AppState.shared
-
-        // Set work elapsed to 10 (just after heartbeat)
-        appState.workElapsedSeconds = 10
         mockSync.reset()
 
-        // Tick — increments to 11, should NOT trigger heartbeat
+        // Set idle to medium idle (between idleIgnore=60 and idleReset=300)
+        // Mac won't increment work time but should still heartbeat
+        mockIdle.idleTime = 120
+
+        // Tick 10 times at idle — heartbeat should still fire
+        for _ in 1...10 {
+            engine.tick()
+        }
+        XCTAssertGreaterThanOrEqual(mockSync.publishedPayloads.count, 1,
+            "Should publish heartbeat even during idle periods")
+    }
+
+    func testNoHeartbeatBeforeTenTicks() {
+        let engine = TimerEngine.shared
+        mockSync.reset()
         mockIdle.idleTime = 0
+
+        // Single tick — no heartbeat
         engine.tick()
 
-        XCTAssertEqual(appState.workElapsedSeconds, 11)
         XCTAssertEqual(mockSync.publishedPayloads.count, 0,
-            "Should not publish heartbeat between 10-second intervals")
+            "Should not publish heartbeat after only 1 tick")
     }
 }
