@@ -95,9 +95,9 @@ final class WatchTimerEngineSyncTests: XCTestCase {
         engine.handleRemoteState(payload)
 
         XCTAssertEqual(appState.timerState, .workRunning)
-        // 600 + ~5 seconds elapsed = ~605
-        XCTAssertGreaterThanOrEqual(appState.workElapsedSeconds, 604)
-        XCTAssertLessThanOrEqual(appState.workElapsedSeconds, 606)
+        // Work elapsed is NOT extrapolated from wall clock (Mac uses idle-aware
+        // timing), so we get exactly the synced value, not synced + elapsed.
+        XCTAssertEqual(appState.workElapsedSeconds, 600)
     }
 
     func testHandleRemoteStateBreakRunningAppliesTimeAdjustedRemaining() {
@@ -297,14 +297,12 @@ final class WatchTimerEngineSyncTests: XCTestCase {
         )
         engine.handleRemoteState(payload)
 
-        // Tick in synced mode — should recompute from payload timestamps
-        let beforeTick = appState.workElapsedSeconds
+        // Tick in synced mode — should recompute from payload
         engine.tick()
 
-        // After tick, workElapsedSeconds should be recomputed from payload
-        // It should be approximately 600 + time since stateChangedAt
-        let expectedMin = 600 + 10 // at least 10 seconds since stateChangedAt
-        XCTAssertGreaterThanOrEqual(appState.workElapsedSeconds, expectedMin - 1)
+        // Work elapsed is NOT extrapolated (Mac uses idle-aware timing),
+        // so it stays at the synced value.
+        XCTAssertEqual(appState.workElapsedSeconds, 600)
     }
 
     func testTickInLocalModeIncrementsIndependently() {

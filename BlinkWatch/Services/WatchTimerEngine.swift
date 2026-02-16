@@ -244,7 +244,11 @@ final class WatchTimerEngine: ObservableObject {
 
         switch payload.timerState {
         case .workRunning:
-            appState.workElapsedSeconds = payload.workElapsedAtChange + Int(elapsed)
+            // Don't extrapolate work elapsed from wall clock — Mac's idle-aware
+            // timing pauses work counting during idle, so wall-clock extrapolation
+            // drifts ahead. Just use the last synced value; it updates on every
+            // Mac state transition (~1-5s latency).
+            appState.workElapsedSeconds = payload.workElapsedAtChange
         case .workPaused:
             appState.workElapsedSeconds = payload.workElapsedAtChange
         case .breakRunning:
@@ -260,6 +264,13 @@ final class WatchTimerEngine: ObservableObject {
             }
             if !disableHardwareInteractions {
                 startExtendedSession()
+            }
+        }
+
+        // Break exit detection: end extended session when leaving breakRunning
+        if previousState == .breakRunning && payload.timerState != .breakRunning {
+            if !disableHardwareInteractions {
+                endExtendedSession()
             }
         }
     }
