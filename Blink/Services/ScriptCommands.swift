@@ -3,7 +3,7 @@ import Foundation
 /// AppleScript command: `tell application "Blink" to take break`
 class TakeBreakCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
-        DispatchQueue.main.sync {
+        MainActor.assumeIsolated {
             BlinkActions.execute(.takeBreak).message
         }
     }
@@ -12,7 +12,7 @@ class TakeBreakCommand: NSScriptCommand {
 /// AppleScript command: `tell application "Blink" to snooze`
 class SnoozeBreakCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
-        DispatchQueue.main.sync {
+        MainActor.assumeIsolated {
             BlinkActions.execute(.snooze).message
         }
     }
@@ -21,7 +21,7 @@ class SnoozeBreakCommand: NSScriptCommand {
 /// AppleScript command: `tell application "Blink" to restart timer`
 class RestartTimerCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
-        DispatchQueue.main.sync {
+        MainActor.assumeIsolated {
             BlinkActions.execute(.restart).message
         }
     }
@@ -30,7 +30,7 @@ class RestartTimerCommand: NSScriptCommand {
 /// AppleScript command: `tell application "Blink" to get status`
 class GetStatusCommand: NSScriptCommand {
     override func performDefaultImplementation() -> Any? {
-        DispatchQueue.main.sync {
+        MainActor.assumeIsolated {
             BlinkActions.execute(.status).message
         }
     }
