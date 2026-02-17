@@ -8,10 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		061DA0427EA238BE85F0484D /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A391242EBB4D85082A17B4 /* DashboardView.swift */; };
+		068337C7ECB2334E776835E9 /* SyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D974565B929B9DFF5932A42C /* SyncAction.swift */; };
+		0A6BE83D87AE7E9E7B4B2A6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D01A0FA0E75C70BDC3D72446 /* Assets.xcassets */; };
+		0DADB7E2280060FFB88F5B18 /* BlinkWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB245469D61AE2514B9BDD55 /* BlinkWatchApp.swift */; };
 		0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */; };
+		178B19FA860258796D87FBCF /* WatchBreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C26ED59625B3DCA8D51F2B /* WatchBreakView.swift */; };
+		17B487222AE4F434C2F96EEC /* TimerEngineSyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC867AC6A18ED2E407546F /* TimerEngineSyncTests.swift */; };
+		1B07346E3B237039418EC3DB /* ICloudSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C379C782060321688D11C2 /* ICloudSyncManager.swift */; };
 		1FE36C49979D50150D7AFD3A /* HeatmapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEB2A9AB2CD68D70760DDB /* HeatmapView.swift */; };
+		22301253ABE390BD07B09A2E /* WatchSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3B4002EA1DF78532197FF /* WatchSettings.swift */; };
+		2251E3ED33212FA950F3CED6 /* TimeFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A5CDC4BE4F953F49EAFE50 /* TimeFormattingTests.swift */; };
 		25F8E55421DC2B55922B6CC4 /* BlinkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DBB159CA5CB427CCCADEF /* BlinkApp.swift */; };
-		30D30B4D9A2C6999BE0B1B2A /* TimerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B14229E5F2CC5BE38BBD8F /* TimerState.swift */; };
+		2967AC701EA104579C0B4055 /* DisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF76295D6FFC56F94BB6FA48 /* DisplayMode.swift */; };
+		307D8C5E569C63FB93E80632 /* WatchTimerEngineSyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D33185BE2E09721611CD41C /* WatchTimerEngineSyncTests.swift */; };
+		332CA585EABD66BC469578EB /* SyncSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067E7DFF7A098E73A581F177 /* SyncSettings.swift */; };
 		37AE47172E9BA021933E4BAA /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5805D0FFE3D68E06036E9624 /* TodayView.swift */; };
 		392771A9BFECC03DF04CA680 /* ScreenLockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F216EAFA3B9F1BEFF27C83 /* ScreenLockService.swift */; };
 		4129E9924D67A65E4915D44F /* SessionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */; };
@@ -19,28 +29,50 @@
 		44A45038B0F961D173826104 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3611BA1F7A16AA6199641486 /* Assets.xcassets */; };
 		4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1991D869152E867145645 /* BreakOverlayView.swift */; };
 		5387B639C73460184472E695 /* IdleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */; };
+		561235F3A441C65D4814B682 /* HapticManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BD4F44B082B1C62F6CCA35 /* HapticManagerTests.swift */; };
 		56D66E151B92392FAD048551 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */; };
 		5ABFB2E35715D42FFB42D99C /* TimerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D227434466D7C6840A638063 /* TimerStateTests.swift */; };
 		632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */; };
+		63F935ACAD05A5950E6630BB /* SyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFE8B26C6DF5391F9F4AE14 /* SyncPayload.swift */; };
+		65256C105373F4843FBE8750 /* SyncManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4C671A4943BDB5F56525A /* SyncManagerProtocol.swift */; };
+		6763D29A256E6CD8BF40549B /* SyncPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559A948D3157A727B635AD6 /* SyncPayloadTests.swift */; };
+		6B12ED3083670AD2A8EC289E /* TimeFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA12D464303FF2278DCC338A /* TimeFormatting.swift */; };
+		6D59219F69C8347D7A2A4508 /* WatchAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB6CF7394F2442F2A83F872 /* WatchAppState.swift */; };
 		70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF789F55EB114BFCAAC4D66E /* Settings.swift */; };
+		715F377E3949D9A1AF625547 /* TimeFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA12D464303FF2278DCC338A /* TimeFormatting.swift */; };
+		7353CC5D60AB384F22E0E2EB /* WatchSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0087FD7E489413B25D39F6 /* WatchSettingsView.swift */; };
 		73AB7B338DB82417D3186C82 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B03EA8B0225251705AB7B3D /* TimelineView.swift */; };
 		73E03BFD01CE99F321993218 /* StatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00172653033246D12BB1077 /* StatCardView.swift */; };
 		78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F959148BA99247482E7877 /* SettingsTests.swift */; };
 		800B4C3B5C9CC910FF0E3270 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18329DE3828BB763D21CF688 /* WeekView.swift */; };
+		8267F47B366DCEA9C6829F0F /* SyncSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067E7DFF7A098E73A581F177 /* SyncSettings.swift */; };
+		8445575A6F5EB89E6B723219 /* WatchTimerEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E704484188F40EB352ED29AD /* WatchTimerEngineTests.swift */; };
+		8C8FD4D90A3968F2A1BE5210 /* WatchTimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E1AFE54B32FEA74E25B794 /* WatchTimerEngine.swift */; };
+		8D95842169BA8A842D46CFE6 /* TimerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C7D916B815399763305AF /* TimerState.swift */; };
+		9AB7927FB2F935D00B39B66A /* SyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFE8B26C6DF5391F9F4AE14 /* SyncPayload.swift */; };
 		A28573DB47843BB7BE40F320 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */; };
 		A2D25850B165CAA891EE1B03 /* InsightTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1EC3310B24818DC6EF078 /* InsightTipView.swift */; };
+		A8F6DA6DB891BD302FA92BCA /* SyncManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4C671A4943BDB5F56525A /* SyncManagerProtocol.swift */; };
+		A9389DB467652FDAA1C4005B /* SyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D974565B929B9DFF5932A42C /* SyncAction.swift */; };
 		AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF6E4483329D18D25EE4C8D /* AppState.swift */; };
 		ADD6E0073DA1C9ABA1674175 /* AllTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A1794267E2C1A35324FC /* AllTimeView.swift */; };
+		B1C1705753F1EE6A95A53520 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2CADE2E46074308C5CEE6E /* HapticManager.swift */; };
 		BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BD162119285851B944B178 /* DashboardWindowController.swift */; };
 		BDCC35F58C8ADC5000C29EC6 /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8491C3E02C2563330E0344 /* MonthView.swift */; };
 		CD862C41CDF9479F9357C069 /* SessionLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A1ECC4BB78ABCED93570E3 /* SessionLogView.swift */; };
+		CDABB5F7580F1E5EB16058F2 /* ICloudSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C379C782060321688D11C2 /* ICloudSyncManager.swift */; };
 		D3C6C248BD1267FCFC2CD3B2 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C848C558D50C6595E1828A3 /* HotkeyManager.swift */; };
 		DA5884368B97D20F9914F81E /* TimerEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E96408D496193EA27189E7 /* TimerEngineTests.swift */; };
 		DB4B706A1F3E34BD61B14EE3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B31CDA126203664640FFF96 /* SettingsView.swift */; };
+		DB94E77756056654B9B18139 /* TimerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C7D916B815399763305AF /* TimerState.swift */; };
 		E0EA58A9A2BC06DBB0D2AF0E /* OnboardingWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E51DA777F6F2CA9EC950552 /* OnboardingWindowController.swift */; };
 		E1E630979D77348EA7DC5924 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */; };
+		E7D4A7F77EBC63E49A656823 /* WatchSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539361C5F8FC469187F20612 /* WatchSessionView.swift */; };
+		EA597E948FD513E5202D24C1 /* DisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF76295D6FFC56F94BB6FA48 /* DisplayMode.swift */; };
+		EBEC5FEE6D13F49CCBE2E0FB /* BreakEndedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BC59BE96C107ACFC71544 /* BreakEndedView.swift */; };
 		EC39B00585F415089D82296C /* TimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289903B92CFE24D5E706A4B8 /* TimerEngine.swift */; };
 		F6D5ADCC1C92DFB776B5A660 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */; };
+		F89473CFF3C186DC281F2D79 /* BreakActiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E4422A69A8EB3F9F61B5B4 /* BreakActiveView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,13 +83,26 @@
 			remoteGlobalIDString = 4F7B28CBF14815045A9B7C0C;
 			remoteInfo = Blink;
 		};
+		A49038F86A4C893D57747358 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5F716E18902DA7ABF2287DDD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F8F93E82691F278A52D84A8;
+			remoteInfo = BlinkWatch;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		00F1991D869152E867145645 /* BreakOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakOverlayView.swift; sourceTree = "<group>"; };
 		042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		05044F51BADFD4336A1B9967 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		067E7DFF7A098E73A581F177 /* SyncSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSettings.swift; sourceTree = "<group>"; };
+		076C7D916B815399763305AF /* TimerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerState.swift; sourceTree = "<group>"; };
+		08DC867AC6A18ED2E407546F /* TimerEngineSyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngineSyncTests.swift; sourceTree = "<group>"; };
 		0B47EB8B7273BB95141192DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		0D33185BE2E09721611CD41C /* WatchTimerEngineSyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTimerEngineSyncTests.swift; sourceTree = "<group>"; };
 		10F959148BA99247482E7877 /* SettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
+		176BC59BE96C107ACFC71544 /* BreakEndedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakEndedView.swift; sourceTree = "<group>"; };
 		18329DE3828BB763D21CF688 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
 		2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthCalculator.swift; sourceTree = "<group>"; };
 		23B1EC3310B24818DC6EF078 /* InsightTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightTipView.swift; sourceTree = "<group>"; };
@@ -65,35 +110,94 @@
 		26A391242EBB4D85082A17B4 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		289903B92CFE24D5E706A4B8 /* TimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngine.swift; sourceTree = "<group>"; };
 		314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakOverlayWindowController.swift; sourceTree = "<group>"; };
+		35A33A27684E2230972E1395 /* BlinkWatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlinkWatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		3611BA1F7A16AA6199641486 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3EB6CF7394F2442F2A83F872 /* WatchAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAppState.swift; sourceTree = "<group>"; };
 		43D3A1794267E2C1A35324FC /* AllTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTimeView.swift; sourceTree = "<group>"; };
 		48431B2C296BDB92BF0BB93C /* Blink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blink.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A0087FD7E489413B25D39F6 /* WatchSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSettingsView.swift; sourceTree = "<group>"; };
 		4B31CDA126203664640FFF96 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		4BE4C671A4943BDB5F56525A /* SyncManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManagerProtocol.swift; sourceTree = "<group>"; };
+		4DFE8B26C6DF5391F9F4AE14 /* SyncPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncPayload.swift; sourceTree = "<group>"; };
+		539361C5F8FC469187F20612 /* WatchSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionView.swift; sourceTree = "<group>"; };
 		57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
 		5805D0FFE3D68E06036E9624 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDetector.swift; sourceTree = "<group>"; };
 		6E8491C3E02C2563330E0344 /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
+		71BD4F44B082B1C62F6CCA35 /* HapticManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManagerTests.swift; sourceTree = "<group>"; };
 		7B03EA8B0225251705AB7B3D /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
+		7B50720E0BC9451F19647EEF /* BlinkWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlinkWatch.entitlements; sourceTree = "<group>"; };
 		7E51DA777F6F2CA9EC950552 /* OnboardingWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWindowController.swift; sourceTree = "<group>"; };
 		83CABA226B77C41C6ED8BE26 /* BlinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86E96408D496193EA27189E7 /* TimerEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngineTests.swift; sourceTree = "<group>"; };
+		8C3FE352EB3AFEEB76ECBD6B /* Blink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blink.entitlements; sourceTree = "<group>"; };
+		97E1AFE54B32FEA74E25B794 /* WatchTimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTimerEngine.swift; sourceTree = "<group>"; };
 		989DBB159CA5CB427CCCADEF /* BlinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkApp.swift; sourceTree = "<group>"; };
 		9C848C558D50C6595E1828A3 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
+		A4C379C782060321688D11C2 /* ICloudSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudSyncManager.swift; sourceTree = "<group>"; };
+		A8C26ED59625B3DCA8D51F2B /* WatchBreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchBreakView.swift; sourceTree = "<group>"; };
+		A9D3B4002EA1DF78532197FF /* WatchSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSettings.swift; sourceTree = "<group>"; };
+		AB4E287AD1A9757283A87C42 /* BlinkWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlinkWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEvent.swift; sourceTree = "<group>"; };
 		AF789F55EB114BFCAAC4D66E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		B0A5CDC4BE4F953F49EAFE50 /* TimeFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormattingTests.swift; sourceTree = "<group>"; };
+		BB245469D61AE2514B9BDD55 /* BlinkWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkWatchApp.swift; sourceTree = "<group>"; };
+		BF76295D6FFC56F94BB6FA48 /* DisplayMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayMode.swift; sourceTree = "<group>"; };
 		C4A1ECC4BB78ABCED93570E3 /* SessionLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionLogView.swift; sourceTree = "<group>"; };
 		C4BD162119285851B944B178 /* DashboardWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardWindowController.swift; sourceTree = "<group>"; };
+		CA2CADE2E46074308C5CEE6E /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
+		D01A0FA0E75C70BDC3D72446 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D227434466D7C6840A638063 /* TimerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerStateTests.swift; sourceTree = "<group>"; };
-		D7B14229E5F2CC5BE38BBD8F /* TimerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerState.swift; sourceTree = "<group>"; };
+		D974565B929B9DFF5932A42C /* SyncAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAction.swift; sourceTree = "<group>"; };
+		DA12D464303FF2278DCC338A /* TimeFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatting.swift; sourceTree = "<group>"; };
 		DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		E559A948D3157A727B635AD6 /* SyncPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncPayloadTests.swift; sourceTree = "<group>"; };
+		E704484188F40EB352ED29AD /* WatchTimerEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTimerEngineTests.swift; sourceTree = "<group>"; };
 		F00172653033246D12BB1077 /* StatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCardView.swift; sourceTree = "<group>"; };
+		F0E4422A69A8EB3F9F61B5B4 /* BreakActiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakActiveView.swift; sourceTree = "<group>"; };
 		F0FEB2A9AB2CD68D70760DDB /* HeatmapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatmapView.swift; sourceTree = "<group>"; };
 		FBF6E4483329D18D25EE4C8D /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		1968AD7BBD06B5241B0E0CA1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3EB6CF7394F2442F2A83F872 /* WatchAppState.swift */,
+				A9D3B4002EA1DF78532197FF /* WatchSettings.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		20782E60E931E1AAD4A6941C /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				BF76295D6FFC56F94BB6FA48 /* DisplayMode.swift */,
+				A4C379C782060321688D11C2 /* ICloudSyncManager.swift */,
+				D974565B929B9DFF5932A42C /* SyncAction.swift */,
+				4BE4C671A4943BDB5F56525A /* SyncManagerProtocol.swift */,
+				4DFE8B26C6DF5391F9F4AE14 /* SyncPayload.swift */,
+				067E7DFF7A098E73A581F177 /* SyncSettings.swift */,
+				DA12D464303FF2278DCC338A /* TimeFormatting.swift */,
+				076C7D916B815399763305AF /* TimerState.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		2F3CE6921E4CB9789AF7668D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F0E4422A69A8EB3F9F61B5B4 /* BreakActiveView.swift */,
+				176BC59BE96C107ACFC71544 /* BreakEndedView.swift */,
+				A8C26ED59625B3DCA8D51F2B /* WatchBreakView.swift */,
+				539361C5F8FC469187F20612 /* WatchSessionView.swift */,
+				4A0087FD7E489413B25D39F6 /* WatchSettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		3A270D15CC4BE237D818A9F7 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +223,15 @@
 			path = Windows;
 			sourceTree = "<group>";
 		};
+		4ED402DD38850FC669001EAF /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CA2CADE2E46074308C5CEE6E /* HapticManager.swift */,
+				97E1AFE54B32FEA74E25B794 /* WatchTimerEngine.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		6B4DFF2978746EEAAA0E3700 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -127,9 +240,24 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		7F8944AF51D1E8B45F813A3D /* BlinkWatch */ = {
+			isa = PBXGroup;
+			children = (
+				7B50720E0BC9451F19647EEF /* BlinkWatch.entitlements */,
+				BB245469D61AE2514B9BDD55 /* BlinkWatchApp.swift */,
+				05044F51BADFD4336A1B9967 /* Info.plist */,
+				1968AD7BBD06B5241B0E0CA1 /* Models */,
+				B517D1B92C8335D7C0A49E2B /* Resources */,
+				4ED402DD38850FC669001EAF /* Services */,
+				2F3CE6921E4CB9789AF7668D /* Views */,
+			);
+			path = BlinkWatch;
+			sourceTree = "<group>";
+		};
 		A668A2BE284733E6CF606FC7 /* Blink */ = {
 			isa = PBXGroup;
 			children = (
+				8C3FE352EB3AFEEB76ECBD6B /* Blink.entitlements */,
 				989DBB159CA5CB427CCCADEF /* BlinkApp.swift */,
 				0B47EB8B7273BB95141192DE /* Info.plist */,
 				C9D3CC1439A512CB2F2EFA74 /* Models */,
@@ -146,8 +274,30 @@
 			children = (
 				A668A2BE284733E6CF606FC7 /* Blink */,
 				ED4A683DB64EC1ACF4A0AB0F /* BlinkTests */,
+				7F8944AF51D1E8B45F813A3D /* BlinkWatch */,
+				B2F875E8EA20C62589297B29 /* BlinkWatchTests */,
+				20782E60E931E1AAD4A6941C /* Shared */,
 				E370FA75E2B9CA960A6CB41D /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		B2F875E8EA20C62589297B29 /* BlinkWatchTests */ = {
+			isa = PBXGroup;
+			children = (
+				71BD4F44B082B1C62F6CCA35 /* HapticManagerTests.swift */,
+				B0A5CDC4BE4F953F49EAFE50 /* TimeFormattingTests.swift */,
+				0D33185BE2E09721611CD41C /* WatchTimerEngineSyncTests.swift */,
+				E704484188F40EB352ED29AD /* WatchTimerEngineTests.swift */,
+			);
+			path = BlinkWatchTests;
+			sourceTree = "<group>";
+		};
+		B517D1B92C8335D7C0A49E2B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D01A0FA0E75C70BDC3D72446 /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		C74D77E33801AE8DF7BDC67F /* Dashboard */ = {
@@ -173,7 +323,6 @@
 				FBF6E4483329D18D25EE4C8D /* AppState.swift */,
 				AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */,
 				AF789F55EB114BFCAAC4D66E /* Settings.swift */,
-				D7B14229E5F2CC5BE38BBD8F /* TimerState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -183,6 +332,8 @@
 			children = (
 				48431B2C296BDB92BF0BB93C /* Blink.app */,
 				83CABA226B77C41C6ED8BE26 /* BlinkTests.xctest */,
+				AB4E287AD1A9757283A87C42 /* BlinkWatch.app */,
+				35A33A27684E2230972E1395 /* BlinkWatchTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -203,6 +354,8 @@
 			isa = PBXGroup;
 			children = (
 				10F959148BA99247482E7877 /* SettingsTests.swift */,
+				E559A948D3157A727B635AD6 /* SyncPayloadTests.swift */,
+				08DC867AC6A18ED2E407546F /* TimerEngineSyncTests.swift */,
 				86E96408D496193EA27189E7 /* TimerEngineTests.swift */,
 				D227434466D7C6840A638063 /* TimerStateTests.swift */,
 			);
@@ -230,6 +383,24 @@
 			productReference = 48431B2C296BDB92BF0BB93C /* Blink.app */;
 			productType = "com.apple.product-type.application";
 		};
+		7F8F93E82691F278A52D84A8 /* BlinkWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F50AF863BA69B5F87FF3D99 /* Build configuration list for PBXNativeTarget "BlinkWatch" */;
+			buildPhases = (
+				AB7325A5797981ABC026AB69 /* Sources */,
+				98D4C7406A6BE7E15D39B422 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BlinkWatch;
+			packageProductDependencies = (
+			);
+			productName = BlinkWatch;
+			productReference = AB4E287AD1A9757283A87C42 /* BlinkWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
 		BE1454EFB82FC7D2C94FB354 /* BlinkTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 563DE6CE260D3D1FF908B1E3 /* Build configuration list for PBXNativeTarget "BlinkTests" */;
@@ -246,6 +417,24 @@
 			);
 			productName = BlinkTests;
 			productReference = 83CABA226B77C41C6ED8BE26 /* BlinkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DA19F31CB2273A3FC88AB2F9 /* BlinkWatchTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB83DED2CD1C9C50B8FA8D82 /* Build configuration list for PBXNativeTarget "BlinkWatchTests" */;
+			buildPhases = (
+				D530B46F25F716C4B433F9F7 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9360BA4404DBE603EF0CD473 /* PBXTargetDependency */,
+			);
+			name = BlinkWatchTests;
+			packageProductDependencies = (
+			);
+			productName = BlinkWatchTests;
+			productReference = 35A33A27684E2230972E1395 /* BlinkWatchTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -273,6 +462,8 @@
 			targets = (
 				4F7B28CBF14815045A9B7C0C /* Blink */,
 				BE1454EFB82FC7D2C94FB354 /* BlinkTests */,
+				7F8F93E82691F278A52D84A8 /* BlinkWatch */,
+				DA19F31CB2273A3FC88AB2F9 /* BlinkWatchTests */,
 			);
 		};
 /* End PBXProject section */
@@ -283,6 +474,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				44A45038B0F961D173826104 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98D4C7406A6BE7E15D39B422 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A6BE83D87AE7E9E7B4B2A6B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,9 +500,11 @@
 				632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */,
 				061DA0427EA238BE85F0484D /* DashboardView.swift in Sources */,
 				BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */,
+				EA597E948FD513E5202D24C1 /* DisplayMode.swift in Sources */,
 				42E7968DE2C785D54769C32A /* EyeHealthCalculator.swift in Sources */,
 				1FE36C49979D50150D7AFD3A /* HeatmapView.swift in Sources */,
 				D3C6C248BD1267FCFC2CD3B2 /* HotkeyManager.swift in Sources */,
+				1B07346E3B237039418EC3DB /* ICloudSyncManager.swift in Sources */,
 				5387B639C73460184472E695 /* IdleDetector.swift in Sources */,
 				A2D25850B165CAA891EE1B03 /* InsightTipView.swift in Sources */,
 				56D66E151B92392FAD048551 /* LaunchAtLoginManager.swift in Sources */,
@@ -318,11 +519,52 @@
 				DB4B706A1F3E34BD61B14EE3 /* SettingsView.swift in Sources */,
 				E1E630979D77348EA7DC5924 /* SettingsWindowController.swift in Sources */,
 				73E03BFD01CE99F321993218 /* StatCardView.swift in Sources */,
+				A9389DB467652FDAA1C4005B /* SyncAction.swift in Sources */,
+				A8F6DA6DB891BD302FA92BCA /* SyncManagerProtocol.swift in Sources */,
+				9AB7927FB2F935D00B39B66A /* SyncPayload.swift in Sources */,
+				332CA585EABD66BC469578EB /* SyncSettings.swift in Sources */,
+				6B12ED3083670AD2A8EC289E /* TimeFormatting.swift in Sources */,
 				73AB7B338DB82417D3186C82 /* TimelineView.swift in Sources */,
 				EC39B00585F415089D82296C /* TimerEngine.swift in Sources */,
-				30D30B4D9A2C6999BE0B1B2A /* TimerState.swift in Sources */,
+				DB94E77756056654B9B18139 /* TimerState.swift in Sources */,
 				37AE47172E9BA021933E4BAA /* TodayView.swift in Sources */,
 				800B4C3B5C9CC910FF0E3270 /* WeekView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB7325A5797981ABC026AB69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0DADB7E2280060FFB88F5B18 /* BlinkWatchApp.swift in Sources */,
+				F89473CFF3C186DC281F2D79 /* BreakActiveView.swift in Sources */,
+				EBEC5FEE6D13F49CCBE2E0FB /* BreakEndedView.swift in Sources */,
+				2967AC701EA104579C0B4055 /* DisplayMode.swift in Sources */,
+				B1C1705753F1EE6A95A53520 /* HapticManager.swift in Sources */,
+				CDABB5F7580F1E5EB16058F2 /* ICloudSyncManager.swift in Sources */,
+				068337C7ECB2334E776835E9 /* SyncAction.swift in Sources */,
+				65256C105373F4843FBE8750 /* SyncManagerProtocol.swift in Sources */,
+				63F935ACAD05A5950E6630BB /* SyncPayload.swift in Sources */,
+				8267F47B366DCEA9C6829F0F /* SyncSettings.swift in Sources */,
+				715F377E3949D9A1AF625547 /* TimeFormatting.swift in Sources */,
+				8D95842169BA8A842D46CFE6 /* TimerState.swift in Sources */,
+				6D59219F69C8347D7A2A4508 /* WatchAppState.swift in Sources */,
+				178B19FA860258796D87FBCF /* WatchBreakView.swift in Sources */,
+				E7D4A7F77EBC63E49A656823 /* WatchSessionView.swift in Sources */,
+				22301253ABE390BD07B09A2E /* WatchSettings.swift in Sources */,
+				7353CC5D60AB384F22E0E2EB /* WatchSettingsView.swift in Sources */,
+				8C8FD4D90A3968F2A1BE5210 /* WatchTimerEngine.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D530B46F25F716C4B433F9F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				561235F3A441C65D4814B682 /* HapticManagerTests.swift in Sources */,
+				2251E3ED33212FA950F3CED6 /* TimeFormattingTests.swift in Sources */,
+				307D8C5E569C63FB93E80632 /* WatchTimerEngineSyncTests.swift in Sources */,
+				8445575A6F5EB89E6B723219 /* WatchTimerEngineTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +573,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */,
+				6763D29A256E6CD8BF40549B /* SyncPayloadTests.swift in Sources */,
+				17B487222AE4F434C2F96EEC /* TimerEngineSyncTests.swift in Sources */,
 				DA5884368B97D20F9914F81E /* TimerEngineTests.swift in Sources */,
 				5ABFB2E35715D42FFB42D99C /* TimerStateTests.swift in Sources */,
 			);
@@ -343,6 +587,11 @@
 			isa = PBXTargetDependency;
 			target = 4F7B28CBF14815045A9B7C0C /* Blink */;
 			targetProxy = 085974DFCB2BECF3DC6BFAD7 /* PBXContainerItemProxy */;
+		};
+		9360BA4404DBE603EF0CD473 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F8F93E82691F278A52D84A8 /* BlinkWatch */;
+			targetProxy = A49038F86A4C893D57747358 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -396,10 +645,30 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		1B68C23BE7F1F29BE625A8A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BlinkWatch/BlinkWatch.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BlinkWatch/Info.plist;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rachitwatts.blink.watch;
+				PRODUCT_NAME = BlinkWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Release;
 		};
@@ -497,10 +766,10 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Debug;
 		};
@@ -508,6 +777,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Blink/Blink.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -525,10 +795,71 @@
 			};
 			name = Debug;
 		};
+		AF986FFFC2F7C96CD7BE921E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BlinkWatch/BlinkWatch.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = BlinkWatch/Info.plist;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rachitwatts.blink.watch;
+				PRODUCT_NAME = BlinkWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		DF293612ECF483BBBF24DE6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rachitwatts.BlinkWatchTests;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlinkWatch.app/BlinkWatch";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		E022442B015958492C0A7047 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rachitwatts.BlinkWatchTests;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlinkWatch.app/BlinkWatch";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 		F31BE749247DCA686B22646D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Blink/Blink.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -567,11 +898,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		6F50AF863BA69B5F87FF3D99 /* Build configuration list for PBXNativeTarget "BlinkWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF986FFFC2F7C96CD7BE921E /* Debug */,
+				1B68C23BE7F1F29BE625A8A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		9CDF5C024DE739BC28A35BFC /* Build configuration list for PBXNativeTarget "Blink" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AEA610DE59472AAECC971BAC /* Debug */,
 				F31BE749247DCA686B22646D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CB83DED2CD1C9C50B8FA8D82 /* Build configuration list for PBXNativeTarget "BlinkWatchTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DF293612ECF483BBBF24DE6A /* Debug */,
+				E022442B015958492C0A7047 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

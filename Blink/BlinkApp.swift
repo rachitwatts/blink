@@ -45,8 +45,9 @@ struct BlinkApp: App {
     init() {
         print("[BlinkApp] Initializing")
 
-        // Start timer engine
+        // Start timer engine and iCloud KVS sync
         TimerEngine.shared.start()
+        TimerEngine.shared.setupSync()
 
         // Configure SwiftData for analytics
         do {

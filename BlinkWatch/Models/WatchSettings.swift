@@ -1,17 +1,17 @@
 import Foundation
 import SwiftUI
 
-/// Centralized settings storage using UserDefaults via @AppStorage
+/// Watch-specific settings storage using UserDefaults via @AppStorage
 ///
-/// Usage: Access via `Settings.shared` singleton
-/// All properties automatically persist to UserDefaults
-final class Settings: ObservableObject {
+/// Mirrors the macOS Settings with watch-relevant properties only.
+/// The watch app runs independently with its own local settings.
+final class WatchSettings: ObservableObject {
 
     // MARK: - Singleton
 
-    static let shared = Settings()
+    static let shared = WatchSettings()
 
-    // MARK: - Timer Durations (in minutes, stored as Int)
+    // MARK: - Timer Durations (in minutes)
 
     /// Work session duration in minutes (default: 25)
     @AppStorage("workDurationMinutes") var workDurationMinutes: Int = 25
@@ -22,19 +22,9 @@ final class Settings: ObservableObject {
     /// Snooze duration in minutes (default: 5)
     @AppStorage("snoozeDurationMinutes") var snoozeDurationMinutes: Int = 5
 
-    // MARK: - Idle Thresholds (in seconds)
-
-    /// Idle time below this is treated as "still working" (reading, thinking)
-    /// Default: 60 seconds
-    @AppStorage("idleIgnoreThreshold") var idleIgnoreThreshold: Int = 60
-
-    /// Idle time at or above this triggers session reset on return
-    /// Default: 300 seconds (5 minutes)
-    @AppStorage("idleResetThreshold") var idleResetThreshold: Int = 300
-
     // MARK: - Display Settings
 
-    /// How to display time in menu bar: "elapsed" or "remaining"
+    /// How to display time: "elapsed" or "remaining"
     @AppStorage("displayMode") private var displayModeRaw: String = DisplayMode.elapsed.rawValue
 
     var displayMode: DisplayMode {
@@ -44,46 +34,23 @@ final class Settings: ObservableObject {
 
     // MARK: - Feature Toggles
 
-    /// Whether to play sound when break starts
-    @AppStorage("soundEnabled") var soundEnabled: Bool = false
-
-    /// Whether to lock screen when break completes (requires user to be idle)
-    @AppStorage("lockScreenAfterBreak") var lockScreenAfterBreak: Bool = false
-
-    /// Whether to launch app at login
-    @AppStorage("launchAtLogin") var launchAtLogin: Bool = true
-
-    /// Whether user has completed first-launch onboarding
-    @AppStorage("hasCompletedOnboarding") var hasCompletedOnboarding: Bool = false
+    /// Whether to use haptic feedback for break notifications
+    @AppStorage("hapticEnabled") var hapticEnabled: Bool = true
 
     // MARK: - Computed Properties (seconds)
 
-    /// Work duration in seconds
-    var workDurationSeconds: Int {
-        workDurationMinutes * 60
-    }
-
-    /// Break duration in seconds
-    var breakDurationSeconds: Int {
-        breakDurationMinutes * 60
-    }
-
-    /// Snooze duration in seconds
-    var snoozeDurationSeconds: Int {
-        snoozeDurationMinutes * 60
-    }
+    var workDurationSeconds: Int { workDurationMinutes * 60 }
+    var breakDurationSeconds: Int { breakDurationMinutes * 60 }
+    var snoozeDurationSeconds: Int { snoozeDurationMinutes * 60 }
 
     // MARK: - Initialization
 
-    private init() {
-        // Private to enforce singleton pattern
-    }
+    private init() {}
 
     // MARK: - Sync
 
     /// Timestamp of the last local settings change that was published.
-    /// Used to prevent infinite sync loops: when we receive a remote settings
-    /// payload that we ourselves published, we ignore it.
+    /// Used to prevent infinite sync loops.
     var lastPublishedAt: TimeInterval = 0
 
     /// Timestamp of the last applied remote settings.
@@ -92,15 +59,14 @@ final class Settings: ObservableObject {
 
     /// Timestamp of the last remote settings apply.
     /// The debounced Combine observer checks this to avoid re-publishing
-    /// settings that arrived from sync (isApplyingRemote was insufficient
-    /// because defer clears it before the 500ms debounce fires).
+    /// settings that arrived from sync.
     private(set) var lastRemoteApplyAt: TimeInterval = 0
 
     /// Snapshot of last published synced values. Prevents redundant publishes
-    /// when only non-synced properties (soundEnabled, etc.) change.
+    /// when only non-synced properties (hapticEnabled) change.
     private var lastPublishedSnapshot: (Int, Int, Int, String) = (0, 0, 0, "")
 
-    /// Publish current settings to iCloud KVS for the watch to receive.
+    /// Publish current settings to iCloud KVS for the Mac to receive.
     /// Skips the publish if synced values haven't changed since last publish.
     func publishToSync(_ syncManager: any SyncManagerProtocol) {
         let current = (workDurationMinutes, breakDurationMinutes, snoozeDurationMinutes, displayMode.rawValue)
@@ -119,7 +85,7 @@ final class Settings: ObservableObject {
         syncManager.publishSettings(syncSettings)
     }
 
-    /// Apply settings received from the watch (or another device).
+    /// Apply settings received from the Mac (or another device) via iCloud KVS.
     /// Only applies if the remote timestamp is newer than the last applied remote settings.
     /// Returns true if settings were applied, false if they were ignored (stale).
     @discardableResult
@@ -141,18 +107,12 @@ final class Settings: ObservableObject {
 
     // MARK: - Reset
 
-    /// Reset all settings to defaults (useful for testing)
     func resetToDefaults() {
         workDurationMinutes = 25
         breakDurationMinutes = 5
         snoozeDurationMinutes = 5
-        idleIgnoreThreshold = 60
-        idleResetThreshold = 300
         displayModeRaw = DisplayMode.elapsed.rawValue
-        soundEnabled = false
-        lockScreenAfterBreak = false
-        launchAtLogin = true
-        hasCompletedOnboarding = false
+        hapticEnabled = true
         lastPublishedAt = 0
         lastAppliedRemoteAt = 0
         lastRemoteApplyAt = 0

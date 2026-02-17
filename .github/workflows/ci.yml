@@ -32,8 +32,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew install xcodegen xcbeautify
-          brew link xcodegen xcbeautify 2>/dev/null || true
+          brew install xcodegen xcbeautify || true
+          brew link --overwrite xcodegen xcbeautify 2>/dev/null || true
 
       - name: Generate Xcode project
         run: xcodegen generate
@@ -63,10 +63,51 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             | xcbeautify
 
+      - name: Find watchOS simulator
+        id: watch-sim
+        run: |
+          WATCH_UDID=$(xcrun simctl list devices available watchOS -j \
+            | python3 -c "import sys,json; devs=json.load(sys.stdin)['devices']; print(next(d['udid'] for rt in devs for d in devs[rt] if d.get('isAvailable')))" 2>/dev/null \
+            || echo "")
+          if [ -z "$WATCH_UDID" ]; then
+            echo "No available watchOS simulator found, falling back to name-based lookup"
+            echo "dest=platform=watchOS Simulator,name=Apple Watch Series 10 (46mm)" >> "$GITHUB_OUTPUT"
+          else
+            echo "dest=platform=watchOS Simulator,id=$WATCH_UDID" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Using watchOS simulator destination: $(grep dest= "$GITHUB_OUTPUT" | tail -1)"
+
+      - name: Build watchOS app
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project Blink.xcodeproj \
+            -scheme BlinkWatch \
+            -configuration Release \
+            -destination '${{ steps.watch-sim.outputs.dest }}' \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            | xcbeautify
+
+      - name: Run watchOS unit tests
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project Blink.xcodeproj \
+            -scheme BlinkWatch \
+            -destination '${{ steps.watch-sim.outputs.dest }}' \
+            -only-testing:BlinkWatchTests \
+            -resultBundlePath build/TestResults-Watch.xcresult \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            | xcbeautify
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
-          path: build/TestResults-Unit.xcresult
+          path: |
+            build/TestResults-Unit.xcresult
+            build/TestResults-Watch.xcresult
           retention-days: 14
