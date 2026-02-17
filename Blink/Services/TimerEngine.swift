@@ -54,6 +54,9 @@ final class TimerEngine: ObservableObject {
     /// Configured break duration captured when break starts (avoids mid-break settings changes)
     private var configuredBreakDuration: Int = 0
 
+    /// Configured snooze duration captured when snooze starts (avoids mid-snooze settings changes)
+    private var configuredSnoozeDuration: Int = 0
+
     // MARK: - Adaptive Polling
 
     /// Polling interval when user is active (1 second)
@@ -251,7 +254,8 @@ final class TimerEngine: ObservableObject {
             return
         }
         print("[TimerEngine] Snoozing break for \(settings.snoozeDurationMinutes) minutes")
-        appState.snoozeRemainingSeconds = settings.snoozeDurationSeconds
+        configuredSnoozeDuration = settings.snoozeDurationSeconds
+        appState.snoozeRemainingSeconds = configuredSnoozeDuration
         appState.timerState = .snoozeRunning
         appState.isOverlayVisible = false
         AnalyticsService.shared.recordBreakSnoozed(
@@ -266,7 +270,7 @@ final class TimerEngine: ObservableObject {
 
     /// Resume break immediately from snooze (user clicked "Start Break Now" during snooze)
     private func resumeBreakFromSnooze() {
-        let elapsedSnooze = settings.snoozeDurationSeconds - appState.snoozeRemainingSeconds
+        let elapsedSnooze = configuredSnoozeDuration - appState.snoozeRemainingSeconds
         print("[TimerEngine] Resuming break from snooze (snoozed for \(elapsedSnooze)s)")
 
         AnalyticsService.shared.recordSnoozeEndedEarly(

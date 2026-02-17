@@ -150,7 +150,7 @@ final class Settings: ObservableObject {
         idleResetThreshold = 300
         displayModeRaw = DisplayMode.elapsed.rawValue
         soundEnabled = false
-        lockScreenAfterBreak = false
+        lockScreenAfterBreak = true
         launchAtLogin = true
         hasCompletedOnboarding = false
         lastPublishedAt = 0

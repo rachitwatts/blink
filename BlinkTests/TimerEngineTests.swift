@@ -533,9 +533,9 @@ final class TimerEngineTests: XCTestCase {
         XCTAssertFalse(settings.lockScreenAfterBreak, "Setting should be disabled")
     }
 
-    func testLockScreenSettingDefaultsToFalse() {
+    func testLockScreenSettingDefaultsToTrue() {
         Settings.shared.resetToDefaults()
-        XCTAssertFalse(Settings.shared.lockScreenAfterBreak, "Lock screen should default to off")
+        XCTAssertTrue(Settings.shared.lockScreenAfterBreak, "Lock screen should default to on")
     }
 
     func testSkipBreakDoesNotCallCompleteBreak() {
