@@ -65,9 +65,11 @@ enum BlinkActions {
 
             switch state {
             case .workRunning:
-                message = "Working - \(time) elapsed"
+                let label = Settings.shared.displayMode == .elapsed ? "elapsed" : "remaining"
+                message = "Working - \(time) \(label)"
             case .workPaused:
-                message = "Paused - \(time) elapsed"
+                let label = Settings.shared.displayMode == .elapsed ? "elapsed" : "remaining"
+                message = "Paused - \(time) \(label)"
             case .breakRunning:
                 message = "Break - \(time) remaining"
             case .snoozeRunning:
