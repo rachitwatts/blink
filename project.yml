@@ -26,6 +26,8 @@ targets:
       CODE_SIGN_IDENTITY: "-"
       CODE_SIGNING_REQUIRED: NO
       CODE_SIGNING_ALLOWED: NO
+    dependencies:
+      - sdk: AppIntents.framework
 
   BlinkTests:
     type: bundle.unit-test
