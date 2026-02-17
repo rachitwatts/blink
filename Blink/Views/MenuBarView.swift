@@ -46,7 +46,7 @@ struct MenuBarView: View {
             Button("Start Break Now") {
                 timerEngine.startBreakNow()
             }
-            .disabled(appState.timerState == .breakRunning || appState.timerState == .snoozeRunning)
+            .disabled(appState.timerState == .breakRunning)
 
             Divider()
 

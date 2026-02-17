@@ -224,6 +224,11 @@ final class TimerEngine: ObservableObject {
 
     /// Manually trigger a break (Start Break Now)
     func startBreakNow() {
+        if appState.timerState == .snoozeRunning {
+            resumeBreakFromSnooze()
+            return
+        }
+
         guard appState.timerState == .workRunning || appState.timerState == .workPaused else {
             print("[TimerEngine] Cannot start break in state: \(appState.timerState)")
             return
@@ -257,6 +262,23 @@ final class TimerEngine: ObservableObject {
 
         // Switch to active polling for accurate snooze countdown
         scheduleTimer(interval: activePollingInterval)
+    }
+
+    /// Resume break immediately from snooze (user clicked "Start Break Now" during snooze)
+    private func resumeBreakFromSnooze() {
+        let elapsedSnooze = settings.snoozeDurationSeconds - appState.snoozeRemainingSeconds
+        print("[TimerEngine] Resuming break from snooze (snoozed for \(elapsedSnooze)s)")
+
+        AnalyticsService.shared.recordSnoozeEndedEarly(
+            elapsedSnoozeSeconds: elapsedSnooze,
+            breakId: currentBreakId
+        )
+
+        appState.snoozeRemainingSeconds = 0
+        appState.breakRemainingSeconds = configuredBreakDuration
+        appState.timerState = .breakRunning
+        appState.isOverlayVisible = true
+        publishSyncPayload()
     }
 
     /// Skip the current break and start a new work session
