@@ -75,7 +75,9 @@ struct ContentView: View {
             // Detect break countdown reaching zero while in breakRunning state
             if appState.timerState == .breakRunning && newValue <= 0 {
                 breakEnded = true
-                hapticManager.startBreakEndAlert()
+                if WatchSettings.shared.hapticEnabled {
+                    hapticManager.startBreakEndAlert()
+                }
             }
         }
         .onChange(of: appState.timerState) { _, newValue in
