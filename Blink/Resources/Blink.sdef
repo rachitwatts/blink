@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="Blink Terminology">
+    <suite name="Blink Suite" code="Blnk" description="Commands for controlling the Blink timer.">
+
+        <command name="take break" code="BlnkTkBr" description="Start a break immediately.">
+            <cocoa class="Blink.TakeBreakCommand"/>
+            <result type="text" description="Result message."/>
+        </command>
+
+        <command name="snooze" code="BlnkSnze" description="Snooze the current break.">
+            <cocoa class="Blink.SnoozeBreakCommand"/>
+            <result type="text" description="Result message."/>
+        </command>
+
+        <command name="restart timer" code="BlnkRsTm" description="Restart the work session from zero.">
+            <cocoa class="Blink.RestartTimerCommand"/>
+            <result type="text" description="Result message."/>
+        </command>
+
+        <command name="get status" code="BlnkGtSt" description="Get the current timer status.">
+            <cocoa class="Blink.GetStatusCommand"/>
+            <result type="text" description="Current timer state and time."/>
+        </command>
+
+    </suite>
+</dictionary>
