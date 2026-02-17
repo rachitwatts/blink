@@ -90,6 +90,18 @@ struct BlinkApp: App {
             }
             .store(in: &BlinkAppStorage.shared.cancellables)
 
+        // Observe nudge visibility changes
+        AppState.shared.$isNudgeVisible
+            .receive(on: DispatchQueue.main)
+            .sink { isVisible in
+                if isVisible {
+                    NudgeWindowController.shared.show()
+                } else {
+                    NudgeWindowController.shared.hide()
+                }
+            }
+            .store(in: &BlinkAppStorage.shared.cancellables)
+
         // Show onboarding if first launch (with slight delay for window to be ready)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             OnboardingWindowController.shared.showIfNeeded()

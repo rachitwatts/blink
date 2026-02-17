@@ -16,6 +16,8 @@ enum EventType: String, Codable, CaseIterable {
     case appQuit
     case idleDetected
     case settingsChanged
+    case nudgeShown
+    case nudgeDismissed
 }
 
 /// A single analytics event persisted via SwiftData

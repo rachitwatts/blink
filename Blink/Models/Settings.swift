@@ -56,6 +56,19 @@ final class Settings: ObservableObject {
     /// Whether user has completed first-launch onboarding
     @AppStorage("hasCompletedOnboarding") var hasCompletedOnboarding: Bool = false
 
+    // MARK: - Nudge Settings
+
+    /// Master toggle for micro nudges (default: on)
+    @AppStorage("nudgesEnabled") var nudgesEnabled: Bool = true
+
+    /// Interval between nudges in minutes (default: 8)
+    @AppStorage("nudgeIntervalMinutes") var nudgeIntervalMinutes: Int = 8
+
+    /// Individual nudge type toggles (all default: true when nudges enabled)
+    @AppStorage("nudgeBlinkEnabled") var nudgeBlinkEnabled: Bool = true
+    @AppStorage("nudgePostureEnabled") var nudgePostureEnabled: Bool = true
+    @AppStorage("nudgeStretchEnabled") var nudgeStretchEnabled: Bool = true
+
     // MARK: - Computed Properties (seconds)
 
     /// Work duration in seconds
@@ -71,6 +84,11 @@ final class Settings: ObservableObject {
     /// Snooze duration in seconds
     var snoozeDurationSeconds: Int {
         snoozeDurationMinutes * 60
+    }
+
+    /// Nudge interval in seconds
+    var nudgeIntervalSeconds: Int {
+        nudgeIntervalMinutes * 60
     }
 
     // MARK: - Initialization
@@ -153,6 +171,11 @@ final class Settings: ObservableObject {
         lockScreenAfterBreak = true
         launchAtLogin = true
         hasCompletedOnboarding = false
+        nudgesEnabled = true
+        nudgeIntervalMinutes = 8
+        nudgeBlinkEnabled = true
+        nudgePostureEnabled = true
+        nudgeStretchEnabled = true
         lastPublishedAt = 0
         lastAppliedRemoteAt = 0
         lastRemoteApplyAt = 0

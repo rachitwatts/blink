@@ -28,6 +28,9 @@ final class TimerEngine: ObservableObject {
     /// Nil when sync is disabled (e.g., during tests).
     private var syncManager: (any SyncManagerProtocol)?
 
+    /// Nudge scheduler for micro nudges during work
+    private let nudgeScheduler = NudgeScheduler.shared
+
     #if DEBUG
     func setIdleDetector(_ provider: IdleTimeProvider) {
         self.idleDetector = provider
@@ -217,6 +220,8 @@ final class TimerEngine: ObservableObject {
             )
         }
         appState.workElapsedSeconds = 0
+        // Reset nudge timer for new session
+        nudgeScheduler.resetTimer()
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
@@ -293,6 +298,8 @@ final class TimerEngine: ObservableObject {
         }
         print("[TimerEngine] Skipping break, starting new session")
         AnalyticsService.shared.recordBreakSkipped(remainingSeconds: appState.breakRemainingSeconds)
+        // Reset nudge timer for new session
+        nudgeScheduler.resetTimer()
         appState.workElapsedSeconds = 0
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
@@ -402,6 +409,9 @@ final class TimerEngine: ObservableObject {
             // This handles the adaptive polling correctly
             appState.workElapsedSeconds += Int(currentPollingInterval)
 
+            // Micro nudge tick (only during active work)
+            nudgeScheduler.tick()
+
         } else if idleSeconds < idleReset {
             // MEDIUM IDLE (stepped away temporarily)
             // Don't count this time, but don't reset either
@@ -493,6 +503,10 @@ final class TimerEngine: ObservableObject {
 
         let breakDuration = configuredBreakDuration - appState.breakRemainingSeconds
         AnalyticsService.shared.recordBreakCompleted(actualDuration: breakDuration)
+
+        // Resume nudges and reset timer
+        nudgeScheduler.resumeNudges()
+        nudgeScheduler.resetTimer()
 
         // Lock screen if enabled and user is idle
         if settings.lockScreenAfterBreak {

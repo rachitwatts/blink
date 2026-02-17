@@ -43,9 +43,11 @@
 		7353CC5D60AB384F22E0E2EB /* WatchSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0087FD7E489413B25D39F6 /* WatchSettingsView.swift */; };
 		73AB7B338DB82417D3186C82 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B03EA8B0225251705AB7B3D /* TimelineView.swift */; };
 		73E03BFD01CE99F321993218 /* StatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00172653033246D12BB1077 /* StatCardView.swift */; };
+		78315311A227A3C7BDA2529A /* NudgeScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5D6D1864E33D31DD61AED3 /* NudgeScheduler.swift */; };
 		78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F959148BA99247482E7877 /* SettingsTests.swift */; };
 		800B4C3B5C9CC910FF0E3270 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18329DE3828BB763D21CF688 /* WeekView.swift */; };
 		8267F47B366DCEA9C6829F0F /* SyncSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067E7DFF7A098E73A581F177 /* SyncSettings.swift */; };
+		833B51E0B5F21923D69D450D /* NudgeWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A694B40691FF975AD543A159 /* NudgeWindowController.swift */; };
 		8445575A6F5EB89E6B723219 /* WatchTimerEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E704484188F40EB352ED29AD /* WatchTimerEngineTests.swift */; };
 		8C8FD4D90A3968F2A1BE5210 /* WatchTimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E1AFE54B32FEA74E25B794 /* WatchTimerEngine.swift */; };
 		8D95842169BA8A842D46CFE6 /* TimerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C7D916B815399763305AF /* TimerState.swift */; };
@@ -56,11 +58,13 @@
 		A9389DB467652FDAA1C4005B /* SyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D974565B929B9DFF5932A42C /* SyncAction.swift */; };
 		AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF6E4483329D18D25EE4C8D /* AppState.swift */; };
 		ADD6E0073DA1C9ABA1674175 /* AllTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A1794267E2C1A35324FC /* AllTimeView.swift */; };
+		AE03BB7AFF911AA9F379C15E /* NudgeSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8DF27DF00F0429B4096228 /* NudgeSchedulerTests.swift */; };
 		B1C1705753F1EE6A95A53520 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2CADE2E46074308C5CEE6E /* HapticManager.swift */; };
 		BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BD162119285851B944B178 /* DashboardWindowController.swift */; };
 		BDCC35F58C8ADC5000C29EC6 /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8491C3E02C2563330E0344 /* MonthView.swift */; };
 		CD862C41CDF9479F9357C069 /* SessionLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A1ECC4BB78ABCED93570E3 /* SessionLogView.swift */; };
 		CDABB5F7580F1E5EB16058F2 /* ICloudSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C379C782060321688D11C2 /* ICloudSyncManager.swift */; };
+		D09FDDB6548FE9C33246D158 /* NudgeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4EAF92595CAC2A07EDB9F1 /* NudgeType.swift */; };
 		D3C6C248BD1267FCFC2CD3B2 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C848C558D50C6595E1828A3 /* HotkeyManager.swift */; };
 		DA5884368B97D20F9914F81E /* TimerEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E96408D496193EA27189E7 /* TimerEngineTests.swift */; };
 		DB4B706A1F3E34BD61B14EE3 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B31CDA126203664640FFF96 /* SettingsView.swift */; };
@@ -71,6 +75,7 @@
 		EA597E948FD513E5202D24C1 /* DisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF76295D6FFC56F94BB6FA48 /* DisplayMode.swift */; };
 		EBEC5FEE6D13F49CCBE2E0FB /* BreakEndedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BC59BE96C107ACFC71544 /* BreakEndedView.swift */; };
 		EC39B00585F415089D82296C /* TimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289903B92CFE24D5E706A4B8 /* TimerEngine.swift */; };
+		F035D0F9AD314E72D9B6EF03 /* NudgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763953C6EDF9FADBC1C655F /* NudgeView.swift */; };
 		F6D5ADCC1C92DFB776B5A660 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */; };
 		F89473CFF3C186DC281F2D79 /* BreakActiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E4422A69A8EB3F9F61B5B4 /* BreakActiveView.swift */; };
 /* End PBXBuildFile section */
@@ -101,6 +106,7 @@
 		08DC867AC6A18ED2E407546F /* TimerEngineSyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngineSyncTests.swift; sourceTree = "<group>"; };
 		0B47EB8B7273BB95141192DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0D33185BE2E09721611CD41C /* WatchTimerEngineSyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTimerEngineSyncTests.swift; sourceTree = "<group>"; };
+		0F8DF27DF00F0429B4096228 /* NudgeSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeSchedulerTests.swift; sourceTree = "<group>"; };
 		10F959148BA99247482E7877 /* SettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		176BC59BE96C107ACFC71544 /* BreakEndedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakEndedView.swift; sourceTree = "<group>"; };
 		18329DE3828BB763D21CF688 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
@@ -136,6 +142,7 @@
 		989DBB159CA5CB427CCCADEF /* BlinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkApp.swift; sourceTree = "<group>"; };
 		9C848C558D50C6595E1828A3 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
 		A4C379C782060321688D11C2 /* ICloudSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudSyncManager.swift; sourceTree = "<group>"; };
+		A694B40691FF975AD543A159 /* NudgeWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeWindowController.swift; sourceTree = "<group>"; };
 		A8C26ED59625B3DCA8D51F2B /* WatchBreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchBreakView.swift; sourceTree = "<group>"; };
 		A9D3B4002EA1DF78532197FF /* WatchSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSettings.swift; sourceTree = "<group>"; };
 		AB4E287AD1A9757283A87C42 /* BlinkWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlinkWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,6 +150,7 @@
 		AF789F55EB114BFCAAC4D66E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		B0A5CDC4BE4F953F49EAFE50 /* TimeFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormattingTests.swift; sourceTree = "<group>"; };
 		BB245469D61AE2514B9BDD55 /* BlinkWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkWatchApp.swift; sourceTree = "<group>"; };
+		BC4EAF92595CAC2A07EDB9F1 /* NudgeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeType.swift; sourceTree = "<group>"; };
 		BF76295D6FFC56F94BB6FA48 /* DisplayMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayMode.swift; sourceTree = "<group>"; };
 		C4A1ECC4BB78ABCED93570E3 /* SessionLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionLogView.swift; sourceTree = "<group>"; };
 		C4BD162119285851B944B178 /* DashboardWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardWindowController.swift; sourceTree = "<group>"; };
@@ -150,11 +158,13 @@
 		CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		D01A0FA0E75C70BDC3D72446 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D227434466D7C6840A638063 /* TimerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerStateTests.swift; sourceTree = "<group>"; };
+		D763953C6EDF9FADBC1C655F /* NudgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeView.swift; sourceTree = "<group>"; };
 		D974565B929B9DFF5932A42C /* SyncAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAction.swift; sourceTree = "<group>"; };
 		DA12D464303FF2278DCC338A /* TimeFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormatting.swift; sourceTree = "<group>"; };
 		DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		E559A948D3157A727B635AD6 /* SyncPayloadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncPayloadTests.swift; sourceTree = "<group>"; };
 		E704484188F40EB352ED29AD /* WatchTimerEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTimerEngineTests.swift; sourceTree = "<group>"; };
+		EA5D6D1864E33D31DD61AED3 /* NudgeScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeScheduler.swift; sourceTree = "<group>"; };
 		F00172653033246D12BB1077 /* StatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCardView.swift; sourceTree = "<group>"; };
 		F0E4422A69A8EB3F9F61B5B4 /* BreakActiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakActiveView.swift; sourceTree = "<group>"; };
 		F0FEB2A9AB2CD68D70760DDB /* HeatmapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatmapView.swift; sourceTree = "<group>"; };
@@ -206,6 +216,7 @@
 				9C848C558D50C6595E1828A3 /* HotkeyManager.swift */,
 				5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */,
 				57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */,
+				EA5D6D1864E33D31DD61AED3 /* NudgeScheduler.swift */,
 				24F216EAFA3B9F1BEFF27C83 /* ScreenLockService.swift */,
 				289903B92CFE24D5E706A4B8 /* TimerEngine.swift */,
 			);
@@ -217,6 +228,7 @@
 			children = (
 				314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */,
 				C4BD162119285851B944B178 /* DashboardWindowController.swift */,
+				A694B40691FF975AD543A159 /* NudgeWindowController.swift */,
 				7E51DA777F6F2CA9EC950552 /* OnboardingWindowController.swift */,
 				CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */,
 			);
@@ -321,6 +333,7 @@
 			isa = PBXGroup;
 			children = (
 				FBF6E4483329D18D25EE4C8D /* AppState.swift */,
+				BC4EAF92595CAC2A07EDB9F1 /* NudgeType.swift */,
 				AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */,
 				AF789F55EB114BFCAAC4D66E /* Settings.swift */,
 			);
@@ -343,6 +356,7 @@
 			children = (
 				00F1991D869152E867145645 /* BreakOverlayView.swift */,
 				35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */,
+				D763953C6EDF9FADBC1C655F /* NudgeView.swift */,
 				042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */,
 				4B31CDA126203664640FFF96 /* SettingsView.swift */,
 				C74D77E33801AE8DF7BDC67F /* Dashboard */,
@@ -353,6 +367,7 @@
 		ED4A683DB64EC1ACF4A0AB0F /* BlinkTests */ = {
 			isa = PBXGroup;
 			children = (
+				0F8DF27DF00F0429B4096228 /* NudgeSchedulerTests.swift */,
 				10F959148BA99247482E7877 /* SettingsTests.swift */,
 				E559A948D3157A727B635AD6 /* SyncPayloadTests.swift */,
 				08DC867AC6A18ED2E407546F /* TimerEngineSyncTests.swift */,
@@ -510,6 +525,10 @@
 				56D66E151B92392FAD048551 /* LaunchAtLoginManager.swift in Sources */,
 				0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */,
 				BDCC35F58C8ADC5000C29EC6 /* MonthView.swift in Sources */,
+				78315311A227A3C7BDA2529A /* NudgeScheduler.swift in Sources */,
+				D09FDDB6548FE9C33246D158 /* NudgeType.swift in Sources */,
+				F035D0F9AD314E72D9B6EF03 /* NudgeView.swift in Sources */,
+				833B51E0B5F21923D69D450D /* NudgeWindowController.swift in Sources */,
 				F6D5ADCC1C92DFB776B5A660 /* OnboardingView.swift in Sources */,
 				E0EA58A9A2BC06DBB0D2AF0E /* OnboardingWindowController.swift in Sources */,
 				392771A9BFECC03DF04CA680 /* ScreenLockService.swift in Sources */,
@@ -572,6 +591,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE03BB7AFF911AA9F379C15E /* NudgeSchedulerTests.swift in Sources */,
 				78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */,
 				6763D29A256E6CD8BF40549B /* SyncPayloadTests.swift in Sources */,
 				17B487222AE4F434C2F96EEC /* TimerEngineSyncTests.swift in Sources */,
@@ -777,7 +797,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_ENTITLEMENTS = Blink/Blink.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -859,7 +882,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_ENTITLEMENTS = Blink/Blink.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;

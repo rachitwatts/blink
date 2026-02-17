@@ -45,6 +45,11 @@ struct SettingsView: View {
 
                 Divider()
 
+                // Nudge Settings
+                nudgeSection
+
+                Divider()
+
                 // Advanced Settings (collapsible)
                 advancedSection
 
@@ -187,6 +192,46 @@ struct SettingsView: View {
             get: { settings.displayMode },
             set: { settings.displayMode = $0 }
         )
+    }
+
+    // MARK: - Nudge Section
+
+    private var nudgeSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Nudges")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
+            Toggle("Enable micro nudges", isOn: $settings.nudgesEnabled)
+                .toggleStyle(.checkbox)
+
+            if settings.nudgesEnabled {
+                VStack(alignment: .leading, spacing: 8) {
+                    // Interval stepper
+                    HStack {
+                        Text("Remind every")
+                        Stepper(
+                            "\(settings.nudgeIntervalMinutes) min",
+                            value: $settings.nudgeIntervalMinutes,
+                            in: 2...30
+                        )
+                    }
+                    .padding(.leading, 20)
+
+                    // Per-type toggles
+                    VStack(alignment: .leading, spacing: 4) {
+                        Toggle("Blink reminders", isOn: $settings.nudgeBlinkEnabled)
+                            .toggleStyle(.checkbox)
+                        Toggle("Posture reminders", isOn: $settings.nudgePostureEnabled)
+                            .toggleStyle(.checkbox)
+                        Toggle("Neck stretch reminders", isOn: $settings.nudgeStretchEnabled)
+                            .toggleStyle(.checkbox)
+                    }
+                    .padding(.leading, 20)
+                    .foregroundColor(.primary.opacity(0.9))
+                }
+            }
+        }
     }
 
     // MARK: - Advanced Section
