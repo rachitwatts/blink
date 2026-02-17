@@ -48,7 +48,7 @@ final class Settings: ObservableObject {
     @AppStorage("soundEnabled") var soundEnabled: Bool = false
 
     /// Whether to lock screen when break completes (requires user to be idle)
-    @AppStorage("lockScreenAfterBreak") var lockScreenAfterBreak: Bool = false
+    @AppStorage("lockScreenAfterBreak") var lockScreenAfterBreak: Bool = true
 
     /// Whether to launch app at login
     @AppStorage("launchAtLogin") var launchAtLogin: Bool = true
