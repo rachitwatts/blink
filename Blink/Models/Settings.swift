@@ -96,8 +96,17 @@ final class Settings: ObservableObject {
     /// because defer clears it before the 500ms debounce fires).
     private(set) var lastRemoteApplyAt: TimeInterval = 0
 
+    /// Snapshot of last published synced values. Prevents redundant publishes
+    /// when only non-synced properties (soundEnabled, etc.) change.
+    private var lastPublishedSnapshot: (Int, Int, Int, String) = (0, 0, 0, "")
+
     /// Publish current settings to iCloud KVS for the watch to receive.
+    /// Skips the publish if synced values haven't changed since last publish.
     func publishToSync(_ syncManager: any SyncManagerProtocol) {
+        let current = (workDurationMinutes, breakDurationMinutes, snoozeDurationMinutes, displayMode.rawValue)
+        guard current != lastPublishedSnapshot else { return }
+        lastPublishedSnapshot = current
+
         let now = Date().timeIntervalSince1970
         let syncSettings = SyncSettings(
             workDurationMinutes: workDurationMinutes,
@@ -125,6 +134,8 @@ final class Settings: ObservableObject {
         breakDurationMinutes = remote.breakDurationMinutes
         snoozeDurationMinutes = remote.snoozeDurationMinutes
         displayMode = DisplayMode(rawValue: remote.displayMode) ?? .elapsed
+        // Update snapshot so non-synced property changes don't trigger re-publish
+        lastPublishedSnapshot = (workDurationMinutes, breakDurationMinutes, snoozeDurationMinutes, displayMode.rawValue)
         return true
     }
 
@@ -145,5 +156,6 @@ final class Settings: ObservableObject {
         lastPublishedAt = 0
         lastAppliedRemoteAt = 0
         lastRemoteApplyAt = 0
+        lastPublishedSnapshot = (0, 0, 0, "")
     }
 }
