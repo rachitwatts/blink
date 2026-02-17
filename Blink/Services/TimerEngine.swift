@@ -89,9 +89,11 @@ final class TimerEngine: ObservableObject {
         configureSyncCallbacks()
         observeSettingsChanges()
         manager.startObserving()
-        // Publish initial state so watch picks up current Mac state
+        // Publish initial timer state so watch picks up current Mac state.
+        // Do NOT publish settings here — it stamps a fresh changedAt that
+        // blocks newer remote settings from being applied. Settings sync
+        // naturally via the Combine observer when the user changes them.
         publishSyncPayload()
-        settings.publishToSync(manager)
     }
 
     /// Wire up callbacks for incoming watch actions and settings.
