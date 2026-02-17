@@ -401,6 +401,7 @@ final class TimerEngine: ObservableObject {
                     )
                 }
                 appState.workElapsedSeconds = 0
+                nudgeScheduler.resetTimer()
                 shouldResetOnNextActivity = false
             }
 
