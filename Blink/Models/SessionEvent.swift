@@ -10,6 +10,7 @@ enum EventType: String, Codable, CaseIterable {
     case breakSkipped
     case breakSnoozed
     case snoozeExpired
+    case snoozeEndedEarly  // User manually resumed break during snooze
     case pauseToggled
     case appLaunched
     case appQuit

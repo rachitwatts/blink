@@ -533,9 +533,9 @@ final class TimerEngineTests: XCTestCase {
         XCTAssertFalse(settings.lockScreenAfterBreak, "Setting should be disabled")
     }
 
-    func testLockScreenSettingDefaultsToFalse() {
+    func testLockScreenSettingDefaultsToTrue() {
         Settings.shared.resetToDefaults()
-        XCTAssertFalse(Settings.shared.lockScreenAfterBreak, "Lock screen should default to off")
+        XCTAssertTrue(Settings.shared.lockScreenAfterBreak, "Lock screen should default to on")
     }
 
     func testSkipBreakDoesNotCallCompleteBreak() {
@@ -599,5 +599,31 @@ final class TimerEngineTests: XCTestCase {
         // Break should re-trigger
         XCTAssertEqual(appState.timerState, .breakRunning)
         XCTAssertTrue(appState.isOverlayVisible)
+    }
+
+    func testStartBreakNowDuringSnoozeResumesBreak() throws {
+        let appState = AppState.shared
+        let engine = TimerEngine.shared
+
+        // Start break and snooze it
+        engine.startBreakNow()
+        let breakDuration = appState.breakRemainingSeconds
+        engine.snoozeBreak()
+        XCTAssertEqual(appState.timerState, .snoozeRunning)
+
+        // Simulate a few ticks of snooze elapsed
+        for _ in 0..<5 {
+            engine.tick()
+        }
+        XCTAssertEqual(appState.timerState, .snoozeRunning)
+
+        // Resume break during snooze
+        engine.startBreakNow()
+
+        // Should resume the break with full duration
+        XCTAssertEqual(appState.timerState, .breakRunning)
+        XCTAssertTrue(appState.isOverlayVisible)
+        XCTAssertEqual(appState.breakRemainingSeconds, breakDuration)
+        XCTAssertEqual(appState.snoozeRemainingSeconds, 0)
     }
 }

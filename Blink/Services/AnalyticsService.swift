@@ -83,6 +83,14 @@ final class AnalyticsService {
         ))
     }
 
+    func recordSnoozeEndedEarly(elapsedSnoozeSeconds: Int, breakId: String) {
+        record(SessionEvent(
+            eventType: .snoozeEndedEarly,
+            durationSeconds: elapsedSnoozeSeconds,
+            metadata: ["breakId": breakId]
+        ))
+    }
+
     func recordPauseToggled(newState: String) {
         record(SessionEvent(
             eventType: .pauseToggled,
