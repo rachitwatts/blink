@@ -131,6 +131,25 @@ final class AnalyticsService {
         ))
     }
 
+    // MARK: - Nudge Events
+
+    /// Record when a nudge is shown
+    func recordNudgeShown(type: NudgeType) {
+        record(SessionEvent(
+            eventType: .nudgeShown,
+            metadata: ["nudgeType": type.rawValue]
+        ))
+    }
+
+    /// Record when a nudge is dismissed
+    /// - Parameter method: How it was dismissed ("auto", "click", "pause")
+    func recordNudgeDismissed(type: NudgeType, method: String) {
+        record(SessionEvent(
+            eventType: .nudgeDismissed,
+            metadata: ["nudgeType": type.rawValue, "method": method]
+        ))
+    }
+
     // MARK: - Queries
 
     /// Fetch all events from today, sorted by timestamp

@@ -41,6 +41,17 @@ final class AppState: ObservableObject {
     /// Cached eye health grade for score flash (set when flash starts)
     @Published var scoreFlashGrade: String = "—"
 
+    // MARK: - Nudge State
+
+    /// Whether a nudge panel is currently visible
+    @Published var isNudgeVisible: Bool = false
+
+    /// The type of nudge currently being shown (nil when not visible)
+    @Published var activeNudgeType: NudgeType? = nil
+
+    /// Whether nudges are paused for this session (until next break completes)
+    @Published var nudgesPausedForSession: Bool = false
+
     // MARK: - Dependencies
 
     /// Reference to settings for computing display values
@@ -112,5 +123,8 @@ final class AppState: ObservableObject {
         isSettingsVisible = false
         showingScore = false
         scoreFlashGrade = "—"
+        isNudgeVisible = false
+        activeNudgeType = nil
+        nudgesPausedForSession = false
     }
 }
