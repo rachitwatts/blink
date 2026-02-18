@@ -60,6 +60,10 @@ struct PresetChipRow: View {
             isCustom = !presets.contains(value)
             customText = "\(value)"
         }
+        .onChange(of: value) { _, newValue in
+            isCustom = !presets.contains(newValue)
+            customText = "\(newValue)"
+        }
     }
 }
 
