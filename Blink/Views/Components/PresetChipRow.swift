@@ -10,6 +10,7 @@ struct PresetChipRow: View {
 
     @State private var isCustom: Bool = false
     @State private var customText: String = ""
+    @FocusState private var isCustomFieldFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -43,12 +44,10 @@ struct PresetChipRow: View {
                     TextField("", text: $customText)
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 60)
-                        .onSubmit {
-                            if let num = Int(customText), range.contains(num) {
-                                value = num
-                            } else {
-                                customText = "\(value)"
-                            }
+                        .focused($isCustomFieldFocused)
+                        .onSubmit { commitCustomValue() }
+                        .onChange(of: isCustomFieldFocused) { _, focused in
+                            if !focused { commitCustomValue() }
                         }
                     Text(unit)
                         .foregroundStyle(.secondary)
@@ -63,6 +62,14 @@ struct PresetChipRow: View {
         .onChange(of: value) { _, newValue in
             isCustom = !presets.contains(newValue)
             customText = "\(newValue)"
+        }
+    }
+
+    private func commitCustomValue() {
+        if let num = Int(customText), range.contains(num) {
+            value = num
+        } else {
+            customText = "\(value)"
         }
     }
 }
