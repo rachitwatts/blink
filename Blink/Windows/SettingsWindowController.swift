@@ -38,10 +38,23 @@ final class SettingsWindowController {
 
         let newWindow = NSWindow(contentViewController: hostingController)
         newWindow.title = "Blink Settings"
-        newWindow.styleMask = [.titled, .closable]
-        newWindow.setContentSize(NSSize(width: 340, height: 420))
-        newWindow.center()
+        newWindow.styleMask = [.titled, .closable, .fullSizeContentView]
+        newWindow.titlebarAppearsTransparent = true
+        newWindow.setContentSize(NSSize(width: 700, height: 480))
+        newWindow.minSize = NSSize(width: 700, height: 480)
         newWindow.isReleasedWhenClosed = false
+
+        // Translucent background
+        newWindow.backgroundColor = .clear
+        newWindow.isOpaque = false
+
+        // Remember window position
+        newWindow.setFrameAutosaveName("BlinkSettingsWindow")
+
+        // Center only if no saved position
+        if !newWindow.setFrameUsingName("BlinkSettingsWindow") {
+            newWindow.center()
+        }
 
         // Store reference
         window = newWindow
