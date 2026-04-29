@@ -12,7 +12,10 @@ final class BreakContentProvider {
     private init() {}
 
     func selectExercise() -> BreakExercise? {
-        guard settings.breakContentMode == .guided else { return nil }
+        guard settings.breakContentMode == .guided else {
+            lastExercise = nil
+            return nil
+        }
 
         var pool: [BreakExercise] = []
         for exercise in BreakExercise.allCases {
