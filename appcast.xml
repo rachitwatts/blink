@@ -31,5 +31,19 @@
         />
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
     </item>
+    <item>
+      <title>Version 2.1.0</title>
+      <description><![CDATA[<ul><li>Add 40 guided break exercises across 4 categories: eye, breathing, body, and fun</li><li>Each exercise features a polished animated visual guide</li><li>Settings picker to switch between guided exercises, static message, or no content</li></ul>]]></description>
+      <pubDate>Wed, 29 Apr 2026 19:22:54 +0530</pubDate>
+      <enclosure
+        url="https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/Blink-v2.1.0.dmg"
+        sparkle:edSignature="YQGgPreMS1SNg+Z7HRR+1c9wNhdTTjWFASIdOJxig+OnQ841QBcfYCRXbAulPCCZt5VA1kGRvQ03QHswUa9hBw=="
+        sparkle:version="4"
+        sparkle:shortVersionString="2.1.0"
+        type="application/octet-stream"
+        length="4128849"
+        />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
   </channel>
 </rss>
