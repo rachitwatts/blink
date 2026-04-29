@@ -160,7 +160,14 @@ step "1. Bumping version to $VERSION"
 # Only bump the Blink target version (first occurrence), not BlinkWatch
 awk -v ver="$VERSION" '!done && /MARKETING_VERSION:/ { sub(/MARKETING_VERSION: ".*"/, "MARKETING_VERSION: \"" ver "\""); done=1 } 1' "$PROJECT_YML" > "$PROJECT_YML.tmp"
 mv "$PROJECT_YML.tmp" "$PROJECT_YML"
-echo "Updated project.yml"
+
+# Auto-increment CURRENT_PROJECT_VERSION (build number) for Sparkle version comparison
+CURRENT_BUILD=$(grep -m1 'CURRENT_PROJECT_VERSION' "$PROJECT_YML" | sed 's/.*"\(.*\)"/\1/')
+NEW_BUILD=$((CURRENT_BUILD + 1))
+awk -v build="$NEW_BUILD" '!done && /CURRENT_PROJECT_VERSION:/ { sub(/CURRENT_PROJECT_VERSION: ".*"/, "CURRENT_PROJECT_VERSION: \"" build "\""); done=1 } 1' "$PROJECT_YML" > "$PROJECT_YML.tmp"
+mv "$PROJECT_YML.tmp" "$PROJECT_YML"
+
+echo "Updated project.yml (version: $VERSION, build: $NEW_BUILD)"
 
 # --- Step 2: Generate Xcode project ---
 
@@ -267,7 +274,7 @@ item = '''    <item>
       <enclosure
         url=\"$DOWNLOAD_URL\"
         sparkle:edSignature=\"$ED_SIGNATURE\"
-        sparkle:version=\"$VERSION\"
+        sparkle:version=\"$NEW_BUILD\"
         sparkle:shortVersionString=\"$VERSION\"
         type=\"application/octet-stream\"
         length=\"$DMG_SIZE\"
