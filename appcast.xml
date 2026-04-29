@@ -17,5 +17,19 @@
         />
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
     </item>
+    <item>
+      <title>Version 2.0.0</title>
+      <description><![CDATA[<ul><li>Auto-update support — Blink now checks for updates automatically and offers in-app install</li><li>New "Check for Updates..." menu item</li><li>Eye Health deep dive dashboard</li></ul>]]></description>
+      <pubDate>Wed, 29 Apr 2026 15:34:15 +0530</pubDate>
+      <enclosure
+        url="https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/Blink-v2.0.0.dmg"
+        sparkle:edSignature="nkbsuYTAo5JHCUb4wpLGy2GSGuPEk8OG3mmORAHqDR/uJ9Bu7cv9ZJv/mtIY41CVVp+Y+usXL27mt/gaSUzRAw=="
+        sparkle:version="3"
+        sparkle:shortVersionString="2.0.0"
+        type="application/octet-stream"
+        length="3630684"
+        />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
   </channel>
 </rss>
