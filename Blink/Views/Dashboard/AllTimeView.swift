@@ -14,6 +14,7 @@ struct AllTimeView: View {
     @State private var eyeHealthMetrics: EyeHealthMetrics?
     @State private var showEyeHealthDeepDive = false
     @State private var allTimeEvents: [SessionEvent] = []
+    @State private var prevPeriodEvents: [SessionEvent] = []
 
     var body: some View {
         if totalSessions == 0 && totalFocusSeconds == 0 {
@@ -117,7 +118,7 @@ struct AllTimeView: View {
                 loadData()
             }
             .sheet(isPresented: $showEyeHealthDeepDive) {
-                EyeHealthDeepDiveView(events: allTimeEvents, scope: .allTime)
+                EyeHealthDeepDiveView(events: allTimeEvents, scope: .allTime, previousPeriodEvents: prevPeriodEvents)
             }
         }
     }
@@ -125,6 +126,13 @@ struct AllTimeView: View {
     private func loadData() {
         let allEvents = AnalyticsService.shared.allEvents()
         allTimeEvents = allEvents
+
+        // For declining-compliance: previous = 30-60 days ago (current = last 30 days, split by analyzer)
+        let calendar = Calendar.current
+        let now = Date()
+        let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: now)!
+        let sixtyDaysAgo = calendar.date(byAdding: .day, value: -60, to: now)!
+        prevPeriodEvents = allEvents.filter { $0.timestamp >= sixtyDaysAgo && $0.timestamp < thirtyDaysAgo }
 
         guard !allEvents.isEmpty else {
             totalFocusSeconds = 0

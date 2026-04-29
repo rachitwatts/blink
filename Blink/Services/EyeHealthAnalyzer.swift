@@ -32,9 +32,14 @@ final class EyeHealthAnalyzer {
             }
         }
 
-        // Declining compliance needs both current and prior period
-        let combinedForDeclining = previousPeriodEvents + events
-        if let pattern = detectDecliningCompliance(combinedForDeclining, settings, scope) {
+        // Declining compliance compares current vs prior period directly
+        // For allTime scope, narrow current events to last 30 days
+        let decliningCurrentEvents: [SessionEvent] = {
+            guard scope == .allTime else { return events }
+            let thirtyDaysAgo = Calendar.current.date(byAdding: .day, value: -30, to: Date())!
+            return events.filter { $0.timestamp >= thirtyDaysAgo }
+        }()
+        if let pattern = detectDecliningCompliance(currentEvents: decliningCurrentEvents, previousEvents: previousPeriodEvents, scope: scope) {
             insights.append(pattern)
             if let suggestion = generateSuggestion(for: pattern, events: events, settings: settings) {
                 insights.append(suggestion)
@@ -61,6 +66,12 @@ final class EyeHealthAnalyzer {
     static func dismiss(_ insightID: String) {
         var dismissed = loadDismissed()
         dismissed.insert(insightID)
+        // Dismiss the paired pattern/suggestion together
+        if insightID.hasSuffix("_suggestion") {
+            dismissed.insert(String(insightID.dropLast("_suggestion".count)))
+        } else {
+            dismissed.insert(insightID + "_suggestion")
+        }
         saveDismissed(dismissed)
     }
 
@@ -339,33 +350,8 @@ final class EyeHealthAnalyzer {
         )
     }
 
-    /// Detector 8: Current period's compliance is 15+ points below previous period (week/month/allTime only)
-    private static func detectDecliningCompliance(_ events: [SessionEvent], _ settings: Settings, _ scope: AnalysisScope) -> EyeHealthInsight? {
+    private static func detectDecliningCompliance(currentEvents: [SessionEvent], previousEvents: [SessionEvent], scope: AnalysisScope) -> EyeHealthInsight? {
         guard scope != .today else { return nil }
-
-        let calendar = Calendar.current
-        let now = Date()
-
-        let (currentStart, previousStart, previousEnd): (Date, Date, Date) = {
-            switch scope {
-            case .week:
-                let weekStart = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!
-                let prevWeekStart = calendar.date(byAdding: .weekOfYear, value: -1, to: weekStart)!
-                return (weekStart, prevWeekStart, weekStart)
-            case .month:
-                let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
-                let prevMonthStart = calendar.date(byAdding: .month, value: -1, to: monthStart)!
-                return (monthStart, prevMonthStart, monthStart)
-            case .allTime, .today:
-                // For allTime, compare last 30 days vs previous 30 days
-                let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: now)!
-                let sixtyDaysAgo = calendar.date(byAdding: .day, value: -60, to: now)!
-                return (thirtyDaysAgo, sixtyDaysAgo, thirtyDaysAgo)
-            }
-        }()
-
-        let currentEvents = events.filter { $0.timestamp >= currentStart }
-        let previousEvents = events.filter { $0.timestamp >= previousStart && $0.timestamp < previousEnd }
 
         let currentCompliance = complianceRate(for: currentEvents)
         let previousCompliance = complianceRate(for: previousEvents)
