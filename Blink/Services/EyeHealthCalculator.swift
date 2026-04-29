@@ -6,6 +6,10 @@ struct EyeHealthMetrics {
     let snoozeRate: Double       // 0.0 to 1.0
     let grade: String            // A+, A, A-, B+, B, C, D
     let tip: String?             // Contextual tip if grade is C or below
+    let breaksCompleted: Int
+    let breaksSkipped: Int
+    let breaksSnoozed: Int
+    let breaksStarted: Int
 }
 
 /// Calculates an eye health grade from session events
@@ -24,7 +28,10 @@ final class EyeHealthCalculator {
 
         // No break outcomes yet — grade is unavailable
         guard totalBreaks > 0 else {
-            return EyeHealthMetrics(breakCompliance: 0.0, snoozeRate: 0.0, grade: "—", tip: nil)
+            return EyeHealthMetrics(
+                breakCompliance: 0.0, snoozeRate: 0.0, grade: "—", tip: nil,
+                breaksCompleted: 0, breaksSkipped: 0, breaksSnoozed: 0, breaksStarted: 0
+            )
         }
 
         let breakCompliance = Double(breaksCompleted) / Double(totalBreaks)
@@ -43,7 +50,11 @@ final class EyeHealthCalculator {
             breakCompliance: breakCompliance,
             snoozeRate: snoozeRate,
             grade: grade,
-            tip: tip
+            tip: tip,
+            breaksCompleted: breaksCompleted,
+            breaksSkipped: breaksSkipped,
+            breaksSnoozed: breaksSnoozed,
+            breaksStarted: breaksStarted
         )
     }
 

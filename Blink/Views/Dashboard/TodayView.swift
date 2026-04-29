@@ -8,6 +8,7 @@ import SwiftUI
 struct TodayView: View {
     @State private var events: [SessionEvent] = []
     @State private var eyeHealthMetrics: EyeHealthMetrics?
+    @State private var showEyeHealthDeepDive = false
 
     // MARK: - Computed Stats
 
@@ -159,7 +160,16 @@ struct TodayView: View {
                         StatCardView(value: focusTimeFormatted, label: "Focus", sublabel: "Time")
                         StatCardView(value: "\(sessionsCompleted)", label: "Sessions", sublabel: "Completed")
                         StatCardView(value: "\(breakCompliancePercent)%", label: "Break", sublabel: "Compliance")
-                        StatCardView(value: eyeHealthMetrics?.grade ?? "—", label: "Eye", sublabel: "Health")
+                        Button(action: { showEyeHealthDeepDive = true }) {
+                            StatCardView(value: eyeHealthMetrics?.grade ?? "\u{2014}", label: "Eye", sublabel: "Health")
+                                .overlay(alignment: .topTrailing) {
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 8, weight: .semibold))
+                                        .foregroundColor(.secondary)
+                                        .padding(6)
+                                }
+                        }
+                        .buttonStyle(.plain)
                     }
 
                     // Timeline
@@ -188,6 +198,9 @@ struct TodayView: View {
                 .padding(20)
             }
             .onAppear { loadData() }
+            .sheet(isPresented: $showEyeHealthDeepDive) {
+                EyeHealthDeepDiveView(events: events, scope: .today)
+            }
         }
     }
 

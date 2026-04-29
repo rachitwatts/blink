@@ -12,6 +12,9 @@ struct AllTimeView: View {
     @State private var bestDaySeconds = 0
     @State private var bestDayDate: Date?
     @State private var eyeHealthMetrics: EyeHealthMetrics?
+    @State private var showEyeHealthDeepDive = false
+    @State private var allTimeEvents: [SessionEvent] = []
+    @State private var prevPeriodEvents: [SessionEvent] = []
 
     var body: some View {
         if totalSessions == 0 && totalFocusSeconds == 0 {
@@ -59,11 +62,20 @@ struct AllTimeView: View {
                             label: "Break",
                             sublabel: "Compliance"
                         )
-                        StatCardView(
-                            value: eyeHealthMetrics?.grade ?? "\u{2014}",
-                            label: "Eye",
-                            sublabel: "Health"
-                        )
+                        Button(action: { showEyeHealthDeepDive = true }) {
+                            StatCardView(
+                                value: eyeHealthMetrics?.grade ?? "\u{2014}",
+                                label: "Eye",
+                                sublabel: "Health"
+                            )
+                            .overlay(alignment: .topTrailing) {
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 8, weight: .semibold))
+                                    .foregroundColor(.secondary)
+                                    .padding(6)
+                            }
+                        }
+                        .buttonStyle(.plain)
                     }
 
                     HeatmapView(days: heatmapDays, mode: $heatmapMode)
@@ -105,11 +117,22 @@ struct AllTimeView: View {
             .onAppear {
                 loadData()
             }
+            .sheet(isPresented: $showEyeHealthDeepDive) {
+                EyeHealthDeepDiveView(events: allTimeEvents, scope: .allTime, previousPeriodEvents: prevPeriodEvents)
+            }
         }
     }
 
     private func loadData() {
         let allEvents = AnalyticsService.shared.allEvents()
+        allTimeEvents = allEvents
+
+        // For declining-compliance: previous = 30-60 days ago (current = last 30 days, split by analyzer)
+        let calendar = Calendar.current
+        let now = Date()
+        let thirtyDaysAgo = calendar.date(byAdding: .day, value: -30, to: now)!
+        let sixtyDaysAgo = calendar.date(byAdding: .day, value: -60, to: now)!
+        prevPeriodEvents = allEvents.filter { $0.timestamp >= sixtyDaysAgo && $0.timestamp < thirtyDaysAgo }
 
         guard !allEvents.isEmpty else {
             totalFocusSeconds = 0
