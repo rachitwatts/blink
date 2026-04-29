@@ -18,6 +18,7 @@
 		178B19FA860258796D87FBCF /* WatchBreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C26ED59625B3DCA8D51F2B /* WatchBreakView.swift */; };
 		17B487222AE4F434C2F96EEC /* TimerEngineSyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DC867AC6A18ED2E407546F /* TimerEngineSyncTests.swift */; };
 		1B07346E3B237039418EC3DB /* ICloudSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C379C782060321688D11C2 /* ICloudSyncManager.swift */; };
+		1E2F745E906AEB2961EFE55D /* GentleBreakFloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7FC37D5BD933ACB0CBE325 /* GentleBreakFloatingView.swift */; };
 		1FE36C49979D50150D7AFD3A /* HeatmapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEB2A9AB2CD68D70760DDB /* HeatmapView.swift */; };
 		22301253ABE390BD07B09A2E /* WatchSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3B4002EA1DF78532197FF /* WatchSettings.swift */; };
 		2251E3ED33212FA950F3CED6 /* TimeFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A5CDC4BE4F953F49EAFE50 /* TimeFormattingTests.swift */; };
@@ -44,6 +45,7 @@
 		6260E871C994ED46C4ACDF49 /* FunExerciseAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4871F290652D844D8C3640C2 /* FunExerciseAnimations.swift */; };
 		632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */; };
 		63F935ACAD05A5950E6630BB /* SyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFE8B26C6DF5391F9F4AE14 /* SyncPayload.swift */; };
+		64D617C91635DB6046A6C625 /* BreakPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C539723A6C46415EF84690 /* BreakPhase.swift */; };
 		65256C105373F4843FBE8750 /* SyncManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4C671A4943BDB5F56525A /* SyncManagerProtocol.swift */; };
 		6763D29A256E6CD8BF40549B /* SyncPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559A948D3157A727B635AD6 /* SyncPayloadTests.swift */; };
 		6B12ED3083670AD2A8EC289E /* TimeFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA12D464303FF2278DCC338A /* TimeFormatting.swift */; };
@@ -100,6 +102,7 @@
 		EBEC5FEE6D13F49CCBE2E0FB /* BreakEndedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BC59BE96C107ACFC71544 /* BreakEndedView.swift */; };
 		EC39B00585F415089D82296C /* TimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289903B92CFE24D5E706A4B8 /* TimerEngine.swift */; };
 		F035D0F9AD314E72D9B6EF03 /* NudgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D763953C6EDF9FADBC1C655F /* NudgeView.swift */; };
+		F1810AF21BFBA9A9CA4B1353 /* BreakStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AB02A7C609A11636250333 /* BreakStyle.swift */; };
 		F6D5ADCC1C92DFB776B5A660 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */; };
 		F89473CFF3C186DC281F2D79 /* BreakActiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E4422A69A8EB3F9F61B5B4 /* BreakActiveView.swift */; };
 		FE66CDE31D9148DAEC49026F /* PresetChipRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D832D7840AF1896239095EAC /* PresetChipRow.swift */; };
@@ -139,6 +142,7 @@
 		13EC8022A60E5354BFA94A1C /* AnalyticsSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsSettingsSection.swift; sourceTree = "<group>"; };
 		176BC59BE96C107ACFC71544 /* BreakEndedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakEndedView.swift; sourceTree = "<group>"; };
 		18329DE3828BB763D21CF688 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
+		1C7FC37D5BD933ACB0CBE325 /* GentleBreakFloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GentleBreakFloatingView.swift; sourceTree = "<group>"; };
 		2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthCalculator.swift; sourceTree = "<group>"; };
 		23B1EC3310B24818DC6EF078 /* InsightTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightTipView.swift; sourceTree = "<group>"; };
 		24F216EAFA3B9F1BEFF27C83 /* ScreenLockService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLockService.swift; sourceTree = "<group>"; };
@@ -153,6 +157,7 @@
 		3EB6CF7394F2442F2A83F872 /* WatchAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAppState.swift; sourceTree = "<group>"; };
 		4277C159181D74EE1B020457 /* BreakContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakContentProvider.swift; sourceTree = "<group>"; };
 		43D3A1794267E2C1A35324FC /* AllTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTimeView.swift; sourceTree = "<group>"; };
+		47C539723A6C46415EF84690 /* BreakPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakPhase.swift; sourceTree = "<group>"; };
 		48431B2C296BDB92BF0BB93C /* Blink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4871F290652D844D8C3640C2 /* FunExerciseAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunExerciseAnimations.swift; sourceTree = "<group>"; };
 		4A0087FD7E489413B25D39F6 /* WatchSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSettingsView.swift; sourceTree = "<group>"; };
@@ -166,6 +171,7 @@
 		5B91A176C55E06B7A38BDD5D /* EyeHealthInsight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthInsight.swift; sourceTree = "<group>"; };
 		5F32467AA673D205206C9DF1 /* GeneralSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsSection.swift; sourceTree = "<group>"; };
 		5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDetector.swift; sourceTree = "<group>"; };
+		69AB02A7C609A11636250333 /* BreakStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakStyle.swift; sourceTree = "<group>"; };
 		6E8491C3E02C2563330E0344 /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
 		71BD4F44B082B1C62F6CCA35 /* HapticManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManagerTests.swift; sourceTree = "<group>"; };
 		79026248DC53E0D92EA739A9 /* LabeledSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledSlider.swift; sourceTree = "<group>"; };
@@ -434,6 +440,8 @@
 			children = (
 				FBF6E4483329D18D25EE4C8D /* AppState.swift */,
 				7E03C8370B7F8889DE6E59C8 /* BreakExercise.swift */,
+				47C539723A6C46415EF84690 /* BreakPhase.swift */,
+				69AB02A7C609A11636250333 /* BreakStyle.swift */,
 				5B91A176C55E06B7A38BDD5D /* EyeHealthInsight.swift */,
 				BC4EAF92595CAC2A07EDB9F1 /* NudgeType.swift */,
 				AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */,
@@ -457,6 +465,7 @@
 			isa = PBXGroup;
 			children = (
 				00F1991D869152E867145645 /* BreakOverlayView.swift */,
+				1C7FC37D5BD933ACB0CBE325 /* GentleBreakFloatingView.swift */,
 				35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */,
 				D763953C6EDF9FADBC1C655F /* NudgeView.swift */,
 				042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */,
@@ -646,6 +655,8 @@
 				4806DA026C385EA1A3006E7C /* BreakExerciseView.swift in Sources */,
 				4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */,
 				632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */,
+				64D617C91635DB6046A6C625 /* BreakPhase.swift in Sources */,
+				F1810AF21BFBA9A9CA4B1353 /* BreakStyle.swift in Sources */,
 				061DA0427EA238BE85F0484D /* DashboardView.swift in Sources */,
 				BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */,
 				EA597E948FD513E5202D24C1 /* DisplayMode.swift in Sources */,
@@ -656,6 +667,7 @@
 				D4D5DE6D861F6BFEBD4BA2CE /* EyeHealthInsight.swift in Sources */,
 				6260E871C994ED46C4ACDF49 /* FunExerciseAnimations.swift in Sources */,
 				9B804C88BCA387D24866C17E /* GeneralSettingsSection.swift in Sources */,
+				1E2F745E906AEB2961EFE55D /* GentleBreakFloatingView.swift in Sources */,
 				1FE36C49979D50150D7AFD3A /* HeatmapView.swift in Sources */,
 				D3C6C248BD1267FCFC2CD3B2 /* HotkeyManager.swift in Sources */,
 				1B07346E3B237039418EC3DB /* ICloudSyncManager.swift in Sources */,

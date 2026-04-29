@@ -22,6 +22,26 @@ struct GeneralSettingsSection: View {
 
             Divider()
 
+            // Break style
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Break style")
+                    .font(.headline)
+
+                Picker("", selection: breakStyleBinding) {
+                    ForEach(BreakStyle.allCases) { style in
+                        Text(style.displayName).tag(style)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .frame(maxWidth: 350)
+
+                Text(breakStyleDescription)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Divider()
+
             // Break content mode
             VStack(alignment: .leading, spacing: 8) {
                 Text("Break content")
@@ -39,6 +59,8 @@ struct GeneralSettingsSection: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
+            .opacity(settings.breakStyle == .notificationOnly ? 0.5 : 1.0)
+            .disabled(settings.breakStyle == .notificationOnly)
 
             Divider()
 
@@ -48,6 +70,24 @@ struct GeneralSettingsSection: View {
                 .onChange(of: settings.launchAtLogin) { _, newValue in
                     LaunchAtLoginManager.shared.setEnabled(newValue)
                 }
+        }
+    }
+
+    private var breakStyleBinding: Binding<BreakStyle> {
+        Binding(
+            get: { settings.breakStyle },
+            set: { settings.breakStyle = $0 }
+        )
+    }
+
+    private var breakStyleDescription: String {
+        switch settings.breakStyle {
+        case .enforced:
+            return "Full-screen overlay blocks your screen immediately when a break starts."
+        case .gentle:
+            return "Starts with a floating reminder, escalates to full screen after 20 seconds."
+        case .notificationOnly:
+            return "Just a macOS notification — no overlay at all."
         }
     }
 

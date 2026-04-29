@@ -69,6 +69,15 @@ final class Settings: ObservableObject {
     @AppStorage("nudgePostureEnabled") var nudgePostureEnabled: Bool = true
     @AppStorage("nudgeStretchEnabled") var nudgeStretchEnabled: Bool = true
 
+    // MARK: - Break Style
+
+    @AppStorage("breakStyle") private var breakStyleRaw: String = BreakStyle.enforced.rawValue
+
+    var breakStyle: BreakStyle {
+        get { BreakStyle(rawValue: breakStyleRaw) ?? .enforced }
+        set { breakStyleRaw = newValue.rawValue }
+    }
+
     // MARK: - Break Content
 
     @AppStorage("breakContentMode") private var breakContentModeRaw: String = BreakContentMode.guided.rawValue
@@ -185,6 +194,7 @@ final class Settings: ObservableObject {
         nudgeBlinkEnabled = true
         nudgePostureEnabled = true
         nudgeStretchEnabled = true
+        breakStyleRaw = BreakStyle.enforced.rawValue
         breakContentModeRaw = BreakContentMode.guided.rawValue
         lastPublishedAt = 0
         lastAppliedRemoteAt = 0

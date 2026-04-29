@@ -32,6 +32,12 @@ final class AppState: ObservableObject {
     /// Whether the break overlay windows should be visible
     @Published var isOverlayVisible: Bool = false
 
+    /// Current phase within a gentle-mode break
+    @Published var breakPhase: BreakPhase = .floating
+
+    /// Seconds elapsed since break started (drives gentle-mode phase transitions)
+    @Published var breakElapsedSeconds: Int = 0
+
     /// Whether the settings window is currently shown
     @Published var isSettingsVisible: Bool = false
 
@@ -125,6 +131,8 @@ final class AppState: ObservableObject {
         breakRemainingSeconds = 0
         snoozeRemainingSeconds = 0
         isOverlayVisible = false
+        breakPhase = .floating
+        breakElapsedSeconds = 0
         isSettingsVisible = false
         showingScore = false
         scoreFlashGrade = "—"

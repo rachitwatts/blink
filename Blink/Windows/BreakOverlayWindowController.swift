@@ -1,16 +1,7 @@
 import AppKit
 import SwiftUI
+import Combine
 
-/// Controls break overlay windows across all monitors
-///
-/// Responsibilities:
-/// - Creates one NSWindow per connected monitor
-/// - Positions windows to cover entire screen
-/// - Sets window level to appear above full-screen apps
-/// - Handles display connect/disconnect events
-/// - Manages show/hide with animations
-///
-/// Usage: `BreakOverlayWindowController.shared.showOverlay()` / `.hideOverlay()`
 final class BreakOverlayWindowController {
 
     // MARK: - Singleton
@@ -19,19 +10,27 @@ final class BreakOverlayWindowController {
 
     // MARK: - Properties
 
-    /// Array of active overlay windows (one per screen)
+    /// Full-screen overlay windows (enforced mode, or gentle fullscreen phase)
     private var windows: [NSWindow] = []
 
-    /// Observer for display configuration changes
-    private var displayObserver: Any?
+    /// Semi-transparent dim windows for gentle mode (one per screen, pass-through)
+    private var dimWindows: [NSWindow] = []
 
-    /// Track which window has key status (for keyboard events)
+    /// Compact floating window for gentle mode phases 1-2
+    private var floatingWindow: NSWindow?
+
+    private var displayObserver: Any?
+    private var phaseObserver: AnyCancellable?
     private var keyWindow: NSWindow?
+
+    /// Tracks whether we're currently in gentle mode overlay
+    private var isGentleMode: Bool = false
 
     // MARK: - Initialization
 
     private init() {
         setupDisplayObserver()
+        setupPhaseObserver()
     }
 
     deinit {
@@ -42,59 +41,59 @@ final class BreakOverlayWindowController {
 
     // MARK: - Public API
 
-    /// Show break overlay on all connected screens
+    /// Show break overlay — dispatches to enforced or gentle based on current settings
     func showOverlay() {
-        print("[OverlayController] Showing overlay on \(NSScreen.screens.count) screen(s)")
+        let style = Settings.shared.breakStyle
+        print("[OverlayController] Showing overlay (style: \(style.rawValue)) on \(NSScreen.screens.count) screen(s)")
 
-        // Clear any existing windows first
         hideOverlay(animated: false)
 
-        // Create a window for each screen
+        if style == .gentle {
+            isGentleMode = true
+            showGentleOverlay(phase: .floating)
+        } else {
+            isGentleMode = false
+            showFullscreenOverlay()
+        }
+    }
+
+    /// Hide all overlay windows
+    func hideOverlay(animated: Bool = true) {
+        print("[OverlayController] Hiding overlay")
+
+        let allWindows = windows + dimWindows + [floatingWindow].compactMap { $0 }
+        windows.removeAll()
+        dimWindows.removeAll()
+        floatingWindow = nil
+        keyWindow = nil
+        isGentleMode = false
+
+        for window in allWindows {
+            window.orderOut(nil)
+        }
+    }
+
+    // MARK: - Private: Enforced Mode (existing behavior)
+
+    private func showFullscreenOverlay() {
         for screen in NSScreen.screens {
-            let window = createOverlayWindow(for: screen)
+            let window = createFullscreenWindow(for: screen)
             windows.append(window)
         }
 
-        // Show all windows
         for window in windows {
             showWindow(window)
         }
 
-        // Make the first window key for keyboard events
         if let firstWindow = windows.first {
             firstWindow.makeKey()
             keyWindow = firstWindow
         }
 
-        // Bring app to front (so keyboard events work)
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    /// Hide break overlay from all screens
-    /// - Parameter animated: Whether to animate the dismissal (currently disabled for stability)
-    func hideOverlay(animated: Bool = true) {
-        print("[OverlayController] Hiding overlay - window count: \(windows.count)")
-
-        // Capture and clear our references first
-        let windowsToClose = windows
-        windows.removeAll()
-        keyWindow = nil
-
-        for window in windowsToClose {
-            // Just order out and close - let AppKit handle cleanup naturally
-            // Don't manually nil contentView as it can cause double-release
-            window.orderOut(nil)
-        }
-
-        print("[OverlayController] Overlay hidden successfully")
-    }
-
-    // MARK: - Private: Window Creation
-
-    /// Create an overlay window for a specific screen
-    private func createOverlayWindow(for screen: NSScreen) -> NSWindow {
-        // Create window covering the entire screen
-        // Use screen.frame which gives position and size in global coordinates
+    private func createFullscreenWindow(for screen: NSScreen) -> NSWindow {
         let window = KeyableWindow(
             contentRect: screen.frame,
             styleMask: [.borderless],
@@ -103,56 +102,174 @@ final class BreakOverlayWindowController {
             screen: screen
         )
 
-        // Configure window properties
-        window.level = .screenSaver  // Appears above full-screen apps
-        window.collectionBehavior = [
-            .canJoinAllSpaces,      // Appears on all Spaces
-            .fullScreenAuxiliary,   // Can appear over full-screen apps
-            .stationary             // Doesn't move when Spaces switch
-        ]
+        window.level = .screenSaver
+        window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
         window.isOpaque = false
         window.backgroundColor = .clear
         window.hasShadow = false
         window.ignoresMouseEvents = false
         window.acceptsMouseMovedEvents = true
 
-        // Create hosting view with SwiftUI content
         let overlayView = BreakOverlayView()
         let hostingView = KeyableHostingView(rootView: overlayView)
-
-        // Set the window's content view first
         window.contentView = hostingView
 
-        // Now set the frame to match the window's content rect (in window coordinates, origin is 0,0)
         if let contentView = window.contentView {
             hostingView.frame = contentView.bounds
             hostingView.autoresizingMask = [.width, .height]
         }
 
-        // Ensure window is exactly positioned and sized for this screen
         window.setFrame(screen.frame, display: true)
-
         return window
     }
 
-    /// Show a window with optional fade-in animation
+    // MARK: - Private: Gentle Mode
+
+    private func showGentleOverlay(phase: BreakPhase) {
+        switch phase {
+        case .floating:
+            showDimOverlays(opacity: 0.2)
+            showFloatingWindow(size: NSSize(width: 400, height: 300))
+
+        case .dimmed:
+            animateDimOpacity(to: 0.5)
+            animateFloatingWindowGrow()
+
+        case .fullscreen:
+            tearDownGentleWindows()
+            showFullscreenOverlay()
+        }
+    }
+
+    private func showDimOverlays(opacity: CGFloat) {
+        for screen in NSScreen.screens {
+            let window = NSWindow(
+                contentRect: screen.frame,
+                styleMask: [.borderless],
+                backing: .buffered,
+                defer: false,
+                screen: screen
+            )
+
+            window.level = NSWindow.Level(rawValue: NSWindow.Level.normal.rawValue + 1)
+            window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
+            window.isOpaque = false
+            window.backgroundColor = NSColor.black.withAlphaComponent(opacity)
+            window.hasShadow = false
+            window.ignoresMouseEvents = true
+
+            window.setFrame(screen.frame, display: true)
+            window.orderFrontRegardless()
+            dimWindows.append(window)
+        }
+    }
+
+    private func showFloatingWindow(size: NSSize) {
+        guard let primaryScreen = NSScreen.main ?? NSScreen.screens.first else { return }
+
+        let screenFrame = primaryScreen.visibleFrame
+        let origin = NSPoint(
+            x: screenFrame.maxX - size.width - 20,
+            y: screenFrame.minY + 20
+        )
+        let frame = NSRect(origin: origin, size: size)
+
+        let window = KeyableWindow(
+            contentRect: frame,
+            styleMask: [.borderless],
+            backing: .buffered,
+            defer: false,
+            screen: primaryScreen
+        )
+
+        window.level = .floating
+        window.collectionBehavior = [.canJoinAllSpaces, .stationary]
+        window.isOpaque = false
+        window.backgroundColor = .clear
+        window.hasShadow = true
+
+        let floatingView = GentleBreakFloatingView()
+        let hostingView = KeyableHostingView(rootView: floatingView)
+        window.contentView = hostingView
+
+        if let contentView = window.contentView {
+            hostingView.frame = contentView.bounds
+            hostingView.autoresizingMask = [.width, .height]
+        }
+
+        window.setFrame(frame, display: true)
+        showWindow(window)
+        window.makeKey()
+        keyWindow = window
+
+        NSApp.activate(ignoringOtherApps: true)
+        floatingWindow = window
+    }
+
+    private func animateDimOpacity(to opacity: CGFloat) {
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.5
+            for window in dimWindows {
+                window.animator().backgroundColor = NSColor.black.withAlphaComponent(opacity)
+            }
+        }
+    }
+
+    private func animateFloatingWindowGrow() {
+        guard let window = floatingWindow,
+              let screen = NSScreen.main ?? NSScreen.screens.first else { return }
+
+        let newSize = NSSize(width: 500, height: 380)
+        let screenFrame = screen.visibleFrame
+        let newOrigin = NSPoint(
+            x: screenFrame.maxX - newSize.width - 20,
+            y: screenFrame.minY + 20
+        )
+        let newFrame = NSRect(origin: newOrigin, size: newSize)
+
+        NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.5
+            window.animator().setFrame(newFrame, display: true)
+        }
+    }
+
+    private func tearDownGentleWindows() {
+        for window in dimWindows {
+            window.orderOut(nil)
+        }
+        dimWindows.removeAll()
+
+        floatingWindow?.orderOut(nil)
+        floatingWindow = nil
+        keyWindow = nil
+    }
+
+    // MARK: - Private: Phase Observer
+
+    private func setupPhaseObserver() {
+        Task { @MainActor in
+            phaseObserver = AppState.shared.$breakPhase
+                .removeDuplicates()
+                .sink { [weak self] phase in
+                    guard let self, self.isGentleMode else { return }
+                    self.showGentleOverlay(phase: phase)
+                }
+        }
+    }
+
+    // MARK: - Private: Animation
+
     private func showWindow(_ window: NSWindow) {
         let shouldAnimate = !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
 
         if shouldAnimate {
-            // Start invisible
             window.alphaValue = 0
-
-            // Show window
             window.orderFrontRegardless()
-
-            // Fade in
             NSAnimationContext.runAnimationGroup { context in
                 context.duration = 0.3
                 window.animator().alphaValue = 1
             }
         } else {
-            // Instant show
             window.alphaValue = 1
             window.orderFrontRegardless()
         }
@@ -160,7 +277,6 @@ final class BreakOverlayWindowController {
 
     // MARK: - Private: Display Changes
 
-    /// Setup observer for display configuration changes
     private func setupDisplayObserver() {
         displayObserver = NotificationCenter.default.addObserver(
             forName: NSApplication.didChangeScreenParametersNotification,
@@ -171,52 +287,37 @@ final class BreakOverlayWindowController {
         }
     }
 
-    /// Handle display connect/disconnect
     private func handleDisplayChange() {
-        // Only update if overlay is currently visible
-        guard !windows.isEmpty else { return }
-
+        let hasAnyWindows = !windows.isEmpty || !dimWindows.isEmpty || floatingWindow != nil
+        guard hasAnyWindows else { return }
         print("[OverlayController] Display configuration changed, updating windows")
-
-        // Rebuild windows for new display configuration
         showOverlay()
     }
 }
 
 // MARK: - KeyableWindow
 
-/// Custom NSWindow that can become key window for keyboard events
 final class KeyableWindow: NSWindow {
     override var canBecomeKey: Bool { true }
 }
 
 // MARK: - KeyableHostingView
 
-/// Custom NSHostingView that can become first responder for keyboard events
 final class KeyableHostingView<Content: View>: NSHostingView<Content> {
 
     override var acceptsFirstResponder: Bool { true }
 
     override func keyDown(with event: NSEvent) {
-        // Check for Escape key
-        if event.keyCode == 53 { // 53 = Escape
-            // Find the BreakOverlayView and handle the Esc
-            // Since we can't easily access the SwiftUI view, we'll handle it here
-            handleEscapeKey()
+        if event.keyCode == 53 {
+            NotificationCenter.default.post(name: .breakOverlayEscPressed, object: nil)
         } else {
             super.keyDown(with: event)
         }
-    }
-
-    private func handleEscapeKey() {
-        // Post notification that will be picked up by BreakOverlayView
-        NotificationCenter.default.post(name: .breakOverlayEscPressed, object: nil)
     }
 }
 
 // MARK: - Notification Name
 
 extension Notification.Name {
-    /// Posted when Esc is pressed in break overlay
     static let breakOverlayEscPressed = Notification.Name("breakOverlayEscPressed")
 }
