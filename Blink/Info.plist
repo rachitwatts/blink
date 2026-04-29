@@ -37,6 +37,8 @@
 	<true/>
 	<key>OSAScriptingDefinition</key>
 	<string>Blink.sdef</string>
+	<key>SUPublicEDKey</key>
+	<string>jE5bbgmwy1c1c9V4QBNVTfEIMAuStjqGliPqCu9C8hs=</string>
 	<key>SUFeedURL</key>
 	<string>https://raw.githubusercontent.com/rachitwatts/blink/main/appcast.xml</string>
 	<key>SUEnableAutomaticChecks</key>

@@ -51,6 +51,10 @@ fi
 while [[ $# -gt 0 ]]; do
     case $1 in
         --notes|-n)
+            if [ -z "${2:-}" ]; then
+                echo "Error: --notes requires a value"
+                usage
+            fi
             RELEASE_NOTES="$2"
             shift 2
             ;;
@@ -91,6 +95,14 @@ check_tool xcodegen
 check_tool xcodebuild
 check_tool hdiutil
 check_tool gh
+
+# Find Sparkle's sign_update binary from the SPM artifacts
+SIGN_UPDATE=$(find "$HOME/Library/Developer/Xcode/DerivedData" -name "sign_update" -path "*/artifacts/sparkle/*" -type f 2>/dev/null | head -1)
+if [ -z "$SIGN_UPDATE" ]; then
+    echo "Error: Sparkle sign_update not found. Build the project once in Xcode to fetch Sparkle."
+    exit 1
+fi
+echo "Using sign_update: $SIGN_UPDATE"
 
 CURRENT_BRANCH=$(git -C "$PROJECT_DIR" branch --show-current)
 if [ "$CURRENT_BRANCH" != "main" ] && [ "$DRY_RUN" = false ]; then
@@ -218,9 +230,28 @@ DMG_SIZE=$(stat -f%z "$DMG_PATH")
 
 echo "DMG created: $DMG_PATH ($DMG_SIZE bytes)"
 
-# --- Step 6: Update appcast.xml ---
+# --- Step 6: Sign DMG with EdDSA ---
 
-step "6. Updating appcast.xml"
+step "6. Signing DMG with EdDSA"
+
+SIGN_OUTPUT=$("$SIGN_UPDATE" "$DMG_PATH")
+ED_SIGNATURE=$(echo "$SIGN_OUTPUT" | grep -o 'sparkle:edSignature="[^"]*"' | sed 's/sparkle:edSignature="//;s/"//')
+
+if [ -z "$ED_SIGNATURE" ]; then
+    echo "Error: Failed to generate EdDSA signature."
+    echo "sign_update output: $SIGN_OUTPUT"
+    echo ""
+    echo "If this is your first release, generate a keypair first:"
+    echo "  $SIGN_UPDATE --generate"
+    echo "Then add the public key to Blink/Info.plist as SUPublicEDKey."
+    exit 1
+fi
+
+echo "EdDSA signature: ${ED_SIGNATURE:0:20}..."
+
+# --- Step 7: Update appcast.xml ---
+
+step "7. Updating appcast.xml"
 
 PUB_DATE=$(date -R)
 DOWNLOAD_URL="https://github.com/$REPO/releases/download/v$VERSION/$DMG_NAME"
@@ -235,6 +266,7 @@ item = '''    <item>
       <pubDate>$PUB_DATE</pubDate>
       <enclosure
         url=\"$DOWNLOAD_URL\"
+        sparkle:edSignature=\"$ED_SIGNATURE\"
         sparkle:version=\"$VERSION\"
         sparkle:shortVersionString=\"$VERSION\"
         type=\"application/octet-stream\"
@@ -249,10 +281,10 @@ open(sys.argv[1], 'w').write(appcast)
 
 echo "Appcast updated with v$VERSION entry"
 
-# --- Step 7: Publish ---
+# --- Step 8: Publish ---
 
 if [ "$DRY_RUN" = true ]; then
-    step "7. Dry run - skipping publish"
+    step "8. Dry run - skipping publish"
     echo "Would commit version bump + appcast"
     echo "Would create GitHub release v$VERSION with $DMG_PATH"
     echo ""
@@ -261,7 +293,7 @@ if [ "$DRY_RUN" = true ]; then
     exit 0
 fi
 
-step "7. Publishing"
+step "8. Publishing"
 
 # Commit version bump + appcast update
 git -C "$PROJECT_DIR" add "$PROJECT_YML" "$APPCAST"
