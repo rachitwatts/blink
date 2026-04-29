@@ -3,5 +3,19 @@
   <channel>
     <title>Blink Updates</title>
     <language>en</language>
+    <item>
+      <title>Version 1.9.0</title>
+      <description><![CDATA[<ul><li>Auto-update support — Blink now checks for updates automatically and offers in-app install</li><li>New "Check for Updates..." menu item</li><li>One-command release pipeline via scripts/release.sh</li></ul>]]></description>
+      <pubDate>Wed, 29 Apr 2026 14:55:00 +0530</pubDate>
+      <enclosure
+        url="https://github.com/rachitwatts/blink/releases/download/v1.9.0/Blink.dmg"
+        sparkle:edSignature="ULm6F3ytHbF01d9wO7qtQUx+Tdn8xdxojPAhOP+AxpyZL6dhlovHNtmyFneH0dOXR/MlvAhEAtlxmJExTW6YAw=="
+        sparkle:version="2"
+        sparkle:shortVersionString="1.9.0"
+        type="application/octet-stream"
+        length="3630664"
+        />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
   </channel>
 </rss>
