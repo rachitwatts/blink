@@ -45,6 +45,9 @@ struct BlinkApp: App {
     init() {
         print("[BlinkApp] Initializing")
 
+        // Start Sparkle updater early so automatic checks begin immediately
+        _ = UpdaterService.shared
+
         // Start timer engine and iCloud KVS sync
         TimerEngine.shared.start()
         TimerEngine.shared.setupSync()
