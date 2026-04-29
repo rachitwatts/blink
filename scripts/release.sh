@@ -302,8 +302,8 @@ fi
 
 step "8. Publishing"
 
-# Commit version bump + appcast update
-git -C "$PROJECT_DIR" add "$PROJECT_YML" "$APPCAST"
+# Commit version bump + regenerated Xcode project + appcast update
+git -C "$PROJECT_DIR" add "$PROJECT_YML" "$APPCAST" "$PROJECT_DIR/Blink.xcodeproj/project.pbxproj"
 git -C "$PROJECT_DIR" commit -m "Release v$VERSION"
 
 # Push
