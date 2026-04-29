@@ -180,7 +180,10 @@ struct MonthView: View {
         // Gather all events for the 30-day range
         guard let rangeEnd = calendar.date(byAdding: .day, value: 1, to: today) else { return }
         let allEvents = AnalyticsService.shared.eventsForDateRange(from: thirtyDaysAgo, to: rangeEnd)
-        monthEvents = allEvents
+
+        // Include prior month for declining-compliance detection
+        let sixtyDaysAgo = calendar.date(byAdding: .day, value: -59, to: today)!
+        monthEvents = AnalyticsService.shared.eventsForDateRange(from: sixtyDaysAgo, to: rangeEnd)
 
         // Group days into weeks (each week is 7 days, starting from oldest)
         var weeks: [WeeklyStats] = []

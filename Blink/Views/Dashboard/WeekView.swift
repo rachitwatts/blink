@@ -230,8 +230,12 @@ struct WeekView: View {
         // Calculate eye health from the week's events
         let weekStart = calendar.date(byAdding: .day, value: -6, to: today)!
         let weekEnd = calendar.date(byAdding: .day, value: 1, to: today)!
-        weekEvents = AnalyticsService.shared.eventsForDateRange(from: weekStart, to: weekEnd)
-        eyeHealthMetrics = EyeHealthCalculator.calculate(from: weekEvents)
+        let currentWeekEvents = AnalyticsService.shared.eventsForDateRange(from: weekStart, to: weekEnd)
+        eyeHealthMetrics = EyeHealthCalculator.calculate(from: currentWeekEvents)
+
+        // Include prior week for declining-compliance detection
+        let twoWeeksAgo = calendar.date(byAdding: .day, value: -13, to: today)!
+        weekEvents = AnalyticsService.shared.eventsForDateRange(from: twoWeeksAgo, to: weekEnd)
     }
 
     // MARK: - Helpers
