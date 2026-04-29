@@ -5,6 +5,11 @@ options:
     macOS: "14.0"
     watchOS: "10.0"
 
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: "2.6.0"
+
 targets:
   Blink:
     type: application
@@ -28,6 +33,7 @@ targets:
       CODE_SIGNING_ALLOWED: NO
     dependencies:
       - sdk: AppIntents.framework
+      - package: Sparkle
 
   BlinkTests:
     type: bundle.unit-test

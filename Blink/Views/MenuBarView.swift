@@ -14,6 +14,7 @@ struct MenuBarView: View {
     @ObservedObject private var appState = AppState.shared
     @ObservedObject private var timerEngine = TimerEngine.shared
     @ObservedObject private var settings = Settings.shared
+    @ObservedObject private var updaterService = UpdaterService.shared
     @State private var summary: TodaySummary?
 
     // MARK: - Body
@@ -70,6 +71,10 @@ struct MenuBarView: View {
                 .onChange(of: settings.launchAtLogin) { _, newValue in
                     LaunchAtLoginManager.shared.setEnabled(newValue)
                 }
+
+            Button("Check for Updates...") {
+                updaterService.checkForUpdates()
+            }
 
             Divider()
 
