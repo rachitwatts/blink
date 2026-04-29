@@ -220,6 +220,7 @@ final class TimerEngine: ObservableObject {
             )
         }
         appState.workElapsedSeconds = 0
+        appState.activeBreakExercise = nil
         // Reset nudge timer for new session
         nudgeScheduler.resetTimer()
         appState.timerState = .workRunning
@@ -301,6 +302,7 @@ final class TimerEngine: ObservableObject {
         // Reset nudge timer for new session
         nudgeScheduler.resetTimer()
         appState.workElapsedSeconds = 0
+        appState.activeBreakExercise = nil
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
@@ -463,6 +465,7 @@ final class TimerEngine: ObservableObject {
             AnalyticsService.shared.recordSnoozeExpired(breakId: currentBreakId)
             // Resume the existing break without recording a new breakStarted
             appState.breakRemainingSeconds = configuredBreakDuration
+            appState.activeBreakExercise = BreakContentProvider.shared.selectExercise()
             appState.timerState = .breakRunning
             appState.isOverlayVisible = true
             publishSyncPayload()
@@ -481,6 +484,7 @@ final class TimerEngine: ObservableObject {
             configuredDuration: configuredBreakDuration
         )
         appState.breakRemainingSeconds = configuredBreakDuration
+        appState.activeBreakExercise = BreakContentProvider.shared.selectExercise()
         appState.timerState = .breakRunning
         appState.isOverlayVisible = true
         publishSyncPayload()
@@ -518,6 +522,7 @@ final class TimerEngine: ObservableObject {
         }
 
         appState.workElapsedSeconds = 0
+        appState.activeBreakExercise = nil
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
