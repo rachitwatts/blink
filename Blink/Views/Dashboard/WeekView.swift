@@ -20,6 +20,8 @@ struct DailyStats: Identifiable {
 struct WeekView: View {
     @State private var dailyStats: [DailyStats] = []
     @State private var eyeHealthMetrics: EyeHealthMetrics?
+    @State private var showEyeHealthDeepDive = false
+    @State private var weekEvents: [SessionEvent] = []
 
     // MARK: - Computed Stats
 
@@ -94,11 +96,20 @@ struct WeekView: View {
                             label: "Break",
                             sublabel: "Compliance"
                         )
-                        StatCardView(
-                            value: eyeHealthMetrics?.grade ?? "\u{2014}",
-                            label: "Eye",
-                            sublabel: "Health"
-                        )
+                        Button(action: { showEyeHealthDeepDive = true }) {
+                            StatCardView(
+                                value: eyeHealthMetrics?.grade ?? "\u{2014}",
+                                label: "Eye",
+                                sublabel: "Health"
+                            )
+                            .overlay(alignment: .topTrailing) {
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 8, weight: .semibold))
+                                    .foregroundColor(.secondary)
+                                    .padding(6)
+                            }
+                        }
+                        .buttonStyle(.plain)
                     }
 
                     // Daily focus time bar chart
@@ -170,6 +181,9 @@ struct WeekView: View {
                 .padding(20)
             }
             .onAppear { loadData() }
+            .sheet(isPresented: $showEyeHealthDeepDive) {
+                EyeHealthDeepDiveView(events: weekEvents, scope: .week)
+            }
         }
     }
 
@@ -216,7 +230,7 @@ struct WeekView: View {
         // Calculate eye health from the week's events
         let weekStart = calendar.date(byAdding: .day, value: -6, to: today)!
         let weekEnd = calendar.date(byAdding: .day, value: 1, to: today)!
-        let weekEvents = AnalyticsService.shared.eventsForDateRange(from: weekStart, to: weekEnd)
+        weekEvents = AnalyticsService.shared.eventsForDateRange(from: weekStart, to: weekEnd)
         eyeHealthMetrics = EyeHealthCalculator.calculate(from: weekEvents)
     }
 

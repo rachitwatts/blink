@@ -19,6 +19,8 @@ struct WeeklyStats: Identifiable {
 struct MonthView: View {
     @State private var weeklyStats: [WeeklyStats] = []
     @State private var eyeHealthMetrics: EyeHealthMetrics?
+    @State private var showEyeHealthDeepDive = false
+    @State private var monthEvents: [SessionEvent] = []
 
     // MARK: - Computed Stats
 
@@ -83,11 +85,20 @@ struct MonthView: View {
                             label: "Break",
                             sublabel: "Compliance"
                         )
-                        StatCardView(
-                            value: eyeHealthMetrics?.grade ?? "\u{2014}",
-                            label: "Eye",
-                            sublabel: "Health"
-                        )
+                        Button(action: { showEyeHealthDeepDive = true }) {
+                            StatCardView(
+                                value: eyeHealthMetrics?.grade ?? "\u{2014}",
+                                label: "Eye",
+                                sublabel: "Health"
+                            )
+                            .overlay(alignment: .topTrailing) {
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 8, weight: .semibold))
+                                    .foregroundColor(.secondary)
+                                    .padding(6)
+                            }
+                        }
+                        .buttonStyle(.plain)
                     }
 
                     // Weekly focus time bar chart
@@ -153,6 +164,9 @@ struct MonthView: View {
                 .padding(20)
             }
             .onAppear { loadData() }
+            .sheet(isPresented: $showEyeHealthDeepDive) {
+                EyeHealthDeepDiveView(events: monthEvents, scope: .month)
+            }
         }
     }
 
@@ -166,6 +180,7 @@ struct MonthView: View {
         // Gather all events for the 30-day range
         guard let rangeEnd = calendar.date(byAdding: .day, value: 1, to: today) else { return }
         let allEvents = AnalyticsService.shared.eventsForDateRange(from: thirtyDaysAgo, to: rangeEnd)
+        monthEvents = allEvents
 
         // Group days into weeks (each week is 7 days, starting from oldest)
         var weeks: [WeeklyStats] = []
