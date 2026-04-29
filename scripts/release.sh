@@ -1,14 +1,15 @@
 #!/bin/bash
 # Full release pipeline for Blink
 #
-# Handles: version bump → build → DMG → appcast update → GitHub release
+# Handles: version bump → build → DMG → sign → upload to R2 → GitHub release
 #
 # Usage:
 #   ./scripts/release.sh 1.9.0                    # Release with changelog prompt
 #   ./scripts/release.sh 1.9.0 --notes "Fixed X"  # Release with inline notes
 #   ./scripts/release.sh 1.9.0 --dry-run          # Build everything, skip publish
 #
-# Prerequisites: xcodegen, xcbeautify (optional), gh (GitHub CLI)
+# Prerequisites: xcodegen, xcbeautify (optional), gh (GitHub CLI), aws CLI
+# Credentials:   .env file with R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET, R2_PUBLIC_URL
 
 set -euo pipefail
 
@@ -22,6 +23,20 @@ REPO="rachitwatts/blink"
 DRY_RUN=false
 RELEASE_NOTES=""
 SKIP_TESTS=false
+
+# Load R2 credentials from .env
+ENV_FILE="$PROJECT_DIR/.env"
+if [ -f "$ENV_FILE" ]; then
+    set -a
+    source "$ENV_FILE"
+    set +a
+else
+    echo "Error: .env file not found at $ENV_FILE"
+    echo "Create it with: R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET, R2_PUBLIC_URL"
+    exit 1
+fi
+
+R2_ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
 
 # --- Argument parsing ---
 
@@ -95,6 +110,7 @@ check_tool xcodegen
 check_tool xcodebuild
 check_tool hdiutil
 check_tool gh
+check_tool aws
 
 # Find Sparkle's sign_update binary from the SPM artifacts
 SIGN_UPDATE=$(find "$HOME/Library/Developer/Xcode/DerivedData" -name "sign_update" -path "*/artifacts/sparkle/*" -type f 2>/dev/null | head -1)
@@ -261,7 +277,7 @@ echo "EdDSA signature: ${ED_SIGNATURE:0:20}..."
 step "7. Updating appcast.xml"
 
 PUB_DATE=$(date -R)
-DOWNLOAD_URL="https://github.com/$REPO/releases/download/v$VERSION/$DMG_NAME"
+DOWNLOAD_URL="${R2_PUBLIC_URL}/Blink-v${VERSION}.dmg"
 
 # Insert new <item> before </channel> using Python (handles multiline XML safely)
 python3 -c "
@@ -300,7 +316,27 @@ if [ "$DRY_RUN" = true ]; then
     exit 0
 fi
 
-step "8. Publishing"
+step "8. Uploading to Cloudflare R2"
+
+# Upload DMG with versioned filename
+AWS_ACCESS_KEY_ID="$R2_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$R2_SECRET_ACCESS_KEY" \
+    aws s3 cp "$DMG_PATH" "s3://$R2_BUCKET/Blink-v${VERSION}.dmg" \
+    --endpoint-url "$R2_ENDPOINT" \
+    --content-type "application/octet-stream"
+
+echo "DMG uploaded: ${R2_PUBLIC_URL}/Blink-v${VERSION}.dmg"
+
+# Upload appcast.xml
+AWS_ACCESS_KEY_ID="$R2_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$R2_SECRET_ACCESS_KEY" \
+    aws s3 cp "$APPCAST" "s3://$R2_BUCKET/appcast.xml" \
+    --endpoint-url "$R2_ENDPOINT" \
+    --content-type "application/xml"
+
+echo "Appcast uploaded: ${R2_PUBLIC_URL}/appcast.xml"
+
+# --- Step 9: Commit and publish ---
+
+step "9. Publishing"
 
 # Commit version bump + regenerated Xcode project + appcast update
 git -C "$PROJECT_DIR" add "$PROJECT_YML" "$APPCAST" "$PROJECT_DIR/Blink.xcodeproj/project.pbxproj"
@@ -309,13 +345,9 @@ git -C "$PROJECT_DIR" commit -m "Release v$VERSION"
 # Push
 git -C "$PROJECT_DIR" push origin "$CURRENT_BRANCH"
 
-# Create GitHub release
-if gh release view "v$VERSION" --repo "$REPO" &>/dev/null; then
-    echo "Release v$VERSION exists, uploading DMG..."
-    gh release upload "v$VERSION" "$DMG_PATH" --repo "$REPO" --clobber
-else
-    # Convert HTML notes to markdown-ish for GitHub release body
-    gh release create "v$VERSION" "$DMG_PATH" \
+# Create GitHub release (without DMG — it's on R2 now)
+if ! gh release view "v$VERSION" --repo "$REPO" &>/dev/null; then
+    gh release create "v$VERSION" \
         --repo "$REPO" \
         --title "Blink v$VERSION" \
         --notes "$(cat <<EOF
@@ -323,10 +355,8 @@ else
 
 $RELEASE_NOTES
 
-### Installation
-1. Download \`Blink.dmg\`
-2. Open the DMG and drag Blink to Applications
-3. First launch: Right-click → Open → Click "Open"
+### Download
+[Blink.dmg](${R2_PUBLIC_URL}/Blink-v${VERSION}.dmg)
 
 ### Auto-Update
 If you already have Blink installed, the app will offer this update automatically.
@@ -341,6 +371,7 @@ echo ""
 echo "━━━ Release complete ━━━"
 echo ""
 echo "  Version:  $VERSION"
+echo "  DMG:      ${R2_PUBLIC_URL}/Blink-v${VERSION}.dmg"
+echo "  Appcast:  ${R2_PUBLIC_URL}/appcast.xml"
 echo "  Release:  https://github.com/$REPO/releases/tag/v$VERSION"
-echo "  Appcast:  https://raw.githubusercontent.com/$REPO/main/appcast.xml"
 echo ""

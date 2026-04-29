@@ -40,6 +40,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Secrets
+.env
+
 # Swift Package Manager
 .build/
 Packages/

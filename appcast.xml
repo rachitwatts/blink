@@ -8,7 +8,7 @@
       <description><![CDATA[<ul><li>Auto-update support — Blink now checks for updates automatically and offers in-app install</li><li>New "Check for Updates..." menu item</li><li>One-command release pipeline via scripts/release.sh</li></ul>]]></description>
       <pubDate>Wed, 29 Apr 2026 14:55:00 +0530</pubDate>
       <enclosure
-        url="https://github.com/rachitwatts/blink/releases/download/v1.9.0/Blink.dmg"
+        url="https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/Blink-v1.9.0.dmg"
         sparkle:edSignature="ULm6F3ytHbF01d9wO7qtQUx+Tdn8xdxojPAhOP+AxpyZL6dhlovHNtmyFneH0dOXR/MlvAhEAtlxmJExTW6YAw=="
         sparkle:version="2"
         sparkle:shortVersionString="1.9.0"

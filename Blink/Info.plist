@@ -40,7 +40,7 @@
 	<key>SUPublicEDKey</key>
 	<string>jE5bbgmwy1c1c9V4QBNVTfEIMAuStjqGliPqCu9C8hs=</string>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/rachitwatts/blink/main/appcast.xml</string>
+	<string>https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/appcast.xml</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUScheduledCheckInterval</key>
