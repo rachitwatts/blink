@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import AppKit
+import UserNotifications
 
 /// Core timer engine that manages the work/break cycle
 ///
@@ -286,6 +287,10 @@ final class TimerEngine: ObservableObject {
 
         appState.snoozeRemainingSeconds = 0
         appState.breakRemainingSeconds = configuredBreakDuration
+        appState.breakElapsedSeconds = 0
+        if settings.breakStyle == .gentle {
+            appState.breakPhase = .floating
+        }
         appState.timerState = .breakRunning
         appState.isOverlayVisible = true
         publishSyncPayload()
@@ -303,6 +308,8 @@ final class TimerEngine: ObservableObject {
         nudgeScheduler.resetTimer()
         appState.workElapsedSeconds = 0
         appState.activeBreakExercise = nil
+        appState.breakElapsedSeconds = 0
+        appState.breakPhase = .floating
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
@@ -449,9 +456,28 @@ final class TimerEngine: ObservableObject {
         if appState.breakRemainingSeconds > 0 {
             appState.breakRemainingSeconds -= 1
         } else {
-            // Break complete
             print("[TimerEngine] Break complete, starting new session")
             completeBreak()
+            return
+        }
+
+        guard settings.breakStyle == .gentle else { return }
+
+        appState.breakElapsedSeconds += 1
+        let elapsed = appState.breakElapsedSeconds
+
+        if elapsed == 10 && appState.breakPhase == .floating {
+            let idleSeconds = idleDetector.getIdleTime()
+            if idleSeconds >= 10 {
+                print("[TimerEngine] User idle during floating phase, completing break early")
+                completeBreak()
+                return
+            }
+            print("[TimerEngine] Gentle break → dimmed phase")
+            appState.breakPhase = .dimmed
+        } else if elapsed == 20 && appState.breakPhase == .dimmed {
+            print("[TimerEngine] Gentle break → fullscreen phase")
+            appState.breakPhase = .fullscreen
         }
     }
 
@@ -466,6 +492,10 @@ final class TimerEngine: ObservableObject {
             // Resume the existing break without recording a new breakStarted
             appState.breakRemainingSeconds = configuredBreakDuration
             appState.activeBreakExercise = BreakContentProvider.shared.selectExercise()
+            appState.breakElapsedSeconds = 0
+            if settings.breakStyle == .gentle {
+                appState.breakPhase = .floating
+            }
             appState.timerState = .breakRunning
             appState.isOverlayVisible = true
             publishSyncPayload()
@@ -479,22 +509,45 @@ final class TimerEngine: ObservableObject {
     private func triggerBreak(isManual: Bool = false) {
         currentBreakId = UUID().uuidString
         configuredBreakDuration = settings.breakDurationSeconds
+
+        // Notification-only: send notification and reset, no overlay
+        if settings.breakStyle == .notificationOnly {
+            AnalyticsService.shared.recordBreakStarted(
+                trigger: isManual ? "manual" : "auto",
+                configuredDuration: configuredBreakDuration
+            )
+            sendBreakNotification()
+            appState.workElapsedSeconds = 0
+            nudgeScheduler.resetTimer()
+            appState.timerState = .workRunning
+            shouldResetOnNextActivity = false
+            publishSyncPayload()
+            scheduleTimer(interval: activePollingInterval)
+            return
+        }
+
         AnalyticsService.shared.recordBreakStarted(
             trigger: isManual ? "manual" : "auto",
             configuredDuration: configuredBreakDuration
         )
         appState.breakRemainingSeconds = configuredBreakDuration
         appState.activeBreakExercise = BreakContentProvider.shared.selectExercise()
+        appState.breakElapsedSeconds = 0
         appState.timerState = .breakRunning
+
+        if settings.breakStyle == .gentle {
+            appState.breakPhase = .floating
+        } else {
+            appState.breakPhase = .fullscreen
+        }
+
         appState.isOverlayVisible = true
         publishSyncPayload()
 
-        // Play sound if enabled
         if settings.soundEnabled {
             playBreakSound()
         }
 
-        // Switch to active polling during break (for countdown accuracy)
         scheduleTimer(interval: activePollingInterval)
     }
 
@@ -523,6 +576,8 @@ final class TimerEngine: ObservableObject {
 
         appState.workElapsedSeconds = 0
         appState.activeBreakExercise = nil
+        appState.breakElapsedSeconds = 0
+        appState.breakPhase = .floating
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
@@ -530,6 +585,25 @@ final class TimerEngine: ObservableObject {
 
         // Switch to active polling for new work session
         scheduleTimer(interval: activePollingInterval)
+    }
+
+    // MARK: - Private: Notification-Only Mode
+
+    private func sendBreakNotification() {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound]) { granted, _ in
+            guard granted else { return }
+            let content = UNMutableNotificationContent()
+            content.title = "Time for a break"
+            content.body = "Look away from the screen. Blink. Breathe."
+            content.sound = Settings.shared.soundEnabled ? .default : nil
+            let request = UNNotificationRequest(
+                identifier: "blink-break-\(UUID().uuidString)",
+                content: content,
+                trigger: nil
+            )
+            center.add(request)
+        }
     }
 
     // MARK: - Private: Adaptive Polling
