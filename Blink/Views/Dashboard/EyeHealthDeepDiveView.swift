@@ -3,6 +3,7 @@ import SwiftUI
 struct EyeHealthDeepDiveView: View {
     let events: [SessionEvent]
     let scope: AnalysisScope
+    var previousPeriodEvents: [SessionEvent] = []
 
     @State private var dismissed: Set<String> = EyeHealthAnalyzer.loadDismissed()
     @Environment(\.dismiss) private var dismiss
@@ -12,7 +13,7 @@ struct EyeHealthDeepDiveView: View {
     }
 
     private var allInsights: [EyeHealthInsight] {
-        EyeHealthAnalyzer.analyze(events: events, settings: Settings.shared, scope: scope)
+        EyeHealthAnalyzer.analyze(events: events, settings: Settings.shared, scope: scope, previousPeriodEvents: previousPeriodEvents)
     }
 
     private var visibleInsights: [EyeHealthInsight] {

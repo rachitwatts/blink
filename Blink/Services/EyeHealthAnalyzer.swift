@@ -8,7 +8,7 @@ final class EyeHealthAnalyzer {
 
     // MARK: - Analysis
 
-    static func analyze(events: [SessionEvent], settings: Settings, scope: AnalysisScope) -> [EyeHealthInsight] {
+    static func analyze(events: [SessionEvent], settings: Settings, scope: AnalysisScope, previousPeriodEvents: [SessionEvent] = []) -> [EyeHealthInsight] {
         guard !events.isEmpty else { return [] }
 
         var insights: [EyeHealthInsight] = []
@@ -20,8 +20,7 @@ final class EyeHealthAnalyzer {
             detectLongNoBreakRun,
             detectWorstDayCompliance,
             detectBreakTooLong,
-            detectMorningSkipPattern,
-            detectDecliningCompliance
+            detectMorningSkipPattern
         ]
 
         for detector in detectors {
@@ -30,6 +29,15 @@ final class EyeHealthAnalyzer {
                 if let suggestion = generateSuggestion(for: pattern, events: events, settings: settings) {
                     insights.append(suggestion)
                 }
+            }
+        }
+
+        // Declining compliance needs both current and prior period
+        let combinedForDeclining = previousPeriodEvents + events
+        if let pattern = detectDecliningCompliance(combinedForDeclining, settings, scope) {
+            insights.append(pattern)
+            if let suggestion = generateSuggestion(for: pattern, events: events, settings: settings) {
+                insights.append(suggestion)
             }
         }
 

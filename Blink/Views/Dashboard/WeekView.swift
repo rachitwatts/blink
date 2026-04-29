@@ -22,6 +22,7 @@ struct WeekView: View {
     @State private var eyeHealthMetrics: EyeHealthMetrics?
     @State private var showEyeHealthDeepDive = false
     @State private var weekEvents: [SessionEvent] = []
+    @State private var prevPeriodEvents: [SessionEvent] = []
 
     // MARK: - Computed Stats
 
@@ -182,7 +183,7 @@ struct WeekView: View {
             }
             .onAppear { loadData() }
             .sheet(isPresented: $showEyeHealthDeepDive) {
-                EyeHealthDeepDiveView(events: weekEvents, scope: .week)
+                EyeHealthDeepDiveView(events: weekEvents, scope: .week, previousPeriodEvents: prevPeriodEvents)
             }
         }
     }
@@ -230,12 +231,12 @@ struct WeekView: View {
         // Calculate eye health from the week's events
         let weekStart = calendar.date(byAdding: .day, value: -6, to: today)!
         let weekEnd = calendar.date(byAdding: .day, value: 1, to: today)!
-        let currentWeekEvents = AnalyticsService.shared.eventsForDateRange(from: weekStart, to: weekEnd)
-        eyeHealthMetrics = EyeHealthCalculator.calculate(from: currentWeekEvents)
+        weekEvents = AnalyticsService.shared.eventsForDateRange(from: weekStart, to: weekEnd)
+        eyeHealthMetrics = EyeHealthCalculator.calculate(from: weekEvents)
 
-        // Include prior week for declining-compliance detection
+        // Prior week for declining-compliance detection
         let twoWeeksAgo = calendar.date(byAdding: .day, value: -13, to: today)!
-        weekEvents = AnalyticsService.shared.eventsForDateRange(from: twoWeeksAgo, to: weekEnd)
+        prevPeriodEvents = AnalyticsService.shared.eventsForDateRange(from: twoWeeksAgo, to: weekStart)
     }
 
     // MARK: - Helpers

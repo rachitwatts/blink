@@ -21,6 +21,7 @@ struct MonthView: View {
     @State private var eyeHealthMetrics: EyeHealthMetrics?
     @State private var showEyeHealthDeepDive = false
     @State private var monthEvents: [SessionEvent] = []
+    @State private var prevPeriodEvents: [SessionEvent] = []
 
     // MARK: - Computed Stats
 
@@ -165,7 +166,7 @@ struct MonthView: View {
             }
             .onAppear { loadData() }
             .sheet(isPresented: $showEyeHealthDeepDive) {
-                EyeHealthDeepDiveView(events: monthEvents, scope: .month)
+                EyeHealthDeepDiveView(events: monthEvents, scope: .month, previousPeriodEvents: prevPeriodEvents)
             }
         }
     }
@@ -181,9 +182,11 @@ struct MonthView: View {
         guard let rangeEnd = calendar.date(byAdding: .day, value: 1, to: today) else { return }
         let allEvents = AnalyticsService.shared.eventsForDateRange(from: thirtyDaysAgo, to: rangeEnd)
 
-        // Include prior month for declining-compliance detection
+        monthEvents = allEvents
+
+        // Prior month for declining-compliance detection
         let sixtyDaysAgo = calendar.date(byAdding: .day, value: -59, to: today)!
-        monthEvents = AnalyticsService.shared.eventsForDateRange(from: sixtyDaysAgo, to: rangeEnd)
+        prevPeriodEvents = AnalyticsService.shared.eventsForDateRange(from: sixtyDaysAgo, to: thirtyDaysAgo)
 
         // Group days into weeks (each week is 7 days, starting from oldest)
         var weeks: [WeeklyStats] = []
