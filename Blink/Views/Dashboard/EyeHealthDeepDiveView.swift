@@ -135,7 +135,7 @@ struct EyeHealthDeepDiveView: View {
 
                     RoundedRectangle(cornerRadius: 4)
                         .fill(color)
-                        .frame(width: max(0, geo.size.width * CGFloat(value)), height: 8)
+                        .frame(width: max(0, geo.size.width * min(1, CGFloat(value))), height: 8)
                 }
             }
             .frame(height: 8)
