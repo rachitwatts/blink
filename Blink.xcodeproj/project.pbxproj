@@ -21,6 +21,7 @@
 		1FE36C49979D50150D7AFD3A /* HeatmapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEB2A9AB2CD68D70760DDB /* HeatmapView.swift */; };
 		22301253ABE390BD07B09A2E /* WatchSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3B4002EA1DF78532197FF /* WatchSettings.swift */; };
 		2251E3ED33212FA950F3CED6 /* TimeFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A5CDC4BE4F953F49EAFE50 /* TimeFormattingTests.swift */; };
+		2327C480BFC12A3D088D9ECF /* BreakContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4277C159181D74EE1B020457 /* BreakContentProvider.swift */; };
 		239DA3995A595C8B35324A35 /* Blink.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 303F5DFAB86E2C732AB3F09A /* Blink.sdef */; };
 		25F8E55421DC2B55922B6CC4 /* BlinkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DBB159CA5CB427CCCADEF /* BlinkApp.swift */; };
 		2967AC701EA104579C0B4055 /* DisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF76295D6FFC56F94BB6FA48 /* DisplayMode.swift */; };
@@ -32,6 +33,7 @@
 		4129E9924D67A65E4915D44F /* SessionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */; };
 		42E7968DE2C785D54769C32A /* EyeHealthCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */; };
 		44A45038B0F961D173826104 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3611BA1F7A16AA6199641486 /* Assets.xcassets */; };
+		4806DA026C385EA1A3006E7C /* BreakExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E21016B4D872BFCD97FE148 /* BreakExerciseView.swift */; };
 		4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F1991D869152E867145645 /* BreakOverlayView.swift */; };
 		5387B639C73460184472E695 /* IdleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */; };
 		561235F3A441C65D4814B682 /* HapticManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BD4F44B082B1C62F6CCA35 /* HapticManagerTests.swift */; };
@@ -39,6 +41,7 @@
 		5801659869BDFC1052DB69A8 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B2BCBC64F6300D1EAD58BC /* SettingsSection.swift */; };
 		5ABFB2E35715D42FFB42D99C /* TimerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D227434466D7C6840A638063 /* TimerStateTests.swift */; };
 		6236E723BC574777D616DE37 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 274CBBE4DC64F9737B66DCB6 /* Sparkle */; };
+		6260E871C994ED46C4ACDF49 /* FunExerciseAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4871F290652D844D8C3640C2 /* FunExerciseAnimations.swift */; };
 		632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */; };
 		63F935ACAD05A5950E6630BB /* SyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFE8B26C6DF5391F9F4AE14 /* SyncPayload.swift */; };
 		65256C105373F4843FBE8750 /* SyncManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4C671A4943BDB5F56525A /* SyncManagerProtocol.swift */; };
@@ -71,7 +74,9 @@
 		AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF6E4483329D18D25EE4C8D /* AppState.swift */; };
 		ADD6E0073DA1C9ABA1674175 /* AllTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A1794267E2C1A35324FC /* AllTimeView.swift */; };
 		AE03BB7AFF911AA9F379C15E /* NudgeSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8DF27DF00F0429B4096228 /* NudgeSchedulerTests.swift */; };
+		B06407FA399B0DD103F30C31 /* BreakExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E03C8370B7F8889DE6E59C8 /* BreakExercise.swift */; };
 		B1C1705753F1EE6A95A53520 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2CADE2E46074308C5CEE6E /* HapticManager.swift */; };
+		B477D567AA0065928C744811 /* ExerciseAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCFBC93CBC1116ED998879E /* ExerciseAnimations.swift */; };
 		BA4BA1CA226247466DCF5B9B /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DC9E87A47A92F3FE8EF8AF9 /* AppIntents.framework */; };
 		BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BD162119285851B944B178 /* DashboardWindowController.swift */; };
 		BDCC35F58C8ADC5000C29EC6 /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8491C3E02C2563330E0344 /* MonthView.swift */; };
@@ -146,8 +151,10 @@
 		35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		3611BA1F7A16AA6199641486 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3EB6CF7394F2442F2A83F872 /* WatchAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAppState.swift; sourceTree = "<group>"; };
+		4277C159181D74EE1B020457 /* BreakContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakContentProvider.swift; sourceTree = "<group>"; };
 		43D3A1794267E2C1A35324FC /* AllTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTimeView.swift; sourceTree = "<group>"; };
 		48431B2C296BDB92BF0BB93C /* Blink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blink.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4871F290652D844D8C3640C2 /* FunExerciseAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunExerciseAnimations.swift; sourceTree = "<group>"; };
 		4A0087FD7E489413B25D39F6 /* WatchSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSettingsView.swift; sourceTree = "<group>"; };
 		4B31CDA126203664640FFF96 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		4BE4C671A4943BDB5F56525A /* SyncManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManagerProtocol.swift; sourceTree = "<group>"; };
@@ -164,11 +171,13 @@
 		79026248DC53E0D92EA739A9 /* LabeledSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledSlider.swift; sourceTree = "<group>"; };
 		7B03EA8B0225251705AB7B3D /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		7B50720E0BC9451F19647EEF /* BlinkWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlinkWatch.entitlements; sourceTree = "<group>"; };
+		7E03C8370B7F8889DE6E59C8 /* BreakExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakExercise.swift; sourceTree = "<group>"; };
 		7E51DA777F6F2CA9EC950552 /* OnboardingWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWindowController.swift; sourceTree = "<group>"; };
 		7F949EBC6D66479FCF1E8855 /* TimerSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingsSection.swift; sourceTree = "<group>"; };
 		83CABA226B77C41C6ED8BE26 /* BlinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86E96408D496193EA27189E7 /* TimerEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngineTests.swift; sourceTree = "<group>"; };
 		8C3FE352EB3AFEEB76ECBD6B /* Blink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blink.entitlements; sourceTree = "<group>"; };
+		8E21016B4D872BFCD97FE148 /* BreakExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakExerciseView.swift; sourceTree = "<group>"; };
 		96BCA52CE10433682051D232 /* EyeHealthAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthAnalyzer.swift; sourceTree = "<group>"; };
 		97E1AFE54B32FEA74E25B794 /* WatchTimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTimerEngine.swift; sourceTree = "<group>"; };
 		989DBB159CA5CB427CCCADEF /* BlinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkApp.swift; sourceTree = "<group>"; };
@@ -180,6 +189,7 @@
 		A9D3B4002EA1DF78532197FF /* WatchSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSettings.swift; sourceTree = "<group>"; };
 		AB4E287AD1A9757283A87C42 /* BlinkWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlinkWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEvent.swift; sourceTree = "<group>"; };
+		ADCFBC93CBC1116ED998879E /* ExerciseAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseAnimations.swift; sourceTree = "<group>"; };
 		AE767D9885C52AF12A60FB5D /* ThumbnailPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailPicker.swift; sourceTree = "<group>"; };
 		AF789F55EB114BFCAAC4D66E /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		B0A5CDC4BE4F953F49EAFE50 /* TimeFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeFormattingTests.swift; sourceTree = "<group>"; };
@@ -285,6 +295,7 @@
 				DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */,
 				E88F147877081BA043EF2625 /* BlinkActions.swift */,
 				B300FF7997F3F7E7A3D5A032 /* BlinkIntents.swift */,
+				4277C159181D74EE1B020457 /* BreakContentProvider.swift */,
 				96BCA52CE10433682051D232 /* EyeHealthAnalyzer.swift */,
 				2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */,
 				9C848C558D50C6595E1828A3 /* HotkeyManager.swift */,
@@ -327,6 +338,16 @@
 				303F5DFAB86E2C732AB3F09A /* Blink.sdef */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		7EF5F369E7CD6E3B23FA8FF5 /* Exercises */ = {
+			isa = PBXGroup;
+			children = (
+				8E21016B4D872BFCD97FE148 /* BreakExerciseView.swift */,
+				ADCFBC93CBC1116ED998879E /* ExerciseAnimations.swift */,
+				4871F290652D844D8C3640C2 /* FunExerciseAnimations.swift */,
+			);
+			path = Exercises;
 			sourceTree = "<group>";
 		};
 		7F8944AF51D1E8B45F813A3D /* BlinkWatch */ = {
@@ -412,6 +433,7 @@
 			isa = PBXGroup;
 			children = (
 				FBF6E4483329D18D25EE4C8D /* AppState.swift */,
+				7E03C8370B7F8889DE6E59C8 /* BreakExercise.swift */,
 				5B91A176C55E06B7A38BDD5D /* EyeHealthInsight.swift */,
 				BC4EAF92595CAC2A07EDB9F1 /* NudgeType.swift */,
 				AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */,
@@ -441,6 +463,7 @@
 				4B31CDA126203664640FFF96 /* SettingsView.swift */,
 				286FBBABEB31092CB23F18B6 /* Components */,
 				C74D77E33801AE8DF7BDC67F /* Dashboard */,
+				7EF5F369E7CD6E3B23FA8FF5 /* Exercises */,
 				F9FC872F5D91B5C423DD46FB /* Settings */,
 			);
 			path = Views;
@@ -618,15 +641,20 @@
 				FE6F6432B20D6F47785893FE /* BlinkActions.swift in Sources */,
 				25F8E55421DC2B55922B6CC4 /* BlinkApp.swift in Sources */,
 				8DA01D3A11E58DE9806D9841 /* BlinkIntents.swift in Sources */,
+				2327C480BFC12A3D088D9ECF /* BreakContentProvider.swift in Sources */,
+				B06407FA399B0DD103F30C31 /* BreakExercise.swift in Sources */,
+				4806DA026C385EA1A3006E7C /* BreakExerciseView.swift in Sources */,
 				4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */,
 				632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */,
 				061DA0427EA238BE85F0484D /* DashboardView.swift in Sources */,
 				BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */,
 				EA597E948FD513E5202D24C1 /* DisplayMode.swift in Sources */,
+				B477D567AA0065928C744811 /* ExerciseAnimations.swift in Sources */,
 				3CAD34D9D1060A6AB735E736 /* EyeHealthAnalyzer.swift in Sources */,
 				42E7968DE2C785D54769C32A /* EyeHealthCalculator.swift in Sources */,
 				E44AAA6CF18262D707C5F54F /* EyeHealthDeepDiveView.swift in Sources */,
 				D4D5DE6D861F6BFEBD4BA2CE /* EyeHealthInsight.swift in Sources */,
+				6260E871C994ED46C4ACDF49 /* FunExerciseAnimations.swift in Sources */,
 				9B804C88BCA387D24866C17E /* GeneralSettingsSection.swift in Sources */,
 				1FE36C49979D50150D7AFD3A /* HeatmapView.swift in Sources */,
 				D3C6C248BD1267FCFC2CD3B2 /* HotkeyManager.swift in Sources */,

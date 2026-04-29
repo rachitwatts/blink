@@ -28,26 +28,33 @@ struct BreakOverlayView: View {
             // Background: Dark gradient
             backgroundGradient
 
-            // Content: Timer, message, buttons
-            VStack(spacing: 40) {
-                Spacer()
+            // Content: three equal zones — timer / exercise / buttons
+            VStack(spacing: 0) {
+                // Top zone: countdown timer
+                VStack {
+                    Spacer()
+                    countdownTimerView
+                    Spacer()
+                }
+                .frame(maxHeight: .infinity)
 
-                // Large countdown timer
-                countdownTimerView
+                // Center zone: exercise content
+                VStack {
+                    Spacer()
+                    breakContent
+                    Spacer()
+                }
+                .frame(maxHeight: .infinity)
 
-                // Calming message
-                messageText
-
-                Spacer()
-
-                // Snooze and Skip buttons
-                buttonRow
-
-                // Keyboard hints
-                hintText
-
-                Spacer()
-                    .frame(height: 60)
+                // Bottom zone: buttons and hints
+                VStack(spacing: 16) {
+                    Spacer()
+                    buttonRow
+                    hintText
+                    Spacer()
+                        .frame(height: 48)
+                }
+                .frame(maxHeight: .infinity)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -95,12 +102,22 @@ struct BreakOverlayView: View {
                 "Time remaining: \(formatTimeAccessible(appState.breakRemainingSeconds))")
     }
 
-    // MARK: - Message
+    // MARK: - Break Content
 
-    private var messageText: some View {
-        Text("Look away. Blink. Breathe.")
-            .font(.system(size: 24, weight: .regular))
-            .foregroundColor(.white.opacity(0.7))
+    @ViewBuilder
+    private var breakContent: some View {
+        switch Settings.shared.breakContentMode {
+        case .guided:
+            if let exercise = appState.activeBreakExercise {
+                BreakExerciseView(exercise: exercise)
+            }
+        case .staticMessage:
+            Text("Look away. Blink. Breathe.")
+                .font(.system(size: 24, weight: .regular))
+                .foregroundColor(.white.opacity(0.7))
+        case .none:
+            EmptyView()
+        }
     }
 
     // MARK: - Buttons

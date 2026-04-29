@@ -52,6 +52,11 @@ final class AppState: ObservableObject {
     /// Whether nudges are paused for this session (until next break completes)
     @Published var nudgesPausedForSession: Bool = false
 
+    // MARK: - Break Exercise State
+
+    /// The exercise selected for the current break (nil when not on break or mode is not guided)
+    @Published var activeBreakExercise: BreakExercise? = nil
+
     // MARK: - Dependencies
 
     /// Reference to settings for computing display values
@@ -126,5 +131,6 @@ final class AppState: ObservableObject {
         isNudgeVisible = false
         activeNudgeType = nil
         nudgesPausedForSession = false
+        activeBreakExercise = nil
     }
 }
