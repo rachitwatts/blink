@@ -437,6 +437,11 @@ final class TimerEngine: ObservableObject {
                 }
                 appState.workElapsedSeconds = 0
                 nudgeScheduler.resetTimer()
+                // Clear any lingering deferral state from the previous session
+                appState.breakDeferred = false
+                appState.breakDeferralReason = nil
+                hasDeferralBeenRecorded = false
+                deferralStartTime = nil
                 shouldResetOnNextActivity = false
             }
 
@@ -465,6 +470,9 @@ final class TimerEngine: ObservableObject {
                 shouldResetOnNextActivity = true
             }
         }
+
+        // Only deliver breaks when user is actively working — not during idle
+        guard idleSeconds < idleIgnore else { return }
 
         // Calendar early shift: if break is almost due and a meeting starts soon, fire early
         let remainingWork = settings.workDurationSeconds - appState.workElapsedSeconds
