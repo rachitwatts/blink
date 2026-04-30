@@ -78,6 +78,11 @@ final class CalendarMonitor: ObservableObject, CalendarMonitorProtocol {
         upcomingEvents = store.events(matching: predicate)
     }
 
+    /// Force an immediate refresh of upcoming events (e.g. after access is first granted)
+    func refreshEvents() {
+        poll()
+    }
+
     func refreshCalendars() {
         guard authorizationStatus == .fullAccess else {
             availableCalendars = []

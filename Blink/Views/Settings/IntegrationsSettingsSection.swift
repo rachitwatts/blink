@@ -110,6 +110,7 @@ struct IntegrationsSettingsSection: View {
             let granted = await calendarMonitor.requestAccess()
             if granted {
                 calendarMonitor.refreshCalendars()
+                calendarMonitor.refreshEvents()
             } else {
                 await MainActor.run {
                     settings.calendarIntegrationEnabled = false
