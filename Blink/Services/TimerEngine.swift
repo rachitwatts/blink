@@ -450,8 +450,10 @@ final class TimerEngine: ObservableObject {
             // This handles the adaptive polling correctly
             appState.workElapsedSeconds += Int(currentPollingInterval)
 
-            // Micro nudge tick (only during active work)
-            nudgeScheduler.tick()
+            // Micro nudge tick (only during active work, suppressed while deferred)
+            if !appState.breakDeferred {
+                nudgeScheduler.tick()
+            }
 
         } else if idleSeconds < idleReset {
             // MEDIUM IDLE (stepped away temporarily)
@@ -538,6 +540,7 @@ final class TimerEngine: ObservableObject {
             InCallNudgeWindowController.shared.show(duration: 4)
             appState.workElapsedSeconds = 0
             nudgeScheduler.resetTimer()
+            publishSyncPayload()
             return
         }
 
