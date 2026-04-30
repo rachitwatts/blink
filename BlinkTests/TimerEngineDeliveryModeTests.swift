@@ -174,6 +174,43 @@ final class TimerEngineDeliveryModeTests: XCTestCase {
         XCTAssertTrue(appState.isOverlayVisible)
     }
 
+    func testEarlyBreakShiftDefersWhenScreenSharing() {
+        let appState = AppState.shared
+        mockIdle.idleTime = 0
+        mockCall.callContext = .screenSharing
+
+        Settings.shared.calendarIntegrationEnabled = true
+        Settings.shared.workDurationMinutes = 1
+        appState.workElapsedSeconds = 55
+        mockCalendar.mockNextEventWithin = 2
+
+        TimerEngine.shared.tick()
+
+        // Should defer, not show full break
+        XCTAssertEqual(appState.timerState, .workRunning)
+        XCTAssertTrue(appState.breakDeferred)
+        XCTAssertFalse(appState.isOverlayVisible)
+    }
+
+    func testEarlyBreakShiftShowsNudgeWhenOnCall() {
+        let appState = AppState.shared
+        mockIdle.idleTime = 0
+        mockCall.callContext = .onCall
+
+        Settings.shared.calendarIntegrationEnabled = true
+        Settings.shared.workDurationMinutes = 1
+        appState.workElapsedSeconds = 55
+        mockCalendar.mockNextEventWithin = 2
+
+        TimerEngine.shared.tick()
+
+        // Should show in-call nudge, not full break
+        XCTAssertFalse(appState.isOverlayVisible)
+        XCTAssertFalse(appState.breakDeferred)
+        XCTAssertEqual(appState.workElapsedSeconds, 0)
+        XCTAssertEqual(appState.timerState, .workRunning)
+    }
+
     func testNoEarlyShiftWhenFarFromBreak() {
         let appState = AppState.shared
         mockIdle.idleTime = 0
@@ -190,6 +227,50 @@ final class TimerEngineDeliveryModeTests: XCTestCase {
         // Should NOT trigger break early (more than 60s remaining)
         XCTAssertEqual(appState.timerState, .workRunning)
         XCTAssertFalse(appState.isOverlayVisible)
+    }
+
+    // MARK: - Deferral State Clearing on Manual Transitions
+
+    func testRestartSessionClearsDeferralState() {
+        let appState = AppState.shared
+        mockIdle.idleTime = 0
+        mockCall.callContext = .screenSharing
+
+        Settings.shared.workDurationMinutes = 1
+        appState.workElapsedSeconds = 59
+
+        // Trigger deferral
+        TimerEngine.shared.tick()
+        XCTAssertTrue(appState.breakDeferred)
+
+        // User manually restarts session
+        TimerEngine.shared.restartSession()
+
+        XCTAssertFalse(appState.breakDeferred)
+        XCTAssertNil(appState.breakDeferralReason)
+    }
+
+    func testStartBreakNowClearsDeferralState() {
+        let appState = AppState.shared
+        mockIdle.idleTime = 0
+        mockCall.callContext = .screenSharing
+
+        Settings.shared.workDurationMinutes = 1
+        appState.workElapsedSeconds = 59
+
+        // Trigger deferral
+        TimerEngine.shared.tick()
+        XCTAssertTrue(appState.breakDeferred)
+
+        // Stop screen sharing so startBreakNow can actually trigger a break
+        mockCall.callContext = .none
+
+        // User manually starts break
+        TimerEngine.shared.startBreakNow()
+
+        XCTAssertFalse(appState.breakDeferred)
+        XCTAssertNil(appState.breakDeferralReason)
+        XCTAssertEqual(appState.timerState, .breakRunning)
     }
 
     // MARK: - Deferral State in AppState

@@ -240,6 +240,11 @@ final class TimerEngine: ObservableObject {
         appState.activeBreakExercise = nil
         // Reset nudge timer for new session
         nudgeScheduler.resetTimer()
+        // Clear any lingering deferral state from call/screen-share suppression
+        appState.breakDeferred = false
+        appState.breakDeferralReason = nil
+        hasDeferralBeenRecorded = false
+        deferralStartTime = nil
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
@@ -260,6 +265,11 @@ final class TimerEngine: ObservableObject {
             return
         }
         print("[TimerEngine] Starting break now (manual)")
+        // Clear any lingering deferral state — user explicitly requested a break
+        appState.breakDeferred = false
+        appState.breakDeferralReason = nil
+        hasDeferralBeenRecorded = false
+        deferralStartTime = nil
         // Record the in-progress work duration before transitioning to break
         if appState.workElapsedSeconds > 0 {
             AnalyticsService.shared.recordSessionCompleted(
@@ -466,7 +476,7 @@ final class TimerEngine: ObservableObject {
                 actualDuration: appState.workElapsedSeconds,
                 configuredDuration: settings.workDurationSeconds
             )
-            triggerBreak()
+            deliverBreak()
             return
         }
 
