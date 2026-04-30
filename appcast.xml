@@ -51,11 +51,11 @@
       <pubDate>Thu, 30 Apr 2026 16:24:03 +0530</pubDate>
       <enclosure
         url="https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/Blink-v2.3.0.dmg"
-        sparkle:edSignature="68wrWIvNb8u6MacJ+6KnMH4zT6Pvv7FK/AJHA/XOwzdnucDEO90M7zYTLzEiGXyx0Ts+bYMhDmoqOfwO+sqiBg=="
-        sparkle:version="5"
+        sparkle:edSignature="NHxhd6D8mi+oBBrf/2fEgrlQfy47j+QvgBGJLLMvkYHvFTSO8ri+wfWH/EBOxaDGOO5Zr0DhQFxg+1juhXCuBw=="
+        sparkle:version="6"
         sparkle:shortVersionString="2.3.0"
         type="application/octet-stream"
-        length="4298703"
+        length="4298704"
         />
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
     </item>
