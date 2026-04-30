@@ -472,10 +472,7 @@ final class TimerEngine: ObservableObject {
             && !appState.breakDeferred
             && calendarMonitor.nextEventStartsWithin(minutes: settings.calendarLeadTimeMinutes) {
             print("[TimerEngine] Early break shift: meeting starts within \(settings.calendarLeadTimeMinutes) min")
-            AnalyticsService.shared.recordSessionCompleted(
-                actualDuration: appState.workElapsedSeconds,
-                configuredDuration: settings.workDurationSeconds
-            )
+            // Note: sessionCompleted is recorded inside deliverBreak() for all paths
             deliverBreak()
             return
         }
