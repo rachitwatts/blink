@@ -45,6 +45,8 @@
 	<true/>
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
+	<key>NSCameraUsageDescription</key>
+	<string>Blink checks whether your camera is in use by another app to detect active video calls and avoid interrupting you with breaks.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Blink checks your calendar to shift breaks before meetings start and avoid interrupting you during events.</string>
 	<key>NSHumanReadableCopyright</key>
