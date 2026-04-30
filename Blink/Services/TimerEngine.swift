@@ -24,6 +24,8 @@ final class TimerEngine: ObservableObject {
     private let appState = AppState.shared
     private let settings = Settings.shared
     private var idleDetector: IdleTimeProvider = IdleDetector.shared
+    private var callDetector: CallDetectorProtocol = CallDetector.shared
+    private var calendarMonitor: CalendarMonitorProtocol = CalendarMonitor.shared
 
     /// Sync manager for publishing state to watch via iCloud KVS.
     /// Nil when sync is disabled (e.g., during tests).
@@ -41,6 +43,14 @@ final class TimerEngine: ObservableObject {
     /// Pass nil to disable sync entirely.
     func setSyncManager(_ manager: (any SyncManagerProtocol)?) {
         self.syncManager = manager
+    }
+
+    func setCallDetector(_ detector: CallDetectorProtocol) {
+        self.callDetector = detector
+    }
+
+    func setCalendarMonitor(_ monitor: CalendarMonitorProtocol) {
+        self.calendarMonitor = monitor
     }
     #endif
 
@@ -60,6 +70,12 @@ final class TimerEngine: ObservableObject {
 
     /// Configured snooze duration captured when snooze starts (avoids mid-snooze settings changes)
     private var configuredSnoozeDuration: Int = 0
+
+    /// Whether a breakDeferred analytics event has been recorded for this deferral cycle
+    private var hasDeferralBeenRecorded: Bool = false
+
+    /// Timestamp when deferral started (for tracking total deferred time)
+    private var deferralStartTime: Date?
 
     // MARK: - Adaptive Polling
 
@@ -224,6 +240,11 @@ final class TimerEngine: ObservableObject {
         appState.activeBreakExercise = nil
         // Reset nudge timer for new session
         nudgeScheduler.resetTimer()
+        // Clear any lingering deferral state from call/screen-share suppression
+        appState.breakDeferred = false
+        appState.breakDeferralReason = nil
+        hasDeferralBeenRecorded = false
+        deferralStartTime = nil
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
@@ -244,6 +265,11 @@ final class TimerEngine: ObservableObject {
             return
         }
         print("[TimerEngine] Starting break now (manual)")
+        // Clear any lingering deferral state — user explicitly requested a break
+        appState.breakDeferred = false
+        appState.breakDeferralReason = nil
+        hasDeferralBeenRecorded = false
+        deferralStartTime = nil
         // Record the in-progress work duration before transitioning to break
         if appState.workElapsedSeconds > 0 {
             AnalyticsService.shared.recordSessionCompleted(
@@ -411,6 +437,11 @@ final class TimerEngine: ObservableObject {
                 }
                 appState.workElapsedSeconds = 0
                 nudgeScheduler.resetTimer()
+                // Clear any lingering deferral state from the previous session
+                appState.breakDeferred = false
+                appState.breakDeferralReason = nil
+                hasDeferralBeenRecorded = false
+                deferralStartTime = nil
                 shouldResetOnNextActivity = false
             }
 
@@ -419,8 +450,10 @@ final class TimerEngine: ObservableObject {
             // This handles the adaptive polling correctly
             appState.workElapsedSeconds += Int(currentPollingInterval)
 
-            // Micro nudge tick (only during active work)
-            nudgeScheduler.tick()
+            // Micro nudge tick (only during active work, suppressed while deferred)
+            if !appState.breakDeferred {
+                nudgeScheduler.tick()
+            }
 
         } else if idleSeconds < idleReset {
             // MEDIUM IDLE (stepped away temporarily)
@@ -440,15 +473,84 @@ final class TimerEngine: ObservableObject {
             }
         }
 
-        // Check if work duration reached - trigger break
+        // Only deliver breaks when user is actively working — not during idle
+        guard idleSeconds < idleIgnore else { return }
+
+        // Resolve any deferred break (from screen-sharing suppression) as soon as the condition clears.
+        // This runs before the calendar/work-duration checks so early-shifted deferrals are
+        // delivered promptly when screen sharing stops, even before the full work timer expires.
+        if appState.breakDeferred {
+            if !callDetector.isScreenSharing {
+                let deferredSeconds = Int(Date().timeIntervalSince(deferralStartTime ?? Date()))
+                AnalyticsService.shared.recordBreakDeferralEnded(
+                    totalDeferredSeconds: deferredSeconds, breakId: currentBreakId
+                )
+                appState.breakDeferred = false
+                appState.breakDeferralReason = nil
+                hasDeferralBeenRecorded = false
+                deferralStartTime = nil
+                deliverBreak()
+            }
+            return
+        }
+
+        // Calendar early shift: if break is almost due and a meeting starts soon, fire early
+        let remainingWork = settings.workDurationSeconds - appState.workElapsedSeconds
+        if remainingWork > 0 && remainingWork <= 60
+            && calendarMonitor.nextEventStartsWithin(minutes: settings.calendarLeadTimeMinutes) {
+            print("[TimerEngine] Early break shift: meeting starts within \(settings.calendarLeadTimeMinutes) min")
+            // Note: sessionCompleted is recorded inside deliverBreak() for all paths
+            deliverBreak()
+            return
+        }
+
+        // Check if work duration reached - context-aware break delivery
         if appState.workElapsedSeconds >= settings.workDurationSeconds {
-            print("[TimerEngine] Work duration reached (\(appState.workElapsedSeconds)s), triggering break")
+            deliverBreak()
+        }
+    }
+
+    /// Determine how to deliver a break based on call/screen-share context
+    private func deliverBreak() {
+        if callDetector.isScreenSharing {
+            // Full suppression — defer until screen sharing stops
+            if !appState.breakDeferred {
+                print("[TimerEngine] Screen sharing detected, deferring break")
+                appState.breakDeferred = true
+                appState.breakDeferralReason = "Screen sharing"
+                deferralStartTime = Date()
+            }
+            if !hasDeferralBeenRecorded {
+                currentBreakId = UUID().uuidString
+                AnalyticsService.shared.recordBreakDeferred(reason: "screen_sharing", breakId: currentBreakId)
+                hasDeferralBeenRecorded = true
+            }
+            return
+        }
+
+        if callDetector.isOnCall {
+            // In-call nudge — subtle reminder, reset work timer
+            print("[TimerEngine] On call, showing in-call nudge")
+            currentBreakId = UUID().uuidString
             AnalyticsService.shared.recordSessionCompleted(
                 actualDuration: appState.workElapsedSeconds,
                 configuredDuration: settings.workDurationSeconds
             )
-            triggerBreak()
+            AnalyticsService.shared.recordInCallNudgeShown(breakId: currentBreakId)
+            InCallNudgeWindowController.shared.show(duration: 4)
+            appState.workElapsedSeconds = 0
+            nudgeScheduler.resetTimer()
+            publishSyncPayload()
+            return
         }
+
+        // Normal break delivery
+        print("[TimerEngine] Work duration reached (\(appState.workElapsedSeconds)s), triggering break")
+        AnalyticsService.shared.recordSessionCompleted(
+            actualDuration: appState.workElapsedSeconds,
+            configuredDuration: settings.workDurationSeconds
+        )
+        triggerBreak()
     }
 
     /// Handle a tick while in BreakRunning state

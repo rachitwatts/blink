@@ -150,6 +150,29 @@ final class AnalyticsService {
         ))
     }
 
+    func recordBreakDeferred(reason: String, breakId: String) {
+        record(SessionEvent(
+            eventType: .breakDeferred,
+            reason: reason,
+            metadata: ["breakId": breakId]
+        ))
+    }
+
+    func recordBreakDeferralEnded(totalDeferredSeconds: Int, breakId: String) {
+        record(SessionEvent(
+            eventType: .breakDeferralEnded,
+            durationSeconds: totalDeferredSeconds,
+            metadata: ["breakId": breakId]
+        ))
+    }
+
+    func recordInCallNudgeShown(breakId: String) {
+        record(SessionEvent(
+            eventType: .inCallNudgeShown,
+            metadata: ["breakId": breakId]
+        ))
+    }
+
     // MARK: - Queries
 
     /// Fetch all events from today, sorted by timestamp

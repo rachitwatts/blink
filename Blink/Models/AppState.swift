@@ -63,6 +63,14 @@ final class AppState: ObservableObject {
     /// The exercise selected for the current break (nil when not on break or mode is not guided)
     @Published var activeBreakExercise: BreakExercise? = nil
 
+    // MARK: - Call/Screen Share State
+
+    /// Whether a break is being suppressed due to screen sharing
+    @Published var breakDeferred: Bool = false
+
+    /// Reason for break deferral (shown in menu bar)
+    @Published var breakDeferralReason: String? = nil
+
     // MARK: - Dependencies
 
     /// Reference to settings for computing display values
@@ -95,6 +103,9 @@ final class AppState: ObservableObject {
 
     /// Full menu bar title including pause indicator
     var menuBarTitle: String {
+        if breakDeferred {
+            return "⏳ \(displayTime)"
+        }
         switch timerState {
         case .workPaused:
             return "⏸ \(displayTime)"
@@ -140,5 +151,7 @@ final class AppState: ObservableObject {
         activeNudgeType = nil
         nudgesPausedForSession = false
         activeBreakExercise = nil
+        breakDeferred = false
+        breakDeferralReason = nil
     }
 }

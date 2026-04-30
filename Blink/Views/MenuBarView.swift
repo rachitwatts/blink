@@ -30,6 +30,12 @@ struct MenuBarView: View {
                     .padding(.bottom, 4)
             }
 
+            if appState.breakDeferred, let reason = appState.breakDeferralReason {
+                Text("Break suppressed: \(reason)")
+                    .font(.system(size: 11))
+                    .foregroundColor(.orange)
+            }
+
             Divider()
 
             // MARK: Timer Controls

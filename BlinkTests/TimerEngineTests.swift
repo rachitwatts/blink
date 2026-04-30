@@ -1,12 +1,6 @@
 import XCTest
 @testable import Blink
 
-/// Mock idle time provider for testing tick handlers
-class MockIdleTimeProvider: IdleTimeProvider {
-    var idleTime: TimeInterval = 0
-    func getIdleTime() -> TimeInterval { idleTime }
-}
-
 /// Tests for TimerEngine core logic
 @MainActor
 final class TimerEngineTests: XCTestCase {
@@ -22,9 +16,13 @@ final class TimerEngineTests: XCTestCase {
         AppState.shared.reset()
         Settings.shared.resetToDefaults()
 
-        // Inject mock idle time provider
+        // Inject mock dependencies
         mockIdle = MockIdleTimeProvider()
         TimerEngine.shared.setIdleDetector(mockIdle)
+        TimerEngine.shared.setCallDetector(MockCallDetector())
+        TimerEngine.shared.setCalendarMonitor(MockCalendarMonitor())
+        TimerEngine.shared.setSyncManager(nil)
+        InCallNudgeWindowController.suppressForTesting = true
 
         // Reset engine internal state (shouldResetOnNextActivity)
         TimerEngine.shared.restartSession()
