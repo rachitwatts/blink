@@ -45,5 +45,19 @@
         />
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
     </item>
+    <item>
+      <title>Version 2.3.0</title>
+      <description><![CDATA[<ul><li>Calendar-aware break scheduling: shifts breaks earlier when a meeting is about to start</li><li>Call detection: detects active mic, camera, and screen sharing via CoreAudio and AVCaptureDevice</li><li>Three break delivery modes: full overlay (normal), in-call nudge (subtle capsule for calls), full suppression (screen sharing)</li><li>New Integrations settings tab with call detection toggle, calendar access with per-calendar filtering, and lead time slider</li><li>In-call nudges count as completed breaks in eye health grade</li></ul>]]></description>
+      <pubDate>Thu, 30 Apr 2026 16:24:03 +0530</pubDate>
+      <enclosure
+        url="https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/Blink-v2.3.0.dmg"
+        sparkle:edSignature="68wrWIvNb8u6MacJ+6KnMH4zT6Pvv7FK/AJHA/XOwzdnucDEO90M7zYTLzEiGXyx0Ts+bYMhDmoqOfwO+sqiBg=="
+        sparkle:version="5"
+        sparkle:shortVersionString="2.3.0"
+        type="application/octet-stream"
+        length="4298703"
+        />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
   </channel>
 </rss>
