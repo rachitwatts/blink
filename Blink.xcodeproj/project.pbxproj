@@ -56,6 +56,7 @@
 		7353CC5D60AB384F22E0E2EB /* WatchSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0087FD7E489413B25D39F6 /* WatchSettingsView.swift */; };
 		73AB7B338DB82417D3186C82 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B03EA8B0225251705AB7B3D /* TimelineView.swift */; };
 		73E03BFD01CE99F321993218 /* StatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00172653033246D12BB1077 /* StatCardView.swift */; };
+		7543964B77E10E7367528F2A /* CallDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A861AE9E99A2FEDBEA068B8 /* CallDetectorTests.swift */; };
 		78315311A227A3C7BDA2529A /* NudgeScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5D6D1864E33D31DD61AED3 /* NudgeScheduler.swift */; };
 		78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F959148BA99247482E7877 /* SettingsTests.swift */; };
 		800B4C3B5C9CC910FF0E3270 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18329DE3828BB763D21CF688 /* WeekView.swift */; };
@@ -86,6 +87,8 @@
 		BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BD162119285851B944B178 /* DashboardWindowController.swift */; };
 		BDCC35F58C8ADC5000C29EC6 /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E8491C3E02C2563330E0344 /* MonthView.swift */; };
 		C3D36BF911CBF69717F318E9 /* InCallNudgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1E45A82FD8E5EA73AB49BE /* InCallNudgeView.swift */; };
+		C8A0997CBA984EBF4D9CA385 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF242D9087A81F971D513B0 /* TestHelpers.swift */; };
+		CB0504032FDD5C98EB0C9610 /* CalendarMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26003B8275BF2BC293211CE5 /* CalendarMonitorTests.swift */; };
 		CD862C41CDF9479F9357C069 /* SessionLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A1ECC4BB78ABCED93570E3 /* SessionLogView.swift */; };
 		CDAA0D9A2A6AE33ADDA6DBB0 /* ShortcutsSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30B61B095596200A6E6E2C1C /* ShortcutsSettingsSection.swift */; };
 		CDABB5F7580F1E5EB16058F2 /* ICloudSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C379C782060321688D11C2 /* ICloudSyncManager.swift */; };
@@ -102,6 +105,7 @@
 		E10529D11D097EFEBEFE6989 /* BlinkActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0894126555611FB825C1A26F /* BlinkActionsTests.swift */; };
 		E1E630979D77348EA7DC5924 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */; };
 		E44AAA6CF18262D707C5F54F /* EyeHealthDeepDiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B4F37A954AEE835FF6904 /* EyeHealthDeepDiveView.swift */; };
+		E45BCB081BF4D989CBF36926 /* TimerEngineDeliveryModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63AA08D6624D2803ECCF10DB /* TimerEngineDeliveryModeTests.swift */; };
 		E7D4A7F77EBC63E49A656823 /* WatchSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539361C5F8FC469187F20612 /* WatchSessionView.swift */; };
 		EA597E948FD513E5202D24C1 /* DisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF76295D6FFC56F94BB6FA48 /* DisplayMode.swift */; };
 		EBEC5FEE6D13F49CCBE2E0FB /* BreakEndedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176BC59BE96C107ACFC71544 /* BreakEndedView.swift */; };
@@ -151,6 +155,7 @@
 		2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthCalculator.swift; sourceTree = "<group>"; };
 		23B1EC3310B24818DC6EF078 /* InsightTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightTipView.swift; sourceTree = "<group>"; };
 		24F216EAFA3B9F1BEFF27C83 /* ScreenLockService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenLockService.swift; sourceTree = "<group>"; };
+		26003B8275BF2BC293211CE5 /* CalendarMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonitorTests.swift; sourceTree = "<group>"; };
 		26A391242EBB4D85082A17B4 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		289903B92CFE24D5E706A4B8 /* TimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngine.swift; sourceTree = "<group>"; };
 		303F5DFAB86E2C732AB3F09A /* Blink.sdef */ = {isa = PBXFileReference; path = Blink.sdef; sourceTree = "<group>"; };
@@ -177,12 +182,14 @@
 		5D317170BFC913CBDE6571CF /* IntegrationsSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationsSettingsSection.swift; sourceTree = "<group>"; };
 		5F32467AA673D205206C9DF1 /* GeneralSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsSection.swift; sourceTree = "<group>"; };
 		5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDetector.swift; sourceTree = "<group>"; };
+		63AA08D6624D2803ECCF10DB /* TimerEngineDeliveryModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngineDeliveryModeTests.swift; sourceTree = "<group>"; };
 		69AB02A7C609A11636250333 /* BreakStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakStyle.swift; sourceTree = "<group>"; };
 		6D9C87A5FDE3AFD4D2F5E291 /* CallDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallDetector.swift; sourceTree = "<group>"; };
 		6E8491C3E02C2563330E0344 /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
 		70D8AC94997A966A04621569 /* InCallNudgeWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InCallNudgeWindowController.swift; sourceTree = "<group>"; };
 		71BD4F44B082B1C62F6CCA35 /* HapticManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManagerTests.swift; sourceTree = "<group>"; };
 		79026248DC53E0D92EA739A9 /* LabeledSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledSlider.swift; sourceTree = "<group>"; };
+		7A861AE9E99A2FEDBEA068B8 /* CallDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallDetectorTests.swift; sourceTree = "<group>"; };
 		7B03EA8B0225251705AB7B3D /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		7B50720E0BC9451F19647EEF /* BlinkWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BlinkWatch.entitlements; sourceTree = "<group>"; };
 		7E03C8370B7F8889DE6E59C8 /* BreakExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakExercise.swift; sourceTree = "<group>"; };
@@ -202,6 +209,7 @@
 		A694B40691FF975AD543A159 /* NudgeWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeWindowController.swift; sourceTree = "<group>"; };
 		A8C26ED59625B3DCA8D51F2B /* WatchBreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchBreakView.swift; sourceTree = "<group>"; };
 		A9D3B4002EA1DF78532197FF /* WatchSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSettings.swift; sourceTree = "<group>"; };
+		AAF242D9087A81F971D513B0 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		AB4E287AD1A9757283A87C42 /* BlinkWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlinkWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionEvent.swift; sourceTree = "<group>"; };
 		ADCFBC93CBC1116ED998879E /* ExerciseAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseAnimations.swift; sourceTree = "<group>"; };
@@ -496,9 +504,13 @@
 			isa = PBXGroup;
 			children = (
 				0894126555611FB825C1A26F /* BlinkActionsTests.swift */,
+				26003B8275BF2BC293211CE5 /* CalendarMonitorTests.swift */,
+				7A861AE9E99A2FEDBEA068B8 /* CallDetectorTests.swift */,
 				0F8DF27DF00F0429B4096228 /* NudgeSchedulerTests.swift */,
 				10F959148BA99247482E7877 /* SettingsTests.swift */,
 				E559A948D3157A727B635AD6 /* SyncPayloadTests.swift */,
+				AAF242D9087A81F971D513B0 /* TestHelpers.swift */,
+				63AA08D6624D2803ECCF10DB /* TimerEngineDeliveryModeTests.swift */,
 				08DC867AC6A18ED2E407546F /* TimerEngineSyncTests.swift */,
 				86E96408D496193EA27189E7 /* TimerEngineTests.swift */,
 				D227434466D7C6840A638063 /* TimerStateTests.swift */,
@@ -772,9 +784,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E10529D11D097EFEBEFE6989 /* BlinkActionsTests.swift in Sources */,
+				CB0504032FDD5C98EB0C9610 /* CalendarMonitorTests.swift in Sources */,
+				7543964B77E10E7367528F2A /* CallDetectorTests.swift in Sources */,
 				AE03BB7AFF911AA9F379C15E /* NudgeSchedulerTests.swift in Sources */,
 				78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */,
 				6763D29A256E6CD8BF40549B /* SyncPayloadTests.swift in Sources */,
+				C8A0997CBA984EBF4D9CA385 /* TestHelpers.swift in Sources */,
+				E45BCB081BF4D989CBF36926 /* TimerEngineDeliveryModeTests.swift in Sources */,
 				17B487222AE4F434C2F96EEC /* TimerEngineSyncTests.swift in Sources */,
 				DA5884368B97D20F9914F81E /* TimerEngineTests.swift in Sources */,
 				5ABFB2E35715D42FFB42D99C /* TimerStateTests.swift in Sources */,

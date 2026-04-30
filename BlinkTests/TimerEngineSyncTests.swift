@@ -69,6 +69,9 @@ final class TimerEngineSyncTests: XCTestCase {
 
         mockIdle = MockIdleTimeProvider()
         TimerEngine.shared.setIdleDetector(mockIdle)
+        TimerEngine.shared.setCallDetector(MockCallDetector())
+        TimerEngine.shared.setCalendarMonitor(MockCalendarMonitor())
+        InCallNudgeWindowController.suppressForTesting = true
 
         mockSync = MockSyncManager()
         TimerEngine.shared.setSyncManager(mockSync)

@@ -6,15 +6,22 @@ final class InCallNudgeWindowController {
 
     static let shared = InCallNudgeWindowController()
 
+    #if DEBUG
+    static var suppressForTesting = false
+    #endif
+
     private var window: NSWindow?
     private var dismissTimer: DispatchWorkItem?
 
     private init() {}
 
     func show(duration: TimeInterval = 4) {
+        #if DEBUG
+        guard !Self.suppressForTesting else { return }
+        #endif
         hide()
 
-        guard let screen = NSScreen.main else { return }
+        guard NSApp != nil, let screen = NSScreen.main else { return }
 
         let hostingView = NSHostingView(rootView: InCallNudgeView())
         hostingView.frame = NSRect(x: 0, y: 0, width: 280, height: 44)
