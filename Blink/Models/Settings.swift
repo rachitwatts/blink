@@ -78,6 +78,20 @@ final class Settings: ObservableObject {
         set { breakStyleRaw = newValue.rawValue }
     }
 
+    // MARK: - Integrations
+
+    /// Whether to detect active calls (mic/camera) and adapt break delivery
+    @AppStorage("callDetectionEnabled") var callDetectionEnabled: Bool = true
+
+    /// Whether calendar integration is enabled for early break shifting
+    @AppStorage("calendarIntegrationEnabled") var calendarIntegrationEnabled: Bool = false
+
+    /// Comma-separated calendar identifiers to watch (empty = all)
+    @AppStorage("watchedCalendarIdentifiers") var watchedCalendarIdentifiers: String = ""
+
+    /// Minutes before a calendar event to shift breaks earlier
+    @AppStorage("calendarLeadTimeMinutes") var calendarLeadTimeMinutes: Int = 3
+
     // MARK: - Break Content
 
     @AppStorage("breakContentMode") private var breakContentModeRaw: String = BreakContentMode.guided.rawValue
@@ -196,6 +210,10 @@ final class Settings: ObservableObject {
         nudgeStretchEnabled = true
         breakStyleRaw = BreakStyle.enforced.rawValue
         breakContentModeRaw = BreakContentMode.guided.rawValue
+        callDetectionEnabled = true
+        calendarIntegrationEnabled = false
+        watchedCalendarIdentifiers = ""
+        calendarLeadTimeMinutes = 3
         lastPublishedAt = 0
         lastAppliedRemoteAt = 0
         lastRemoteApplyAt = 0

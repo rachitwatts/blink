@@ -20,11 +20,13 @@ struct EyeHealthMetrics {
 final class EyeHealthCalculator {
     static func calculate(from events: [SessionEvent]) -> EyeHealthMetrics {
         let breaksCompleted = events.filter { $0.type == .breakCompleted }.count
+        let inCallNudges = events.filter { $0.type == .inCallNudgeShown }.count
+        let effectiveCompleted = breaksCompleted + inCallNudges
         let breaksSkipped = events.filter { $0.type == .breakSkipped }.count
         let breaksSnoozed = events.filter { $0.type == .breakSnoozed }.count
         let breaksStarted = events.filter { $0.type == .breakStarted }.count
 
-        let totalBreaks = breaksCompleted + breaksSkipped
+        let totalBreaks = effectiveCompleted + breaksSkipped
 
         // No break outcomes yet — grade is unavailable
         guard totalBreaks > 0 else {
@@ -34,7 +36,7 @@ final class EyeHealthCalculator {
             )
         }
 
-        let breakCompliance = Double(breaksCompleted) / Double(totalBreaks)
+        let breakCompliance = Double(effectiveCompleted) / Double(totalBreaks)
         let snoozeRate = breaksStarted > 0 ? min(1.0, Double(breaksSnoozed) / Double(breaksStarted)) : 0.0
 
         let grade = calculateGrade(breakCompliance: breakCompliance, snoozeRate: snoozeRate)

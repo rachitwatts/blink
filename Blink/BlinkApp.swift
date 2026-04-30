@@ -52,6 +52,10 @@ struct BlinkApp: App {
         TimerEngine.shared.start()
         TimerEngine.shared.setupSync()
 
+        // Start call detection and calendar monitoring
+        CallDetector.shared.start()
+        CalendarMonitor.shared.start()
+
         // Configure SwiftData for analytics
         do {
             let appSupport = FileManager.default.urls(
