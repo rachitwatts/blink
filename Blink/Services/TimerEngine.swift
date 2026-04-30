@@ -474,10 +474,27 @@ final class TimerEngine: ObservableObject {
         // Only deliver breaks when user is actively working — not during idle
         guard idleSeconds < idleIgnore else { return }
 
+        // Resolve any deferred break (from screen-sharing suppression) as soon as the condition clears.
+        // This runs before the calendar/work-duration checks so early-shifted deferrals are
+        // delivered promptly when screen sharing stops, even before the full work timer expires.
+        if appState.breakDeferred {
+            if !callDetector.isScreenSharing {
+                let deferredSeconds = Int(Date().timeIntervalSince(deferralStartTime ?? Date()))
+                AnalyticsService.shared.recordBreakDeferralEnded(
+                    totalDeferredSeconds: deferredSeconds, breakId: currentBreakId
+                )
+                appState.breakDeferred = false
+                appState.breakDeferralReason = nil
+                hasDeferralBeenRecorded = false
+                deferralStartTime = nil
+                deliverBreak()
+            }
+            return
+        }
+
         // Calendar early shift: if break is almost due and a meeting starts soon, fire early
         let remainingWork = settings.workDurationSeconds - appState.workElapsedSeconds
         if remainingWork > 0 && remainingWork <= 60
-            && !appState.breakDeferred
             && calendarMonitor.nextEventStartsWithin(minutes: settings.calendarLeadTimeMinutes) {
             print("[TimerEngine] Early break shift: meeting starts within \(settings.calendarLeadTimeMinutes) min")
             // Note: sessionCompleted is recorded inside deliverBreak() for all paths
@@ -487,22 +504,6 @@ final class TimerEngine: ObservableObject {
 
         // Check if work duration reached - context-aware break delivery
         if appState.workElapsedSeconds >= settings.workDurationSeconds {
-            // If currently deferred and condition cleared, deliver the break
-            if appState.breakDeferred {
-                if !callDetector.isScreenSharing {
-                    let deferredSeconds = Int(Date().timeIntervalSince(deferralStartTime ?? Date()))
-                    AnalyticsService.shared.recordBreakDeferralEnded(
-                        totalDeferredSeconds: deferredSeconds, breakId: currentBreakId
-                    )
-                    appState.breakDeferred = false
-                    appState.breakDeferralReason = nil
-                    hasDeferralBeenRecorded = false
-                    deferralStartTime = nil
-                    deliverBreak()
-                }
-                return
-            }
-
             deliverBreak()
         }
     }
