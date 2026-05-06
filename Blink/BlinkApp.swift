@@ -80,6 +80,9 @@ struct BlinkApp: App {
         // Register URL scheme handler for blink:// URLs
         URLSchemeHandler.shared.register()
 
+        // Start weekly summary notification service
+        WeeklySummaryService.shared.start()
+
         // Start hotkey manager (lazy permission)
         HotkeyManager.shared.startListening()
 

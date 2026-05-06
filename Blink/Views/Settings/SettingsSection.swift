@@ -5,6 +5,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
     case timer
     case general
     case nudges
+    case notifications
     case integrations
     case advanced
     case shortcuts
@@ -17,6 +18,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         case .timer: "Timer"
         case .general: "General"
         case .nudges: "Nudges"
+        case .notifications: "Notifications"
         case .integrations: "Integrations"
         case .advanced: "Advanced"
         case .shortcuts: "Shortcuts"
@@ -29,6 +31,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
         case .timer: "timer"
         case .general: "gearshape"
         case .nudges: "bell.badge"
+        case .notifications: "bell"
         case .integrations: "link"
         case .advanced: "slider.horizontal.3"
         case .shortcuts: "keyboard"

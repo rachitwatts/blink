@@ -6,6 +6,7 @@ enum BlinkAction: String {
     case snooze = "snooze"
     case restart = "restart"
     case status = "status"
+    case dashboard = "dashboard"
 }
 
 /// Result of executing a BlinkAction
@@ -77,6 +78,10 @@ enum BlinkActions {
             }
 
             return BlinkActionResult(success: true, message: message)
+
+        case .dashboard:
+            DashboardWindowController.shared.showDashboard(tab: .week)
+            return BlinkActionResult(success: true, message: "Dashboard opened to Week view")
         }
     }
 }
