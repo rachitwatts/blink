@@ -37,7 +37,7 @@ struct TimerSettingsSection: View {
                 presets: [15, 20, 25, 30, 45],
                 value: $settings.workDurationMinutes,
                 unit: "min",
-                range: 1...60
+                range: 1...90
             )
             .onChange(of: settings.workDurationMinutes) { _, _ in
                 syncPresetFromDurations()
@@ -68,6 +68,9 @@ struct TimerSettingsSection: View {
             Text("Locks when break ends and you're away")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+        }
+        .onAppear {
+            syncPresetFromDurations()
         }
     }
 
