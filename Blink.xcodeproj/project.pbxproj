@@ -10,6 +10,7 @@
 		011E8826D388B73EF052928C /* ThumbnailPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE767D9885C52AF12A60FB5D /* ThumbnailPicker.swift */; };
 		03CA3044017094B4EAD318D2 /* LabeledSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79026248DC53E0D92EA739A9 /* LabeledSlider.swift */; };
 		058768BA0EE1B5F771576D3B /* AnalyticsSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13EC8022A60E5354BFA94A1C /* AnalyticsSettingsSection.swift */; };
+		05F4758B09393D5F3B74E950 /* TimerPresetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36376D140F2254E3619484EB /* TimerPresetTests.swift */; };
 		061DA0427EA238BE85F0484D /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A391242EBB4D85082A17B4 /* DashboardView.swift */; };
 		068337C7ECB2334E776835E9 /* SyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D974565B929B9DFF5932A42C /* SyncAction.swift */; };
 		0A6BE83D87AE7E9E7B4B2A6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D01A0FA0E75C70BDC3D72446 /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 		6260E871C994ED46C4ACDF49 /* FunExerciseAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4871F290652D844D8C3640C2 /* FunExerciseAnimations.swift */; };
 		632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */; };
 		63F935ACAD05A5950E6630BB /* SyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFE8B26C6DF5391F9F4AE14 /* SyncPayload.swift */; };
+		6463467D7E189272217717C4 /* TimerPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC4CCBAD41D0ADFADC2A6539 /* TimerPreset.swift */; };
 		64D617C91635DB6046A6C625 /* BreakPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C539723A6C46415EF84690 /* BreakPhase.swift */; };
 		65256C105373F4843FBE8750 /* SyncManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4C671A4943BDB5F56525A /* SyncManagerProtocol.swift */; };
 		6763D29A256E6CD8BF40549B /* SyncPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559A948D3157A727B635AD6 /* SyncPayloadTests.swift */; };
@@ -167,6 +169,7 @@
 		35A33A27684E2230972E1395 /* BlinkWatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlinkWatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		3611BA1F7A16AA6199641486 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		36376D140F2254E3619484EB /* TimerPresetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPresetTests.swift; sourceTree = "<group>"; };
 		3EB6CF7394F2442F2A83F872 /* WatchAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAppState.swift; sourceTree = "<group>"; };
 		4277C159181D74EE1B020457 /* BreakContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakContentProvider.swift; sourceTree = "<group>"; };
 		43D3A1794267E2C1A35324FC /* AllTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTimeView.swift; sourceTree = "<group>"; };
@@ -222,6 +225,7 @@
 		B300FF7997F3F7E7A3D5A032 /* BlinkIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkIntents.swift; sourceTree = "<group>"; };
 		BA1E45A82FD8E5EA73AB49BE /* InCallNudgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InCallNudgeView.swift; sourceTree = "<group>"; };
 		BB245469D61AE2514B9BDD55 /* BlinkWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkWatchApp.swift; sourceTree = "<group>"; };
+		BC4CCBAD41D0ADFADC2A6539 /* TimerPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPreset.swift; sourceTree = "<group>"; };
 		BC4EAF92595CAC2A07EDB9F1 /* NudgeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeType.swift; sourceTree = "<group>"; };
 		BF76295D6FFC56F94BB6FA48 /* DisplayMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayMode.swift; sourceTree = "<group>"; };
 		C38A3D77F875EFF9BF583E79 /* NudgesSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgesSettingsSection.swift; sourceTree = "<group>"; };
@@ -472,6 +476,7 @@
 				BC4EAF92595CAC2A07EDB9F1 /* NudgeType.swift */,
 				AD51E67218F2B2B8E1A8EEA5 /* SessionEvent.swift */,
 				AF789F55EB114BFCAAC4D66E /* Settings.swift */,
+				BC4CCBAD41D0ADFADC2A6539 /* TimerPreset.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -518,6 +523,7 @@
 				63AA08D6624D2803ECCF10DB /* TimerEngineDeliveryModeTests.swift */,
 				08DC867AC6A18ED2E407546F /* TimerEngineSyncTests.swift */,
 				86E96408D496193EA27189E7 /* TimerEngineTests.swift */,
+				36376D140F2254E3619484EB /* TimerPresetTests.swift */,
 				D227434466D7C6840A638063 /* TimerStateTests.swift */,
 			);
 			path = BlinkTests;
@@ -742,6 +748,7 @@
 				6B12ED3083670AD2A8EC289E /* TimeFormatting.swift in Sources */,
 				73AB7B338DB82417D3186C82 /* TimelineView.swift in Sources */,
 				EC39B00585F415089D82296C /* TimerEngine.swift in Sources */,
+				6463467D7E189272217717C4 /* TimerPreset.swift in Sources */,
 				D9BF1D56A6B100C721B6A227 /* TimerSettingsSection.swift in Sources */,
 				DB94E77756056654B9B18139 /* TimerState.swift in Sources */,
 				37AE47172E9BA021933E4BAA /* TodayView.swift in Sources */,
@@ -801,6 +808,7 @@
 				E45BCB081BF4D989CBF36926 /* TimerEngineDeliveryModeTests.swift in Sources */,
 				17B487222AE4F434C2F96EEC /* TimerEngineSyncTests.swift in Sources */,
 				DA5884368B97D20F9914F81E /* TimerEngineTests.swift in Sources */,
+				05F4758B09393D5F3B74E950 /* TimerPresetTests.swift in Sources */,
 				5ABFB2E35715D42FFB42D99C /* TimerStateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
