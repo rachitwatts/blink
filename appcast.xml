@@ -59,5 +59,24 @@
         />
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
     </item>
+    <item>
+      <title>Version 2.4.0</title>
+      <description><![CDATA[<ul>
+  <li><strong>Weekly Summary Notifications</strong> — One notification per week with your top eye health insight and an actionable suggestion. Configurable day and time in Settings → Notifications.</li>
+  <li><strong>Smart Insight Selection</strong> — Picks the highest-signal pattern from EyeHealthAnalyzer. Celebrates perfect weeks instead of skipping them.</li>
+  <li><strong>Dashboard Deep Link</strong> — Tapping the notification opens Dashboard to the Week tab. New blink://dashboard URL scheme action.</li>
+  <li><strong>Notifications Settings</strong> — New settings section with toggle, day picker, and time picker.</li>
+</ul>]]></description>
+      <pubDate>Thu, 07 May 2026 11:46:01 +0100</pubDate>
+      <enclosure
+        url="https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/Blink-v2.4.0.dmg"
+        sparkle:edSignature="5TISDW87HqEoPLfbLTn5kgxHVdEGccxbe1uFBsBndnGSLY366M+OheGYGdhByIcj5zi35WwP8Mt3Czhs/n1SCA=="
+        sparkle:version="7"
+        sparkle:shortVersionString="2.4.0"
+        type="application/octet-stream"
+        length="4375453"
+        />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
   </channel>
 </rss>
