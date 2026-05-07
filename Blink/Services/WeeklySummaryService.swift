@@ -46,11 +46,11 @@ final class WeeklySummaryService: NSObject {
         dateComponents.hour = settings.weeklySummaryHour
         dateComponents.minute = settings.weeklySummaryMinute
 
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
 
         let content = UNMutableNotificationContent()
         content.title = "Blink Weekly Summary"
-        content.body = composeInsightBody()
+        content.body = "Your weekly eye health summary is ready. Tap to view your insights."
         content.sound = .default
         content.categoryIdentifier = Self.categoryIdentifier
 
@@ -167,12 +167,29 @@ extension WeeklySummaryService: UNUserNotificationCenterDelegate {
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        if notification.request.identifier == Self.notificationIdentifier {
-            Task { @MainActor in
-                self.reschedule()
-            }
+        guard notification.request.identifier == Self.notificationIdentifier else {
+            completionHandler([.banner, .sound])
+            return
         }
-        completionHandler([.banner, .sound])
+
+        Task { @MainActor in
+            center.removeDeliveredNotifications(withIdentifiers: [Self.notificationIdentifier])
+
+            let content = UNMutableNotificationContent()
+            content.title = "Blink Weekly Summary"
+            content.body = self.composeInsightBody()
+            content.sound = .default
+            content.categoryIdentifier = Self.categoryIdentifier
+
+            let request = UNNotificationRequest(
+                identifier: Self.notificationIdentifier + "-fresh",
+                content: content,
+                trigger: nil
+            )
+            try? await center.add(request)
+        }
+
+        completionHandler([])
     }
 
     nonisolated func userNotificationCenter(
@@ -181,7 +198,7 @@ extension WeeklySummaryService: UNUserNotificationCenterDelegate {
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
         let id = response.notification.request.identifier
-        guard id == Self.notificationIdentifier else {
+        guard id == Self.notificationIdentifier || id == Self.notificationIdentifier + "-fresh" else {
             completionHandler()
             return
         }
@@ -195,7 +212,6 @@ extension WeeklySummaryService: UNUserNotificationCenterDelegate {
                 let result = BlinkActions.execute(.dashboard)
                 print("[WeeklySummaryService] Notification tapped -> \(result.message)")
             }
-            self.reschedule()
         }
 
         completionHandler()
