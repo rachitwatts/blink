@@ -92,6 +92,19 @@ final class Settings: ObservableObject {
     /// Minutes before a calendar event to shift breaks earlier
     @AppStorage("calendarLeadTimeMinutes") var calendarLeadTimeMinutes: Int = 3
 
+    // MARK: - Weekly Summary
+
+    @AppStorage("weeklySummaryEnabled") var weeklySummaryEnabled: Bool = true
+
+    /// Day of week (1 = Sunday, 2 = Monday, ..., 7 = Saturday)
+    @AppStorage("weeklySummaryDay") var weeklySummaryDay: Int = 2
+
+    /// Hour of day (0-23) for weekly summary notification
+    @AppStorage("weeklySummaryHour") var weeklySummaryHour: Int = 9
+
+    /// Minute of hour for weekly summary notification
+    @AppStorage("weeklySummaryMinute") var weeklySummaryMinute: Int = 0
+
     // MARK: - Break Content
 
     @AppStorage("breakContentMode") private var breakContentModeRaw: String = BreakContentMode.guided.rawValue
@@ -210,6 +223,10 @@ final class Settings: ObservableObject {
         nudgeStretchEnabled = true
         breakStyleRaw = BreakStyle.enforced.rawValue
         breakContentModeRaw = BreakContentMode.guided.rawValue
+        weeklySummaryEnabled = true
+        weeklySummaryDay = 2
+        weeklySummaryHour = 9
+        weeklySummaryMinute = 0
         callDetectionEnabled = true
         calendarIntegrationEnabled = false
         watchedCalendarIdentifiers = ""

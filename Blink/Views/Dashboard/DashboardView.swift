@@ -13,7 +13,11 @@ enum DashboardTab: String, CaseIterable {
 /// Provides navigation between Today, Week, Month, and All Time views.
 /// Only Today is implemented in Phase 2; other tabs show placeholders.
 struct DashboardView: View {
-    @State private var selectedTab: DashboardTab = .today
+    @State private var selectedTab: DashboardTab
+
+    init(initialTab: DashboardTab = .today) {
+        _selectedTab = State(initialValue: initialTab)
+    }
 
     var body: some View {
         VStack(spacing: 0) {

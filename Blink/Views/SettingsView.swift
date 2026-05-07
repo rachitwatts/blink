@@ -37,6 +37,8 @@ struct SettingsView: View {
             GeneralSettingsSection(settings: settings)
         case .nudges:
             NudgesSettingsSection(settings: settings)
+        case .notifications:
+            NotificationsSettingsSection(settings: settings)
         case .integrations:
             IntegrationsSettingsSection(settings: settings)
         case .advanced:

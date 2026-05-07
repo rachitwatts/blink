@@ -49,6 +49,7 @@
 		64D617C91635DB6046A6C625 /* BreakPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C539723A6C46415EF84690 /* BreakPhase.swift */; };
 		65256C105373F4843FBE8750 /* SyncManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4C671A4943BDB5F56525A /* SyncManagerProtocol.swift */; };
 		6763D29A256E6CD8BF40549B /* SyncPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559A948D3157A727B635AD6 /* SyncPayloadTests.swift */; };
+		686CC7D6EDC04BB96DD4E3DE /* WeeklySummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DFF544BDD0D2D0123D9F6D /* WeeklySummaryService.swift */; };
 		6B12ED3083670AD2A8EC289E /* TimeFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA12D464303FF2278DCC338A /* TimeFormatting.swift */; };
 		6D59219F69C8347D7A2A4508 /* WatchAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB6CF7394F2442F2A83F872 /* WatchAppState.swift */; };
 		70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF789F55EB114BFCAAC4D66E /* Settings.swift */; };
@@ -65,6 +66,7 @@
 		833B51E0B5F21923D69D450D /* NudgeWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A694B40691FF975AD543A159 /* NudgeWindowController.swift */; };
 		8445575A6F5EB89E6B723219 /* WatchTimerEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E704484188F40EB352ED29AD /* WatchTimerEngineTests.swift */; };
 		879353CFBA3EAA570973C3FC /* AdvancedSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C644DE6C193DCD8DC909D1CF /* AdvancedSettingsSection.swift */; };
+		89CD94DE38AA3BDC73B72ADD /* NotificationsSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09724DF6F5CDF7095DC9581A /* NotificationsSettingsSection.swift */; };
 		8C8FD4D90A3968F2A1BE5210 /* WatchTimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E1AFE54B32FEA74E25B794 /* WatchTimerEngine.swift */; };
 		8D95842169BA8A842D46CFE6 /* TimerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C7D916B815399763305AF /* TimerState.swift */; };
 		8DA01D3A11E58DE9806D9841 /* BlinkIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B300FF7997F3F7E7A3D5A032 /* BlinkIntents.swift */; };
@@ -144,6 +146,7 @@
 		076C7D916B815399763305AF /* TimerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerState.swift; sourceTree = "<group>"; };
 		0894126555611FB825C1A26F /* BlinkActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkActionsTests.swift; sourceTree = "<group>"; };
 		08DC867AC6A18ED2E407546F /* TimerEngineSyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngineSyncTests.swift; sourceTree = "<group>"; };
+		09724DF6F5CDF7095DC9581A /* NotificationsSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsSection.swift; sourceTree = "<group>"; };
 		0B47EB8B7273BB95141192DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0D33185BE2E09721611CD41C /* WatchTimerEngineSyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTimerEngineSyncTests.swift; sourceTree = "<group>"; };
 		0F8DF27DF00F0429B4096228 /* NudgeSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeSchedulerTests.swift; sourceTree = "<group>"; };
@@ -229,6 +232,7 @@
 		CC3246908C5A214F9CBFBD1B /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		D01A0FA0E75C70BDC3D72446 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D227434466D7C6840A638063 /* TimerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerStateTests.swift; sourceTree = "<group>"; };
+		D2DFF544BDD0D2D0123D9F6D /* WeeklySummaryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklySummaryService.swift; sourceTree = "<group>"; };
 		D763953C6EDF9FADBC1C655F /* NudgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeView.swift; sourceTree = "<group>"; };
 		D832D7840AF1896239095EAC /* PresetChipRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetChipRow.swift; sourceTree = "<group>"; };
 		D974565B929B9DFF5932A42C /* SyncAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAction.swift; sourceTree = "<group>"; };
@@ -332,6 +336,7 @@
 				EA72C07FF9220454B3DA5B41 /* ScriptCommands.swift */,
 				289903B92CFE24D5E706A4B8 /* TimerEngine.swift */,
 				029B440AE9D4E364D69FD7CE /* UpdaterService.swift */,
+				D2DFF544BDD0D2D0123D9F6D /* WeeklySummaryService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -525,6 +530,7 @@
 				13EC8022A60E5354BFA94A1C /* AnalyticsSettingsSection.swift */,
 				5F32467AA673D205206C9DF1 /* GeneralSettingsSection.swift */,
 				5D317170BFC913CBDE6571CF /* IntegrationsSettingsSection.swift */,
+				09724DF6F5CDF7095DC9581A /* NotificationsSettingsSection.swift */,
 				C38A3D77F875EFF9BF583E79 /* NudgesSettingsSection.swift */,
 				F8B2BCBC64F6300D1EAD58BC /* SettingsSection.swift */,
 				30B61B095596200A6E6E2C1C /* ShortcutsSettingsSection.swift */,
@@ -709,6 +715,7 @@
 				56D66E151B92392FAD048551 /* LaunchAtLoginManager.swift in Sources */,
 				0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */,
 				BDCC35F58C8ADC5000C29EC6 /* MonthView.swift in Sources */,
+				89CD94DE38AA3BDC73B72ADD /* NotificationsSettingsSection.swift in Sources */,
 				78315311A227A3C7BDA2529A /* NudgeScheduler.swift in Sources */,
 				D09FDDB6548FE9C33246D158 /* NudgeType.swift in Sources */,
 				F035D0F9AD314E72D9B6EF03 /* NudgeView.swift in Sources */,
@@ -740,6 +747,7 @@
 				37AE47172E9BA021933E4BAA /* TodayView.swift in Sources */,
 				93497277D4468BECCC80FE96 /* UpdaterService.swift in Sources */,
 				800B4C3B5C9CC910FF0E3270 /* WeekView.swift in Sources */,
+				686CC7D6EDC04BB96DD4E3DE /* WeeklySummaryService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
