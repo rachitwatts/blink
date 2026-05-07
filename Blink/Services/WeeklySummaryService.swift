@@ -46,7 +46,7 @@ final class WeeklySummaryService: NSObject {
         dateComponents.hour = settings.weeklySummaryHour
         dateComponents.minute = settings.weeklySummaryMinute
 
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
 
         let content = UNMutableNotificationContent()
         content.title = "Blink Weekly Summary"
@@ -167,6 +167,11 @@ extension WeeklySummaryService: UNUserNotificationCenterDelegate {
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
+        if notification.request.identifier == Self.notificationIdentifier {
+            Task { @MainActor in
+                self.reschedule()
+            }
+        }
         completionHandler([.banner, .sound])
     }
 
@@ -184,6 +189,7 @@ extension WeeklySummaryService: UNUserNotificationCenterDelegate {
         Task { @MainActor in
             let result = BlinkActions.execute(.dashboard)
             print("[WeeklySummaryService] Notification tapped -> \(result.message)")
+            self.reschedule()
         }
 
         completionHandler()
