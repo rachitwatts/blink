@@ -18,9 +18,9 @@ case "$FILE_PATH" in
     ;;
 esac
 
-BRANCH=$(git -C /Users/rachit/Work/personal/blink branch --show-current 2>/dev/null)
-IS_WORKTREE=$(git -C /Users/rachit/Work/personal/blink rev-parse --is-inside-work-tree 2>/dev/null)
-GIT_DIR=$(git -C /Users/rachit/Work/personal/blink rev-parse --git-dir 2>/dev/null)
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+BRANCH=$(git -C "$REPO_ROOT" branch --show-current 2>/dev/null)
+GIT_DIR=$(git -C "$REPO_ROOT" rev-parse --git-dir 2>/dev/null)
 
 # Detect if we're in a worktree (git-dir contains "/worktrees/")
 IN_WORKTREE=false

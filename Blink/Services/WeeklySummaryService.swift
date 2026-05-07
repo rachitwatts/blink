@@ -85,7 +85,12 @@ final class WeeklySummaryService: NSObject {
             intentIdentifiers: []
         )
 
-        UNUserNotificationCenter.current().setNotificationCategories([category])
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationCategories { existing in
+            var updated = existing.filter { $0.identifier != Self.categoryIdentifier }
+            updated.insert(category)
+            center.setNotificationCategories(updated)
+        }
     }
 
     // MARK: - Insight Composition
