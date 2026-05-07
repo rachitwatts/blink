@@ -36,12 +36,12 @@ final class DashboardWindowController {
 
     /// Show the dashboard window, or bring it to front if already open
     func showDashboard(tab: DashboardTab? = nil) {
-        if let tab { selectedTab = tab }
+        let targetTab = tab ?? .today
 
         // If window exists, bring to front (reuse even if closed)
         if let existingWindow = window {
-            if let tab {
-                updateTab(tab)
+            if tab != nil {
+                updateTab(targetTab)
             }
             existingWindow.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
@@ -54,7 +54,7 @@ final class DashboardWindowController {
         }
 
         // Create new window
-        let dashboardView = DashboardView(initialTab: selectedTab)
+        let dashboardView = DashboardView(initialTab: targetTab)
             .modelContainer(container)
         let hostingController = NSHostingController(rootView: dashboardView)
 
@@ -74,8 +74,6 @@ final class DashboardWindowController {
         newWindow.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
-
-    private var selectedTab: DashboardTab = .today
 
     private func updateTab(_ tab: DashboardTab) {
         guard let window, let container = modelContainer else { return }

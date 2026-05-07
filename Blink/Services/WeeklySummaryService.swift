@@ -186,9 +186,15 @@ extension WeeklySummaryService: UNUserNotificationCenterDelegate {
             return
         }
 
+        let actionId = response.actionIdentifier
+        let shouldOpenDashboard = actionId == UNNotificationDefaultActionIdentifier
+            || actionId == Self.viewDashboardActionIdentifier
+
         Task { @MainActor in
-            let result = BlinkActions.execute(.dashboard)
-            print("[WeeklySummaryService] Notification tapped -> \(result.message)")
+            if shouldOpenDashboard {
+                let result = BlinkActions.execute(.dashboard)
+                print("[WeeklySummaryService] Notification tapped -> \(result.message)")
+            }
             self.reschedule()
         }
 
