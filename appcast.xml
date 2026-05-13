@@ -78,5 +78,19 @@
         />
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
     </item>
+    <item>
+      <title>Version 2.5.0</title>
+      <description><![CDATA[<ul><li>Added timer preset suggestions — choose from Classic (20-20-20), Pomodoro, DeskTime, or Ultradian rhythms</li><li>Research-backed descriptions help you pick the right work/break rhythm</li><li>Editing durations manually auto-detects matching preset or switches to Custom</li></ul>]]></description>
+      <pubDate>Wed, 13 May 2026 20:45:31 +0530</pubDate>
+      <enclosure
+        url="https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/Blink-v2.5.0.dmg"
+        sparkle:edSignature="OfssygvNJEPAa2rUTpB9VsCdkhMFfC8R1b4jcS/OS0a00wbQysYf2AblWG2a2J6JHj9m/ZDU9PccQccw6W0RCw=="
+        sparkle:version="8"
+        sparkle:shortVersionString="2.5.0"
+        type="application/octet-stream"
+        length="4395851"
+        />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
   </channel>
 </rss>
