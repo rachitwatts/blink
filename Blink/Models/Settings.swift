@@ -11,6 +11,15 @@ final class Settings: ObservableObject {
 
     static let shared = Settings()
 
+    // MARK: - Timer Preset
+
+    @AppStorage("timerPreset") private var timerPresetRaw: String = TimerPreset.pomodoro.rawValue
+
+    var timerPreset: TimerPreset {
+        get { TimerPreset(rawValue: timerPresetRaw) ?? .pomodoro }
+        set { timerPresetRaw = newValue.rawValue }
+    }
+
     // MARK: - Timer Durations (in minutes, stored as Int)
 
     /// Work session duration in minutes (default: 25)
@@ -206,6 +215,7 @@ final class Settings: ObservableObject {
 
     /// Reset all settings to defaults (useful for testing)
     func resetToDefaults() {
+        timerPresetRaw = TimerPreset.pomodoro.rawValue
         workDurationMinutes = 25
         breakDurationMinutes = 5
         snoozeDurationMinutes = 5
