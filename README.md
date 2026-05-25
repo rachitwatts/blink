@@ -1,9 +1,17 @@
 # Blink
 
+[![CI](https://github.com/rachitwatts/blink/actions/workflows/ci.yml/badge.svg)](https://github.com/rachitwatts/blink/actions/workflows/ci.yml)
+[![Latest Release](https://img.shields.io/github/v/release/rachitwatts/blink)](https://github.com/rachitwatts/blink/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 A minimal macOS menu bar app that reminds you to take regular eye breaks.
 
 <p align="center">
-  <img src="references/Gemini_Generated_Image_dsyr5bdsyr5bdsyr.png" width="128" alt="Blink App Icon">
+  <img src="references/app-icon.png" width="128" alt="Blink App Icon">
+</p>
+
+<p align="center">
+  <img src="references/demo.gif" width="600" alt="Blink Demo">
 </p>
 
 ## Why Blink?
