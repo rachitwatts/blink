@@ -120,5 +120,19 @@
         />
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
     </item>
+    <item>
+      <title>Version 2.6.2</title>
+      <description><![CDATA[Bug fixes and tuning to improve the break experience]]></description>
+      <pubDate>Mon, 25 May 2026 12:42:42 +0530</pubDate>
+      <enclosure
+        url="https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/Blink-v2.6.2.dmg"
+        sparkle:edSignature="3pnaavnaZqesWoMSO1/UOBPsQlVS8bRVnuA0YrV1JTx0ax3E1/bkrYyJsRiuGix21/D4hJLjaFlRsLh0uw6HBA=="
+        sparkle:version="11"
+        sparkle:shortVersionString="2.6.2"
+        type="application/octet-stream"
+        length="4436345"
+        />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
   </channel>
 </rss>
