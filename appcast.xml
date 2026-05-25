@@ -106,5 +106,19 @@
         />
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
     </item>
+    <item>
+      <title>Version 2.6.1</title>
+      <description><![CDATA[Fix code signing — app is now signed with Apple Development certificate so macOS notification permissions work correctly]]></description>
+      <pubDate>Mon, 25 May 2026 12:08:43 +0530</pubDate>
+      <enclosure
+        url="https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/Blink-v2.6.1.dmg"
+        sparkle:edSignature="IF+gg+tEiMb2X03bZBNRuX/RpCXvkHS/N2lc8NfY3iZVTNF+RAvyJlw5BRRUyHTtcPTp80H4BOkAJwoOupgYBA=="
+        sparkle:version="10"
+        sparkle:shortVersionString="2.6.1"
+        type="application/octet-stream"
+        length="4435056"
+        />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
   </channel>
 </rss>
