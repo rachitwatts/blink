@@ -338,8 +338,8 @@ echo "Appcast uploaded: ${R2_PUBLIC_URL}/appcast.xml"
 
 step "9. Publishing"
 
-# Commit version bump + regenerated Xcode project + appcast update
-git -C "$PROJECT_DIR" add "$PROJECT_YML" "$APPCAST" "$PROJECT_DIR/Blink.xcodeproj/project.pbxproj"
+# Commit version bump + regenerated Xcode project (appcast is gitignored, lives on R2 only)
+git -C "$PROJECT_DIR" add "$PROJECT_YML" "$PROJECT_DIR/Blink.xcodeproj/project.pbxproj"
 git -C "$PROJECT_DIR" commit -m "Release v$VERSION"
 
 # Push
