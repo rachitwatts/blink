@@ -7,15 +7,7 @@
 A minimal macOS menu bar app that reminds you to take regular eye breaks.
 
 <p align="center">
-  <img src="references/app-icon.png" width="128" alt="Blink App Icon">
-</p>
-
-<p align="center">
-  <img src="references/break.gif" width="600" alt="Break Overlay">
-</p>
-
-<p align="center">
-  <img src="references/settings.gif" width="600" alt="Settings">
+  <img src="references/demo.gif" width="600" alt="Blink Demo">
 </p>
 
 ## Why Blink?
