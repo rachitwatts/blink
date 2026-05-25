@@ -42,15 +42,15 @@ final class BreakOverlayWindowController {
     // MARK: - Public API
 
     /// Show break overlay — dispatches to enforced or gentle based on current settings
-    func showOverlay() {
+    func showOverlay(initialPhase: BreakPhase = .floating) {
         let style = Settings.shared.breakStyle
-        print("[OverlayController] Showing overlay (style: \(style.rawValue)) on \(NSScreen.screens.count) screen(s)")
+        print("[OverlayController] Showing overlay (style: \(style.rawValue), phase: \(initialPhase)) on \(NSScreen.screens.count) screen(s)")
 
         hideOverlay(animated: false)
 
-        if style == .gentle {
+        if style == .gentle && initialPhase != .fullscreen {
             isGentleMode = true
-            showGentleOverlay(phase: .floating)
+            showGentleOverlay(phase: initialPhase)
         } else {
             isGentleMode = false
             showFullscreenOverlay()
