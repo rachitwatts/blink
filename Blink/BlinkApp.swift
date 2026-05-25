@@ -95,8 +95,9 @@ struct BlinkApp: App {
             .receive(on: DispatchQueue.main)
             .sink { isVisible in
                 if isVisible {
-                    print("[BlinkApp] Showing overlay")
-                    BreakOverlayWindowController.shared.showOverlay()
+                    let phase = AppState.shared.breakPhase
+                    print("[BlinkApp] Showing overlay (phase: \(phase))")
+                    BreakOverlayWindowController.shared.showOverlay(initialPhase: phase)
                 } else {
                     print("[BlinkApp] Hiding overlay")
                     BreakOverlayWindowController.shared.hideOverlay()

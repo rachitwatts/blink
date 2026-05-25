@@ -570,8 +570,8 @@ final class TimerEngine: ObservableObject {
 
         if elapsed == 10 && appState.breakPhase == .floating {
             let idleSeconds = idleDetector.getIdleTime()
-            if idleSeconds >= 10 {
-                print("[TimerEngine] User idle during floating phase, completing break early")
+            if idleSeconds >= Double(elapsed) + 10 {
+                print("[TimerEngine] User was idle before break started, completing break early")
                 completeBreak()
                 return
             }
@@ -637,7 +637,7 @@ final class TimerEngine: ObservableObject {
         appState.breakElapsedSeconds = 0
         appState.timerState = .breakRunning
 
-        if settings.breakStyle == .gentle {
+        if settings.breakStyle == .gentle && !isManual {
             appState.breakPhase = .floating
         } else {
             appState.breakPhase = .fullscreen
