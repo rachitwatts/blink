@@ -92,5 +92,19 @@
         />
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
     </item>
+    <item>
+      <title>Version 2.6.0</title>
+      <description><![CDATA[Fix notification permissions (app now appears in System Settings > Notifications), default to gentle break style, fix settings window transparency, and normalize rhythm preset card sizing]]></description>
+      <pubDate>Mon, 25 May 2026 12:00:28 +0530</pubDate>
+      <enclosure
+        url="https://pub-6b6f1485dfb94319bca0db9f7748b1a8.r2.dev/Blink-v2.6.0.dmg"
+        sparkle:edSignature="cyHczau2EShD6YptAoxGW+yVhsYmiZd9dY8hBUj78NEpkqe57cXz0Ow1ST69v7UGa0ilYOdBQ5xg5UR2O3ujBw=="
+        sparkle:version="9"
+        sparkle:shortVersionString="2.6.0"
+        type="application/octet-stream"
+        length="4399643"
+        />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
   </channel>
 </rss>
