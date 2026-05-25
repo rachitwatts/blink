@@ -630,6 +630,12 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					4F7B28CBF14815045A9B7C0C = {
+						DevelopmentTeam = 87AMBUKU99;
+						ProvisioningStyle = Manual;
+					};
+				};
 			};
 			buildConfigurationList = 114EF5ED8BC9EE1BB0FAB30B /* Build configuration list for PBXProject "Blink" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -1010,12 +1016,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_ENTITLEMENTS = Blink/Blink.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 9;
+				DEVELOPMENT_TEAM = 87AMBUKU99;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Blink/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1026,6 +1031,7 @@
 				MARKETING_VERSION = 2.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rachitwatts.blink;
 				PRODUCT_NAME = Blink;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.9;
 			};
@@ -1095,12 +1101,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_ENTITLEMENTS = Blink/Blink.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 9;
+				DEVELOPMENT_TEAM = 87AMBUKU99;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Blink/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1111,6 +1116,7 @@
 				MARKETING_VERSION = 2.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rachitwatts.blink;
 				PRODUCT_NAME = Blink;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.9;
 			};

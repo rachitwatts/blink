@@ -27,10 +27,10 @@ targets:
       CURRENT_PROJECT_VERSION: "9"
       MARKETING_VERSION: "2.6.0"
       GENERATE_INFOPLIST_FILE: NO
-      CODE_SIGN_ENTITLEMENTS: Blink/Blink.entitlements
-      CODE_SIGN_IDENTITY: "-"
-      CODE_SIGNING_REQUIRED: NO
-      CODE_SIGNING_ALLOWED: NO
+      CODE_SIGN_STYLE: Manual
+      CODE_SIGN_IDENTITY: "Apple Development"
+      DEVELOPMENT_TEAM: 87AMBUKU99
+      PROVISIONING_PROFILE_SPECIFIER: ""
     dependencies:
       - sdk: AppIntents.framework
       - package: Sparkle
