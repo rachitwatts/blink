@@ -43,6 +43,20 @@ Temporary Items
 # Secrets
 .env
 
+# Claude Code local config
+.claude/settings.local.json
+.claude/worktrees/
+
+# Internal planning docs
+thoughts/
+references/*.md
+
+# Build artifacts
+appcast.xml
+
+# AI assistant config
+CLAUDE.md
+
 # Swift Package Manager
 .build/
 Packages/
