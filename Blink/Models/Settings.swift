@@ -80,10 +80,10 @@ final class Settings: ObservableObject {
 
     // MARK: - Break Style
 
-    @AppStorage("breakStyle") private var breakStyleRaw: String = BreakStyle.enforced.rawValue
+    @AppStorage("breakStyle") private var breakStyleRaw: String = BreakStyle.gentle.rawValue
 
     var breakStyle: BreakStyle {
-        get { BreakStyle(rawValue: breakStyleRaw) ?? .enforced }
+        get { BreakStyle(rawValue: breakStyleRaw) ?? .gentle }
         set { breakStyleRaw = newValue.rawValue }
     }
 
@@ -231,7 +231,7 @@ final class Settings: ObservableObject {
         nudgeBlinkEnabled = true
         nudgePostureEnabled = true
         nudgeStretchEnabled = true
-        breakStyleRaw = BreakStyle.enforced.rawValue
+        breakStyleRaw = BreakStyle.gentle.rawValue
         breakContentModeRaw = BreakContentMode.guided.rawValue
         weeklySummaryEnabled = true
         weeklySummaryDay = 2
