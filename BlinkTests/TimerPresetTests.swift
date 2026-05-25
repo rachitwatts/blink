@@ -13,7 +13,7 @@ final class TimerPresetTests: XCTestCase {
         let preset = TimerPreset.classic
         XCTAssertEqual(preset.workMinutes, 20)
         XCTAssertEqual(preset.breakMinutes, 5)
-        XCTAssertEqual(preset.displayName, "Classic (20-20-20)")
+        XCTAssertEqual(preset.displayName, "Classic")
     }
 
     func testPomodoroPreset() {
