@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import Combine
+import UserNotifications
 
 /// Main entry point for the Blink app
 ///
@@ -118,6 +119,22 @@ struct BlinkApp: App {
         // Show onboarding if first launch (with slight delay for window to be ready)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             OnboardingWindowController.shared.showIfNeeded()
+        }
+
+        // Request notification permissions after the app is fully initialized.
+        // Menu bar-only apps need a delay — calling requestAuthorization during
+        // init() fires before macOS registers the app with the window server,
+        // so the system prompt is silently swallowed and the app never appears
+        // in System Settings > Notifications.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, _ in
+                print("[BlinkApp] Notification permission: \(granted ? "granted" : "denied")")
+                if granted {
+                    Task { @MainActor in
+                        WeeklySummaryService.shared.reschedule()
+                    }
+                }
+            }
         }
 
         // Persist in-progress session when app terminates

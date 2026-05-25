@@ -44,9 +44,7 @@ final class SettingsWindowController {
         newWindow.minSize = NSSize(width: 700, height: 480)
         newWindow.isReleasedWhenClosed = false
 
-        // Translucent background
-        newWindow.backgroundColor = .clear
-        newWindow.isOpaque = false
+        newWindow.isOpaque = true
 
         // Remember window position
         newWindow.setFrameAutosaveName("BlinkSettingsWindow")

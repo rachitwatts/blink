@@ -11,7 +11,7 @@ enum TimerPreset: String, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .classic: "Classic (20-20-20)"
+        case .classic: "Classic"
         case .pomodoro: "Pomodoro"
         case .deskTime: "DeskTime"
         case .ultradian: "Ultradian"
@@ -22,9 +22,9 @@ enum TimerPreset: String, CaseIterable, Identifiable {
     var subtitle: String {
         switch self {
         case .classic: "Eye doctor recommended"
-        case .pomodoro: "The original focus technique"
-        case .deskTime: "Highest-productivity ratio"
-        case .ultradian: "Matches your natural energy cycle"
+        case .pomodoro: "Classic focus technique"
+        case .deskTime: "Peak productivity ratio"
+        case .ultradian: "Natural energy cycle"
         case .custom: "Your own rhythm"
         }
     }
