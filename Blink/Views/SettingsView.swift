@@ -22,7 +22,7 @@ struct SettingsView: View {
                     .padding(24)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .background(.ultraThinMaterial)
+            .background(Color(nsColor: .windowBackgroundColor))
             .animation(.easeInOut(duration: 0.15), value: selectedSection)
         }
         .frame(width: 700, height: 480)

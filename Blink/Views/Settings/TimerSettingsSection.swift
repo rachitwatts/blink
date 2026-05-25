@@ -29,6 +29,7 @@ struct TimerSettingsSection: View {
                         }
                     }
                 }
+                .fixedSize(horizontal: false, vertical: true)
             }
 
             // Work duration chips
@@ -97,18 +98,17 @@ struct PresetCard: View {
                     .font(.subheadline)
                     .fontWeight(.medium)
 
-                if preset != .custom {
-                    Text("\(preset.workMinutes)/\(preset.breakMinutes)")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
+                Text(preset != .custom ? "\(preset.workMinutes)/\(preset.breakMinutes)" : " ")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
 
                 Text(preset.subtitle)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
-                    .lineLimit(1)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.vertical, 8)
             .padding(.horizontal, 6)
             .background(
