@@ -48,7 +48,6 @@ class BlinkTestCase: XCTestCase {
         TimerEngine.shared.setIdleDetector(mockIdle)
         TimerEngine.shared.setCallDetector(mockCall)
         TimerEngine.shared.setCalendarMonitor(mockCalendar)
-        TimerEngine.shared.setSyncManager(nil)
         InCallNudgeWindowController.suppressForTesting = true
 
         // Clear engine internal state (e.g. shouldResetOnNextActivity) without

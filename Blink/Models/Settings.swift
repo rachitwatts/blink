@@ -193,81 +193,14 @@ final class Settings: ObservableObject {
     /// Source of the current time for sync timestamps. Production uses the
     /// wall clock; tests inject a `MutableClock` for deterministic loop-guard
     /// and conflict-resolution behavior.
-    private var clock: NowProviding = SystemClock()
-
     #if DEBUG
     /// Point all persisted settings at an isolated store for testing.
     /// `BlinkTestCase` calls this in `setUp` with a fresh ephemeral suite,
     /// so each test sees default values and never mutates real user prefs.
     func useStoreForTesting(_ defaults: UserDefaults) {
         bindAppStorage(to: defaults)
-        resetSyncState()
-    }
-
-    func setClock(_ clock: NowProviding) {
-        self.clock = clock
     }
     #endif
-
-    // MARK: - Sync
-
-    /// Timestamp of the last local settings change that was published.
-    /// Used to prevent infinite sync loops: when we receive a remote settings
-    /// payload that we ourselves published, we ignore it.
-    var lastPublishedAt: TimeInterval = 0
-
-    /// Timestamp of the last applied remote settings.
-    /// Used for conflict resolution: only apply if the remote timestamp is newer.
-    private(set) var lastAppliedRemoteAt: TimeInterval = 0
-
-    /// Timestamp of the last remote settings apply.
-    /// The debounced Combine observer checks this to avoid re-publishing
-    /// settings that arrived from sync (isApplyingRemote was insufficient
-    /// because defer clears it before the 500ms debounce fires).
-    private(set) var lastRemoteApplyAt: TimeInterval = 0
-
-    /// Snapshot of last published synced values. Prevents redundant publishes
-    /// when only non-synced properties (soundEnabled, etc.) change.
-    private var lastPublishedSnapshot: (Int, Int, Int, String) = (0, 0, 0, "")
-
-    /// Publish current settings to iCloud KVS for the watch to receive.
-    /// Skips the publish if synced values haven't changed since last publish.
-    func publishToSync(_ syncManager: any SyncManagerProtocol) {
-        let current = (workDurationMinutes, breakDurationMinutes, snoozeDurationMinutes, displayMode.rawValue)
-        guard current != lastPublishedSnapshot else { return }
-        lastPublishedSnapshot = current
-
-        let now = clock.now.timeIntervalSince1970
-        let syncSettings = SyncSettings(
-            workDurationMinutes: workDurationMinutes,
-            breakDurationMinutes: breakDurationMinutes,
-            snoozeDurationMinutes: snoozeDurationMinutes,
-            displayMode: displayMode.rawValue,
-            changedAt: now
-        )
-        lastPublishedAt = now
-        syncManager.publishSettings(syncSettings)
-    }
-
-    /// Apply settings received from the watch (or another device).
-    /// Only applies if the remote timestamp is newer than the last applied remote settings.
-    /// Returns true if settings were applied, false if they were ignored (stale).
-    @discardableResult
-    func applyRemoteSettings(_ remote: SyncSettings) -> Bool {
-        // Reject if remote is older than what we last applied or last published locally
-        guard remote.changedAt > lastAppliedRemoteAt,
-              remote.changedAt > lastPublishedAt else { return false }
-
-        lastRemoteApplyAt = clock.now.timeIntervalSince1970
-        lastAppliedRemoteAt = remote.changedAt
-        workDurationMinutes = remote.workDurationMinutes
-        breakDurationMinutes = remote.breakDurationMinutes
-        snoozeDurationMinutes = remote.snoozeDurationMinutes
-        displayMode = DisplayMode(rawValue: remote.displayMode) ?? .elapsed
-        // Update snapshot so non-synced property changes don't trigger re-publish
-        lastPublishedSnapshot = (workDurationMinutes, breakDurationMinutes, snoozeDurationMinutes, displayMode.rawValue)
-        return true
-    }
 
     // MARK: - Reset
 
@@ -299,14 +232,5 @@ final class Settings: ObservableObject {
         calendarIntegrationEnabled = false
         watchedCalendarIdentifiers = ""
         calendarLeadTimeMinutes = 3
-        resetSyncState()
-    }
-
-    /// Reset the in-memory sync bookkeeping (not persisted via @AppStorage).
-    private func resetSyncState() {
-        lastPublishedAt = 0
-        lastAppliedRemoteAt = 0
-        lastRemoteApplyAt = 0
-        lastPublishedSnapshot = (0, 0, 0, "")
     }
 }
