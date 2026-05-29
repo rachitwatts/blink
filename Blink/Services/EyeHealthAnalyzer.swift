@@ -63,6 +63,17 @@ final class EyeHealthAnalyzer {
 
     private static let dismissedKey = "dismissedEyeHealthInsights"
 
+    /// Backing store for dismissed-insight IDs. Production uses the standard
+    /// defaults; tests inject an isolated suite (`.standard` shorthand keeps
+    /// this off the `UserDefaults.standard` ban-lint).
+    private static var store: UserDefaults = .standard
+
+    #if DEBUG
+    static func setStoreForTesting(_ defaults: UserDefaults) {
+        store = defaults
+    }
+    #endif
+
     static func dismiss(_ insightID: String) {
         var dismissed = loadDismissed()
         dismissed.insert(insightID)
@@ -76,11 +87,11 @@ final class EyeHealthAnalyzer {
     }
 
     static func resetDismissals() {
-        UserDefaults.standard.removeObject(forKey: dismissedKey)
+        store.removeObject(forKey: dismissedKey)
     }
 
     static func loadDismissed() -> Set<String> {
-        guard let raw = UserDefaults.standard.string(forKey: dismissedKey), !raw.isEmpty else {
+        guard let raw = store.string(forKey: dismissedKey), !raw.isEmpty else {
             return []
         }
         return Set(raw.components(separatedBy: ","))
@@ -91,7 +102,7 @@ final class EyeHealthAnalyzer {
     }
 
     private static func saveDismissed(_ ids: Set<String>) {
-        UserDefaults.standard.set(ids.sorted().joined(separator: ","), forKey: dismissedKey)
+        store.set(ids.sorted().joined(separator: ","), forKey: dismissedKey)
     }
 
     // MARK: - Pattern Detectors

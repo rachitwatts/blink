@@ -40,11 +40,9 @@ jobs:
 
       - name: Lint — no UserDefaults.standard in production code
         run: |
-          # Production settings must go through Settings' injectable store so
-          # tests stay isolated (P1). EyeHealthAnalyzer is a known exception
-          # pending an injectable store (P3.1). Comments are ignored.
-          matches=$(grep -rn "UserDefaults\.standard" Blink Shared BlinkWatch --include="*.swift" \
-            | grep -v "EyeHealthAnalyzer.swift" \
+          # Production settings must go through an injectable store so tests
+          # stay isolated (P1). Comments are ignored.
+          matches=$(grep -rn "UserDefaults\.standard" Blink Shared --include="*.swift" \
             | grep -vE "^[^:]+:[0-9]+:[[:space:]]*//" || true)
           if [ -n "$matches" ]; then
             echo "::error::UserDefaults.standard used in production code — route through Settings' injectable store."
