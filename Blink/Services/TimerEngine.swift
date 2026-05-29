@@ -471,14 +471,39 @@ final class TimerEngine: ObservableObject {
         guard settings.breakStyle == .gentle else { return }
 
         appState.breakElapsedSeconds += 1
-        let elapsed = appState.breakElapsedSeconds
+        let newPhase = Self.computePhase(
+            elapsed: appState.breakElapsedSeconds,
+            current: appState.breakPhase
+        )
+        if newPhase != appState.breakPhase {
+            print("[TimerEngine] Gentle break → \(newPhase) phase")
+            appState.breakPhase = newPhase
+        }
+    }
 
-        if elapsed == 10 && appState.breakPhase == .floating {
-            print("[TimerEngine] Gentle break → dimmed phase")
-            appState.breakPhase = .dimmed
-        } else if elapsed == 20 && appState.breakPhase == .dimmed {
-            print("[TimerEngine] Gentle break → fullscreen phase")
-            appState.breakPhase = .fullscreen
+    // MARK: - Gentle Break Phase Progression
+
+    /// Seconds into a gentle break at which the overlay dims.
+    static let gentleDimmedThreshold = 10
+
+    /// Seconds into a gentle break at which the overlay goes fullscreen.
+    static let gentleFullscreenThreshold = 20
+
+    /// Pure phase progression for gentle breaks.
+    ///
+    /// Uses `>=` thresholds (not `==`) so a skipped tick — e.g. timer
+    /// coalescing during system sleep — can't strand a phase at its exact
+    /// boundary value (the root of issues #48/#50). The current-phase guard
+    /// keeps escalation forward-only and one stage per tick:
+    /// floating → dimmed (≥10s) → fullscreen (≥20s).
+    static func computePhase(elapsed: Int, current: BreakPhase) -> BreakPhase {
+        switch current {
+        case .floating:
+            return elapsed >= gentleDimmedThreshold ? .dimmed : .floating
+        case .dimmed:
+            return elapsed >= gentleFullscreenThreshold ? .fullscreen : .dimmed
+        case .fullscreen:
+            return .fullscreen
         }
     }
 
