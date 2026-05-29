@@ -64,6 +64,7 @@
 		A9FBB884A5B0A47B01891F6B /* EyeHealthCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE030A24A519F2AE2256502 /* EyeHealthCalculatorTests.swift */; };
 		AA2FEABDDA39038956D494DA /* NudgesSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38A3D77F875EFF9BF583E79 /* NudgesSettingsSection.swift */; };
 		AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF6E4483329D18D25EE4C8D /* AppState.swift */; };
+		AD500B18E9EEE329EE8807FA /* BreakContentProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1484F119B0E1475AA6AA677E /* BreakContentProviderTests.swift */; };
 		ADD6E0073DA1C9ABA1674175 /* AllTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A1794267E2C1A35324FC /* AllTimeView.swift */; };
 		AE03BB7AFF911AA9F379C15E /* NudgeSchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8DF27DF00F0429B4096228 /* NudgeSchedulerTests.swift */; };
 		B06407FA399B0DD103F30C31 /* BreakExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E03C8370B7F8889DE6E59C8 /* BreakExercise.swift */; };
@@ -124,6 +125,7 @@
 		0F8DF27DF00F0429B4096228 /* NudgeSchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeSchedulerTests.swift; sourceTree = "<group>"; };
 		10F959148BA99247482E7877 /* SettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		13EC8022A60E5354BFA94A1C /* AnalyticsSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsSettingsSection.swift; sourceTree = "<group>"; };
+		1484F119B0E1475AA6AA677E /* BreakContentProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakContentProviderTests.swift; sourceTree = "<group>"; };
 		18329DE3828BB763D21CF688 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
 		1C7FC37D5BD933ACB0CBE325 /* GentleBreakFloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GentleBreakFloatingView.swift; sourceTree = "<group>"; };
 		2392908E3C6E06999BB96F4A /* EyeHealthCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthCalculator.swift; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 				3AE988CCF1DAA8257F87F367 /* AnalyticsServiceTests.swift */,
 				0894126555611FB825C1A26F /* BlinkActionsTests.swift */,
 				7434DA05EFAF4851495D99EF /* BlinkTestCase.swift */,
+				1484F119B0E1475AA6AA677E /* BreakContentProviderTests.swift */,
 				26003B8275BF2BC293211CE5 /* CalendarMonitorTests.swift */,
 				7A861AE9E99A2FEDBEA068B8 /* CallDetectorTests.swift */,
 				363D9F63B5468FF4BBB61607 /* EyeHealthAnalyzerTests.swift */,
@@ -614,6 +617,7 @@
 				58357FB1F675F5D7D262E235 /* AnalyticsServiceTests.swift in Sources */,
 				E10529D11D097EFEBEFE6989 /* BlinkActionsTests.swift in Sources */,
 				69198456279530A0012C3888 /* BlinkTestCase.swift in Sources */,
+				AD500B18E9EEE329EE8807FA /* BreakContentProviderTests.swift in Sources */,
 				CB0504032FDD5C98EB0C9610 /* CalendarMonitorTests.swift in Sources */,
 				7543964B77E10E7367528F2A /* CallDetectorTests.swift in Sources */,
 				A4407CCBB9E08DE14C1C7C4C /* EyeHealthAnalyzerTests.swift in Sources */,
