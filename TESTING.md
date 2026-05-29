@@ -1,151 +1,81 @@
 # Blink Test Strategy
 
-This document outlines the testing approach for the Blink app.
+How testing works in Blink, and the rules that keep the suite fast, isolated, and trustworthy.
 
-## Quick Start
+## Quick start
 
 ```bash
-# Run all automated tests
-./scripts/run-tests.sh
+# Run the unit tests (macOS)
+./scripts/run-tests.sh unit
 
-# Run specific test suites
-./scripts/run-tests.sh unit    # Unit tests only
-./scripts/run-tests.sh apple   # AppleScript integration tests only
+# Or directly:
+xcodebuild test -project Blink.xcodeproj -scheme Blink \
+  -destination 'platform=macOS' -only-testing:BlinkTests
 ```
 
-## Test Suites
+CI (`.github/workflows/ci.yml`) builds Release, runs the unit tests with code
+coverage, enforces a coverage ratchet on the logic layer, and lints against
+`UserDefaults.standard` in production code.
 
-### 1. Unit Tests (BlinkTests)
+## Test isolation — `BlinkTestCase`
 
-**Location:** `BlinkTests/`
+Unit tests run **hosted by the real Blink.app**, so naive tests can mutate real
+user state or even spawn real windows. Any test that touches `AppState`,
+`Settings`, the timer, analytics, or windows MUST inherit **`BlinkTestCase`**
+(`BlinkTests/BlinkTestCase.swift`), which per test:
 
-**Run with:** `./scripts/run-tests.sh unit`
+- points `Settings` at an ephemeral `UserDefaults(suiteName:)` (never the real domain);
+- configures `AnalyticsService` with an **in-memory** SwiftData container;
+- resets `AppState` and `TimerEngine` internal state, and injects mocks
+  (`mockIdle`, `mockCall`, `mockCalendar`, `mockScreenLock`);
+- **suppresses all real window creation** (`BreakOverlayWindowController`,
+  `NudgeWindowController`, `InCallNudgeWindowController`) — without this, setting
+  `isOverlayVisible` spawns full-screen overlays that grab the display.
 
-Unit tests verify core logic in isolation without UI interaction.
+Pure-logic tests with no shared state (e.g. `EyeHealthCalculatorTests`,
+`WindowLayoutTests`) can subclass `XCTestCase` directly.
 
-| Test File | Coverage |
-|-----------|----------|
-| `SettingsTests.swift` | Default values, duration calculations, reset functionality |
-| `TimerEngineTests.swift` | Timer state machine, pause/resume, break triggers, snooze/skip |
+Execution order is randomized (per the test plan in `project.yml`) to surface
+any remaining order-dependence.
 
-**What's tested:**
-- Settings model defaults and persistence
-- Work/break duration calculations
-- Timer state transitions (working → break → working)
-- Pause/resume during work periods
-- Cannot pause during breaks
-- Snooze extends break by configured duration
-- Skip ends break immediately
-- Restart resets timer to zero
-- Menu bar title formatting (elapsed vs remaining)
+## Test seams (dependency injection)
 
-### 2. AppleScript Integration Tests
+Production singletons expose `#if DEBUG` setters so tests stay deterministic:
 
-**Location:** `scripts/test-helpers/`
+- `TimerEngine`: `setIdleDetector`, `setCallDetector`, `setCalendarMonitor`,
+  `setClock` (`NowProviding`), `setScreenLock` (`ScreenLocking`).
+- `Settings.useStoreForTesting(_:)`, `CallDetector.pollForTesting()`,
+  `EyeHealthAnalyzer.setStoreForTesting(_:)`.
+- Window/nudge controllers: `suppressForTesting`.
 
-**Run with:** `./scripts/run-tests.sh apple`
+## What's covered
 
-These tests interact with the running app via AppleScript to verify end-to-end functionality.
+| Area | Files |
+|------|-------|
+| Timer state machine, idle/break/snooze, delivery modes | `TimerEngineTests`, `TimerEngineDeliveryModeTests`, `TimerStateTests` |
+| Gentle-break phase machine (`computePhase`) | `GentleBreakPhaseTests` |
+| State-machine invariants (seeded fuzz) | `StateMachineInvariantTests` |
+| Notification-only delivery | `NotificationOnlyBreakTests` |
+| Overlay window-layout decision (multi-monitor / disconnect) | `WindowLayoutTests` |
+| Settings persistence / presets | `SettingsTests`, `TimerPresetTests` |
+| Eye-health grade + insight detectors | `EyeHealthCalculatorTests`, `EyeHealthAnalyzerTests` |
+| Analytics recording/queries | `AnalyticsServiceTests` |
+| Weekly summary message selection | `WeeklySummaryServiceTests` |
+| Break content selection, nudges, call/calendar detection, actions | `BreakContentProviderTests`, `NudgeSchedulerTests`, `CallDetectorTests`, `CalendarMonitorTests`, `BlinkActionsTests` |
 
-**Prerequisites:**
-- Blink must be running (script auto-launches if needed)
-- Terminal needs Accessibility permission (System Settings → Privacy & Security → Accessibility)
+## Conventions
 
-| Test | Verifies |
-|------|----------|
-| Menu bar shows timer | Timer displays in MM:SS format |
-| Pause functionality | Clicking Pause shows ⏸ prefix |
-| Resume functionality | Clicking Resume removes ⏸ prefix |
-| Restart session | Timer resets to 00:00 |
-| Settings window | Settings opens and closes |
-| Start break now | Break overlay appears on demand |
-| Skip break | Double-Esc dismisses overlay |
-| Timer increments | Timer advances over time |
-
-**Helper Scripts:**
-- `blink-menu.applescript` — Menu bar interactions (status, pause, resume, restart, settings, start-break)
-- `blink-overlay.applescript` — Break overlay interactions (check visibility, skip, snooze)
-- `blink-settings.applescript` — Settings window interactions (check, close)
-- `check-permissions.sh` — Verify accessibility permissions
-
-### 3. Manual Tests
-
-Some functionality requires manual verification:
-
-#### Menu Bar
-- [ ] Timer appears in menu bar after launch
-- [ ] Clicking timer opens menu dropdown
-- [ ] Menu items are properly enabled/disabled based on state
-
-#### Break Overlay
-- [ ] Overlay covers all connected displays
-- [ ] Overlay appears above other windows
-- [ ] Countdown timer is visible and accurate
-- [ ] Sound plays when break starts (if enabled)
-- [ ] Single Esc snoozes (overlay dismisses, returns after snooze duration)
-- [ ] Double Esc skips (overlay dismisses, work timer restarts)
-
-#### Settings
-- [ ] Work duration slider updates timer
-- [ ] Break duration slider works
-- [ ] Display mode toggle switches between elapsed/remaining
-- [ ] Sound toggle enables/disables break sound
-- [ ] Launch at Login toggle works
-- [ ] Advanced section expands/collapses
-
-#### Global Shortcuts
-- [ ] ⌘⇧B pauses/resumes timer from any app
-- [ ] ⌘⇧R restarts session from any app
-- [ ] Shortcuts work after granting Accessibility permission
-
-#### Idle Detection
-- [ ] Timer pauses when system is idle (no input for configured duration)
-- [ ] Timer resumes when user returns
-- [ ] Idle threshold is configurable in Advanced settings
-
-#### System Integration
-- [ ] App launches at login (when enabled)
-- [ ] App survives sleep/wake cycles
-- [ ] App handles display connect/disconnect during break
-
-## Test Results
-
-Test results are stored in:
-- `build/TestResults-Unit.xcresult` — Xcode unit test results
-
-## Adding New Tests
-
-### Unit Tests
-1. Add test file to `BlinkTests/`
-2. Import XCTest and the module under test
-3. Follow existing naming conventions: `test<Feature><Behavior>`
-
-### AppleScript Tests
-1. Add helper scripts to `scripts/test-helpers/`
-2. Add test cases to `run_apple_tests()` in `scripts/run-tests.sh`
-3. Verify accessibility permissions are sufficient
+- **Every bug fix gets a regression test** (fails before, passes after).
+- New logic in `Blink/Services`, `Blink/Models`, `Shared` needs unit tests — the
+  ratchet (`scripts/check-coverage.sh`) gates that layer.
+- Don't assert incidental UI copy (display names, emoji) or unseeded-RNG ratios —
+  assert behavior/contracts.
+- SwiftUI Views are not unit-tested; extract pure presentation logic into testable
+  functions rather than image-snapshotting (snapshots are environment-flaky across
+  local vs CI macOS).
 
 ## Troubleshooting
 
-### "osascript is not allowed assistive access"
-Grant Terminal (or your terminal app) Accessibility permission:
-1. Open System Settings → Privacy & Security → Accessibility
-2. Add Terminal.app (or iTerm, VS Code, etc.)
-3. Restart the terminal
-
-### Unit tests fail to find BlinkTests target
-Regenerate the Xcode project:
-```bash
-xcodegen generate
-```
-
-### AppleScript tests can't find Blink
-Ensure Blink is running:
-```bash
-open build/Build/Products/Debug/Blink.app
-```
-
-Or build first:
-```bash
-xcodebuild -project Blink.xcodeproj -scheme Blink -configuration Debug build
-```
+- **Tests don't appear after adding a file:** `xcodegen generate`.
+- **Coverage gate failed:** add tests for new logic, or adjust the floor in
+  `scripts/check-coverage.sh` with justification.

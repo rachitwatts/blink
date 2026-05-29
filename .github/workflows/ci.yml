@@ -84,9 +84,11 @@ jobs:
             echo '```' >> "$GITHUB_STEP_SUMMARY"
             xcrun xccov view --report --only-targets build/TestResults-Unit.xcresult >> "$GITHUB_STEP_SUMMARY" 2>&1 || true
             echo '```' >> "$GITHUB_STEP_SUMMARY"
-            # Print overall % to the log for the (future P5) ratchet to parse.
             xcrun xccov view --report --only-targets build/TestResults-Unit.xcresult || true
           fi
+
+      - name: Coverage ratchet (core logic layer)
+        run: ./scripts/check-coverage.sh build/TestResults-Unit.xcresult 70.0
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
