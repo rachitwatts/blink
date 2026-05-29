@@ -48,13 +48,81 @@ final class BreakOverlayWindowController {
 
         hideOverlay(animated: false)
 
-        if style == .gentle && initialPhase != .fullscreen {
-            isGentleMode = true
-            showGentleOverlay(phase: initialPhase)
-        } else {
+        // The branch (fullscreen vs gentle dim+floating) is decided by the pure,
+        // unit-tested calculateWindowLayout — the source of issue-#54-class bugs.
+        let decision = Self.calculateWindowLayout(
+            screenFrames: NSScreen.screens.map(\.frame),
+            primaryVisibleFrame: (NSScreen.main ?? NSScreen.screens.first)?.visibleFrame,
+            phase: initialPhase,
+            breakStyle: style,
+            isOverlayVisible: true
+        )
+
+        if decision.usesFullscreen {
             isGentleMode = false
             showFullscreenOverlay()
+        } else {
+            isGentleMode = true
+            showGentleOverlay(phase: initialPhase)
         }
+    }
+
+    // MARK: - Pure Layout Decision (unit-testable)
+
+    /// Named layout constants (single source for the magic numbers).
+    enum LayoutConstants {
+        static let floatingSize = CGSize(width: 400, height: 300)
+        static let dimmedFloatingSize = CGSize(width: 500, height: 380)
+        static let floatingEdgeInset: CGFloat = 20
+        static let floatingDimOpacity: CGFloat = 0.2
+        static let dimmedDimOpacity: CGFloat = 0.5
+    }
+
+    /// What windows should exist for a given screen configuration + phase.
+    /// Pure value type so the decision can be asserted without creating windows.
+    struct WindowLayoutDecision: Equatable {
+        var fullscreenFrames: [CGRect] = []
+        var dimFrames: [CGRect] = []
+        var dimOpacity: CGFloat = 0
+        var floatingFrame: CGRect?
+
+        var usesFullscreen: Bool { !fullscreenFrames.isEmpty }
+        var isEmpty: Bool { fullscreenFrames.isEmpty && dimFrames.isEmpty && floatingFrame == nil }
+    }
+
+    /// Top-right placement of the gentle floating popup within a screen's
+    /// visible frame, inset from the bottom-right corner.
+    static func floatingFrame(in visibleFrame: CGRect,
+                              size: CGSize,
+                              inset: CGFloat = LayoutConstants.floatingEdgeInset) -> CGRect {
+        CGRect(x: visibleFrame.maxX - size.width - inset,
+               y: visibleFrame.minY + inset,
+               width: size.width,
+               height: size.height)
+    }
+
+    /// Decide the overlay window layout for the given inputs.
+    ///
+    /// This is the #54-class seam: layout is computed from explicit screen
+    /// frames (not a live `NSScreen.screens` read), so monitor connect/
+    /// disconnect mid-break is reproducible and testable.
+    static func calculateWindowLayout(screenFrames: [CGRect],
+                                      primaryVisibleFrame: CGRect?,
+                                      phase: BreakPhase,
+                                      breakStyle: BreakStyle,
+                                      isOverlayVisible: Bool) -> WindowLayoutDecision {
+        guard isOverlayVisible else { return WindowLayoutDecision() }
+
+        let isGentle = breakStyle == .gentle && phase != .fullscreen
+        guard isGentle else {
+            // Enforced mode, or the gentle fullscreen phase: one cover per screen.
+            return WindowLayoutDecision(fullscreenFrames: screenFrames)
+        }
+
+        let opacity = phase == .dimmed ? LayoutConstants.dimmedDimOpacity : LayoutConstants.floatingDimOpacity
+        let size = phase == .dimmed ? LayoutConstants.dimmedFloatingSize : LayoutConstants.floatingSize
+        let floating = primaryVisibleFrame.map { floatingFrame(in: $0, size: size) }
+        return WindowLayoutDecision(dimFrames: screenFrames, dimOpacity: opacity, floatingFrame: floating)
     }
 
     /// Hide all overlay windows
@@ -128,20 +196,20 @@ final class BreakOverlayWindowController {
     private func showGentleOverlay(phase: BreakPhase) {
         switch phase {
         case .floating:
-            showDimOverlays(opacity: 0.2)
-            showFloatingWindow(size: NSSize(width: 400, height: 300))
+            showDimOverlays(opacity: LayoutConstants.floatingDimOpacity)
+            showFloatingWindow(size: LayoutConstants.floatingSize)
 
         case .dimmed:
             // Animate the existing windows during a normal phase transition, but
             // create them at the dimmed state if none exist — e.g. when re-showing
             // after a display-change teardown (issue #54).
             if dimWindows.isEmpty {
-                showDimOverlays(opacity: 0.5)
+                showDimOverlays(opacity: LayoutConstants.dimmedDimOpacity)
             } else {
-                animateDimOpacity(to: 0.5)
+                animateDimOpacity(to: LayoutConstants.dimmedDimOpacity)
             }
             if floatingWindow == nil {
-                showFloatingWindow(size: NSSize(width: 500, height: 380))
+                showFloatingWindow(size: LayoutConstants.dimmedFloatingSize)
             } else {
                 animateFloatingWindowGrow()
             }
@@ -178,12 +246,7 @@ final class BreakOverlayWindowController {
     private func showFloatingWindow(size: NSSize) {
         guard let primaryScreen = NSScreen.main ?? NSScreen.screens.first else { return }
 
-        let screenFrame = primaryScreen.visibleFrame
-        let origin = NSPoint(
-            x: screenFrame.maxX - size.width - 20,
-            y: screenFrame.minY + 20
-        )
-        let frame = NSRect(origin: origin, size: size)
+        let frame = Self.floatingFrame(in: primaryScreen.visibleFrame, size: size)
 
         let window = KeyableWindow(
             contentRect: frame,
@@ -230,13 +293,7 @@ final class BreakOverlayWindowController {
         guard let window = floatingWindow,
               let screen = NSScreen.main ?? NSScreen.screens.first else { return }
 
-        let newSize = NSSize(width: 500, height: 380)
-        let screenFrame = screen.visibleFrame
-        let newOrigin = NSPoint(
-            x: screenFrame.maxX - newSize.width - 20,
-            y: screenFrame.minY + 20
-        )
-        let newFrame = NSRect(origin: newOrigin, size: newSize)
+        let newFrame = Self.floatingFrame(in: screen.visibleFrame, size: LayoutConstants.dimmedFloatingSize)
 
         NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.5
