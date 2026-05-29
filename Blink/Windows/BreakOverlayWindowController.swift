@@ -132,8 +132,19 @@ final class BreakOverlayWindowController {
             showFloatingWindow(size: NSSize(width: 400, height: 300))
 
         case .dimmed:
-            animateDimOpacity(to: 0.5)
-            animateFloatingWindowGrow()
+            // Animate the existing windows during a normal phase transition, but
+            // create them at the dimmed state if none exist — e.g. when re-showing
+            // after a display-change teardown (issue #54).
+            if dimWindows.isEmpty {
+                showDimOverlays(opacity: 0.5)
+            } else {
+                animateDimOpacity(to: 0.5)
+            }
+            if floatingWindow == nil {
+                showFloatingWindow(size: NSSize(width: 500, height: 380))
+            } else {
+                animateFloatingWindowGrow()
+            }
 
         case .fullscreen:
             tearDownGentleWindows()
