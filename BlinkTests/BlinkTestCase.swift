@@ -54,7 +54,14 @@ class BlinkTestCase: XCTestCase {
         TimerEngine.shared.setCallDetector(mockCall)
         TimerEngine.shared.setCalendarMonitor(mockCalendar)
         TimerEngine.shared.setScreenLock(mockScreenLock)
+
+        // Suppress ALL real window creation. The unit-test bundle is hosted by
+        // the live Blink.app, whose Combine sinks turn AppState flags into real
+        // windows — without these, a test that sets isOverlayVisible spawns
+        // full-screen, screen-saver-level overlays that grab the display.
         InCallNudgeWindowController.suppressForTesting = true
+        BreakOverlayWindowController.suppressForTesting = true
+        NudgeWindowController.suppressForTesting = true
 
         // Clear engine internal state (e.g. shouldResetOnNextActivity) without
         // leaving a live timer running.
@@ -65,7 +72,11 @@ class BlinkTestCase: XCTestCase {
     override func tearDown() async throws {
         TimerEngine.shared.stop()
         AppState.shared.reset()
-        InCallNudgeWindowController.suppressForTesting = false
+        // NOTE: deliberately do NOT reset the *.suppressForTesting flags here.
+        // BlinkApp's sinks can deliver on a later main-runloop turn (after this
+        // method returns); flipping suppression off would let a queued
+        // showOverlay create a real window. The test host runs only tests, so
+        // suppression stays on for the whole process.
 
         // Wipe and detach the ephemeral suite so nothing persists.
         if let suiteName {

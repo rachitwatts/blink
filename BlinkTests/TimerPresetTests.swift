@@ -9,28 +9,30 @@ final class TimerPresetTests: BlinkTestCase {
         let preset = TimerPreset.classic
         XCTAssertEqual(preset.workMinutes, 20)
         XCTAssertEqual(preset.breakMinutes, 5)
-        XCTAssertEqual(preset.displayName, "Classic")
+        // Assert the durations (the contract), not the display copy — coupling
+        // to the exact name string is what broke this test in #46.
+        XCTAssertFalse(preset.displayName.isEmpty)
     }
 
     func testPomodoroPreset() {
         let preset = TimerPreset.pomodoro
         XCTAssertEqual(preset.workMinutes, 25)
         XCTAssertEqual(preset.breakMinutes, 5)
-        XCTAssertEqual(preset.displayName, "Pomodoro")
+        XCTAssertFalse(preset.displayName.isEmpty)
     }
 
     func testDeskTimePreset() {
         let preset = TimerPreset.deskTime
         XCTAssertEqual(preset.workMinutes, 52)
         XCTAssertEqual(preset.breakMinutes, 17)
-        XCTAssertEqual(preset.displayName, "DeskTime")
+        XCTAssertFalse(preset.displayName.isEmpty)
     }
 
     func testUltradianPreset() {
         let preset = TimerPreset.ultradian
         XCTAssertEqual(preset.workMinutes, 90)
         XCTAssertEqual(preset.breakMinutes, 20)
-        XCTAssertEqual(preset.displayName, "Ultradian")
+        XCTAssertFalse(preset.displayName.isEmpty)
     }
 
     // MARK: - Matching

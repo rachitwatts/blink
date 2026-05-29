@@ -8,6 +8,11 @@ final class BreakOverlayWindowController {
 
     static let shared = BreakOverlayWindowController()
 
+    /// When true, `showOverlay` is a no-op. Set by tests so mutating
+    /// `AppState.isOverlayVisible` (observed by the live app) never creates
+    /// real full-screen overlay windows — which would grab the display.
+    static var suppressForTesting = false
+
     // MARK: - Properties
 
     /// Full-screen overlay windows (enforced mode, or gentle fullscreen phase)
@@ -43,6 +48,7 @@ final class BreakOverlayWindowController {
 
     /// Show break overlay — dispatches to enforced or gentle based on current settings
     func showOverlay(initialPhase: BreakPhase = .floating) {
+        guard !Self.suppressForTesting else { return }
         let style = Settings.shared.breakStyle
         print("[OverlayController] Showing overlay (style: \(style.rawValue), phase: \(initialPhase)) on \(NSScreen.screens.count) screen(s)")
 
