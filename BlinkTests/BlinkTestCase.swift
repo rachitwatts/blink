@@ -1,4 +1,5 @@
 import XCTest
+import SwiftData
 @testable import Blink
 
 /// Base class for Blink unit tests that touch shared state.
@@ -34,6 +35,10 @@ class BlinkTestCase: XCTestCase {
     private(set) var testDefaults: UserDefaults!
     private var suiteName: String!
 
+    /// In-memory SwiftData container backing AnalyticsService for this test, so
+    /// analytics writes never touch the real on-disk store.
+    private(set) var testModelContainer: ModelContainer!
+
     override func setUp() async throws {
         try await super.setUp()
 
@@ -41,6 +46,13 @@ class BlinkTestCase: XCTestCase {
         suiteName = "com.rachitwatts.blink.tests.\(UUID().uuidString)"
         testDefaults = UserDefaults(suiteName: suiteName)
         Settings.shared.useStoreForTesting(testDefaults)
+
+        // Route analytics to an ephemeral in-memory store.
+        testModelContainer = try ModelContainer(
+            for: Schema([SessionEvent.self]),
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        AnalyticsService.shared.configure(with: testModelContainer)
 
         // Reset shared observable state.
         AppState.shared.reset()

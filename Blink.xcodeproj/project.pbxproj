@@ -29,6 +29,7 @@
 		5387B639C73460184472E695 /* IdleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */; };
 		56D66E151B92392FAD048551 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */; };
 		5801659869BDFC1052DB69A8 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B2BCBC64F6300D1EAD58BC /* SettingsSection.swift */; };
+		58357FB1F675F5D7D262E235 /* AnalyticsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE988CCF1DAA8257F87F367 /* AnalyticsServiceTests.swift */; };
 		5ABFB2E35715D42FFB42D99C /* TimerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D227434466D7C6840A638063 /* TimerStateTests.swift */; };
 		60F31780D9C70E0481305DD4 /* CallDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9C87A5FDE3AFD4D2F5E291 /* CallDetector.swift */; };
 		6236E723BC574777D616DE37 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 274CBBE4DC64F9737B66DCB6 /* Sparkle */; };
@@ -138,6 +139,7 @@
 		3611BA1F7A16AA6199641486 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		36376D140F2254E3619484EB /* TimerPresetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPresetTests.swift; sourceTree = "<group>"; };
 		363D9F63B5468FF4BBB61607 /* EyeHealthAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthAnalyzerTests.swift; sourceTree = "<group>"; };
+		3AE988CCF1DAA8257F87F367 /* AnalyticsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsServiceTests.swift; sourceTree = "<group>"; };
 		4277C159181D74EE1B020457 /* BreakContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakContentProvider.swift; sourceTree = "<group>"; };
 		43D3A1794267E2C1A35324FC /* AllTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTimeView.swift; sourceTree = "<group>"; };
 		47C539723A6C46415EF84690 /* BreakPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakPhase.swift; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 		ED4A683DB64EC1ACF4A0AB0F /* BlinkTests */ = {
 			isa = PBXGroup;
 			children = (
+				3AE988CCF1DAA8257F87F367 /* AnalyticsServiceTests.swift */,
 				0894126555611FB825C1A26F /* BlinkActionsTests.swift */,
 				7434DA05EFAF4851495D99EF /* BlinkTestCase.swift */,
 				26003B8275BF2BC293211CE5 /* CalendarMonitorTests.swift */,
@@ -605,6 +608,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58357FB1F675F5D7D262E235 /* AnalyticsServiceTests.swift in Sources */,
 				E10529D11D097EFEBEFE6989 /* BlinkActionsTests.swift in Sources */,
 				69198456279530A0012C3888 /* BlinkTestCase.swift in Sources */,
 				CB0504032FDD5C98EB0C9610 /* CalendarMonitorTests.swift in Sources */,
