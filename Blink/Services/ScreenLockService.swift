@@ -1,6 +1,17 @@
 import Foundation
 import Darwin
 
+/// Abstraction over locking the screen, so TimerEngine can be tested without
+/// actually locking the machine (a spy records calls instead).
+protocol ScreenLocking {
+    func lockScreen()
+}
+
+/// Production implementation backed by `ScreenLockService`.
+struct SystemScreenLock: ScreenLocking {
+    func lockScreen() { ScreenLockService.lockScreen() }
+}
+
 /// Service for locking the macOS screen
 ///
 /// Uses `SACLockScreenImmediate()` from the login private framework,

@@ -26,6 +26,10 @@ class BlinkTestCase: XCTestCase {
     /// Calendar monitor injected into `TimerEngine` — set `.mockNextEventWithin`.
     private(set) var mockCalendar: MockCalendarMonitor!
 
+    /// Spy screen-locker injected into `TimerEngine` — never locks the real
+    /// machine; assert `.lockCount`.
+    private(set) var mockScreenLock: SpyScreenLock!
+
     /// The per-test ephemeral defaults suite (wiped in tearDown).
     private(set) var testDefaults: UserDefaults!
     private var suiteName: String!
@@ -45,9 +49,11 @@ class BlinkTestCase: XCTestCase {
         mockIdle = MockIdleTimeProvider()
         mockCall = MockCallDetector()
         mockCalendar = MockCalendarMonitor()
+        mockScreenLock = SpyScreenLock()
         TimerEngine.shared.setIdleDetector(mockIdle)
         TimerEngine.shared.setCallDetector(mockCall)
         TimerEngine.shared.setCalendarMonitor(mockCalendar)
+        TimerEngine.shared.setScreenLock(mockScreenLock)
         InCallNudgeWindowController.suppressForTesting = true
 
         // Clear engine internal state (e.g. shouldResetOnNextActivity) without

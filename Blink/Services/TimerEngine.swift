@@ -31,6 +31,10 @@ final class TimerEngine: ObservableObject {
     /// inject a `MutableClock` for deterministic deferral timing.
     private var clock: NowProviding = SystemClock()
 
+    /// Screen locker. Production locks the real screen; tests inject a spy
+    /// (so the test machine is never actually locked).
+    private var screenLock: ScreenLocking = SystemScreenLock()
+
     /// Nudge scheduler for micro nudges during work
     private let nudgeScheduler = NudgeScheduler.shared
 
@@ -49,6 +53,10 @@ final class TimerEngine: ObservableObject {
 
     func setClock(_ clock: NowProviding) {
         self.clock = clock
+    }
+
+    func setScreenLock(_ lock: ScreenLocking) {
+        self.screenLock = lock
     }
     #endif
 
@@ -593,7 +601,7 @@ final class TimerEngine: ObservableObject {
         if settings.lockScreenAfterBreak {
             let isIdle = idleDetector.getIdleTime() >= TimeInterval(settings.idleIgnoreThreshold)
             if isIdle {
-                ScreenLockService.lockScreen()
+                screenLock.lockScreen()
             }
         }
 
