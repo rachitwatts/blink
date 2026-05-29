@@ -105,6 +105,22 @@ final class WeeklySummaryService: NSObject {
         let events = AnalyticsService.shared.eventsForDateRange(from: weekAgo, to: now)
         let metrics = EyeHealthCalculator.calculate(from: events)
 
+        let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: now)!
+        let previousEvents = AnalyticsService.shared.eventsForDateRange(from: twoWeeksAgo, to: weekAgo)
+        let insights = EyeHealthAnalyzer.analyze(
+            events: events,
+            settings: Settings.shared,
+            scope: .week,
+            previousPeriodEvents: previousEvents
+        )
+
+        return Self.summaryBody(metrics: metrics, insights: insights)
+    }
+
+    /// Pure message-selection from the week's metrics + insights.
+    /// Extracted so the threshold/branch logic is unit-testable without
+    /// notifications or the analytics store.
+    static func summaryBody(metrics: EyeHealthMetrics, insights: [EyeHealthInsight]) -> String {
         guard metrics.breaksCompleted + metrics.breaksSkipped > 0 else {
             return "No break data this week. Open Blink and let it run during your work sessions!"
         }
@@ -114,16 +130,6 @@ final class WeeklySummaryService: NSObject {
         if compliancePct >= 95 {
             return celebrationMessage(metrics: metrics)
         }
-
-        let twoWeeksAgo = calendar.date(byAdding: .day, value: -14, to: now)!
-        let previousEvents = AnalyticsService.shared.eventsForDateRange(from: twoWeeksAgo, to: weekAgo)
-
-        let insights = EyeHealthAnalyzer.analyze(
-            events: events,
-            settings: Settings.shared,
-            scope: .week,
-            previousPeriodEvents: previousEvents
-        )
 
         if let topInsight = insights.first(where: { $0.category == .pattern }) {
             let suggestion = insights.first(where: { $0.id == topInsight.id + "_suggestion" })
@@ -136,7 +142,7 @@ final class WeeklySummaryService: NSObject {
         return summaryFallback(metrics: metrics, compliancePct: compliancePct)
     }
 
-    private func celebrationMessage(metrics: EyeHealthMetrics) -> String {
+    static func celebrationMessage(metrics: EyeHealthMetrics) -> String {
         let pct = Int(metrics.breakCompliance * 100)
         let grade = metrics.grade
 
@@ -146,7 +152,7 @@ final class WeeklySummaryService: NSObject {
         return "Great week! You completed \(pct)% of breaks — grade: \(grade). Your eyes thank you."
     }
 
-    private func summaryFallback(metrics: EyeHealthMetrics, compliancePct: Int) -> String {
+    static func summaryFallback(metrics: EyeHealthMetrics, compliancePct: Int) -> String {
         let grade = metrics.grade
         if compliancePct >= 80 {
             return "Solid week — \(compliancePct)% break compliance (grade: \(grade)). Can you hit 90% next week?"

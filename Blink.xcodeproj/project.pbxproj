@@ -47,6 +47,7 @@
 		7543964B77E10E7367528F2A /* CallDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A861AE9E99A2FEDBEA068B8 /* CallDetectorTests.swift */; };
 		78315311A227A3C7BDA2529A /* NudgeScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5D6D1864E33D31DD61AED3 /* NudgeScheduler.swift */; };
 		78F8B6145A38C1A994ABCAFA /* SettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F959148BA99247482E7877 /* SettingsTests.swift */; };
+		7ADE15ACEDADF186E0DDB9C7 /* WeeklySummaryServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653B357033D9CD636A3B7333 /* WeeklySummaryServiceTests.swift */; };
 		800B4C3B5C9CC910FF0E3270 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18329DE3828BB763D21CF688 /* WeekView.swift */; };
 		8082F3E9AA37F6CB7BDC4528 /* IntegrationsSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D317170BFC913CBDE6571CF /* IntegrationsSettingsSection.swift */; };
 		833B51E0B5F21923D69D450D /* NudgeWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A694B40691FF975AD543A159 /* NudgeWindowController.swift */; };
@@ -155,6 +156,7 @@
 		5F32467AA673D205206C9DF1 /* GeneralSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsSection.swift; sourceTree = "<group>"; };
 		5FED7DCF8D2B12CAC7D7B8F3 /* IdleDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleDetector.swift; sourceTree = "<group>"; };
 		63AA08D6624D2803ECCF10DB /* TimerEngineDeliveryModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngineDeliveryModeTests.swift; sourceTree = "<group>"; };
+		653B357033D9CD636A3B7333 /* WeeklySummaryServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklySummaryServiceTests.swift; sourceTree = "<group>"; };
 		69AB02A7C609A11636250333 /* BreakStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakStyle.swift; sourceTree = "<group>"; };
 		6D9C87A5FDE3AFD4D2F5E291 /* CallDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallDetector.swift; sourceTree = "<group>"; };
 		6E8491C3E02C2563330E0344 /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
@@ -414,6 +416,7 @@
 				86E96408D496193EA27189E7 /* TimerEngineTests.swift */,
 				36376D140F2254E3619484EB /* TimerPresetTests.swift */,
 				D227434466D7C6840A638063 /* TimerStateTests.swift */,
+				653B357033D9CD636A3B7333 /* WeeklySummaryServiceTests.swift */,
 				9210200D4E84718D39FB26CF /* WindowLayoutTests.swift */,
 			);
 			path = BlinkTests;
@@ -625,6 +628,7 @@
 				DA5884368B97D20F9914F81E /* TimerEngineTests.swift in Sources */,
 				05F4758B09393D5F3B74E950 /* TimerPresetTests.swift in Sources */,
 				5ABFB2E35715D42FFB42D99C /* TimerStateTests.swift in Sources */,
+				7ADE15ACEDADF186E0DDB9C7 /* WeeklySummaryServiceTests.swift in Sources */,
 				F6C61FEE0AA1389FFBEB6BFF /* WindowLayoutTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
