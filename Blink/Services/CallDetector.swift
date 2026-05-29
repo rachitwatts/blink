@@ -135,5 +135,11 @@ final class CallDetector: ObservableObject, CallDetectorProtocol {
     func setCallContext(_ context: CallContext) {
         callContext = context
     }
+
+    /// Run one poll cycle synchronously (tests exercise the
+    /// callDetectionEnabled gate, which forces `.none` when disabled).
+    func pollForTesting() {
+        poll()
+    }
     #endif
 }
