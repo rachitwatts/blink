@@ -284,6 +284,9 @@ final class TimerEngine: ObservableObject {
     func snoozeBreak() {
         guard appState.timerState == .breakRunning else {
             print("[TimerEngine] Cannot snooze in state: \(appState.timerState)")
+            // Recover from a stuck overlay: dismiss it even if the engine has
+            // already left the break state (issue #54).
+            appState.isOverlayVisible = false
             return
         }
         print("[TimerEngine] Snoozing break for \(settings.snoozeDurationMinutes) minutes")
@@ -326,6 +329,9 @@ final class TimerEngine: ObservableObject {
     func skipBreak() {
         guard appState.timerState == .breakRunning || appState.timerState == .snoozeRunning else {
             print("[TimerEngine] Cannot skip in state: \(appState.timerState)")
+            // Recover from a stuck overlay: dismiss it even if the engine has
+            // already left the break/snooze state (issue #54).
+            appState.isOverlayVisible = false
             return
         }
         print("[TimerEngine] Skipping break, starting new session")
