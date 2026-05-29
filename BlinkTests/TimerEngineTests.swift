@@ -154,6 +154,38 @@ final class TimerEngineTests: XCTestCase {
         XCTAssertFalse(appState.isOverlayVisible)
     }
 
+    // MARK: - Stuck Overlay Recovery Tests (issue #54)
+
+    func testSnoozeWhileNotInBreakDismissesOverlay() {
+        let appState = AppState.shared
+        let engine = TimerEngine.shared
+
+        // Simulate a stuck overlay: window visible but engine already left the break.
+        appState.timerState = .workRunning
+        appState.isOverlayVisible = true
+
+        engine.snoozeBreak()
+
+        // Overlay is force-dismissed; timer state is left untouched.
+        XCTAssertFalse(appState.isOverlayVisible)
+        XCTAssertEqual(appState.timerState, .workRunning)
+    }
+
+    func testSkipWhileNotInBreakDismissesOverlay() {
+        let appState = AppState.shared
+        let engine = TimerEngine.shared
+
+        // Simulate a stuck overlay: window visible but engine already left the break.
+        appState.timerState = .workRunning
+        appState.isOverlayVisible = true
+
+        engine.skipBreak()
+
+        // Overlay is force-dismissed; timer state is left untouched.
+        XCTAssertFalse(appState.isOverlayVisible)
+        XCTAssertEqual(appState.timerState, .workRunning)
+    }
+
     // MARK: - Display Tests
 
     func testDisplayTimeElapsed() {

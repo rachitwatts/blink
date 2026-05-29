@@ -291,7 +291,24 @@ final class BreakOverlayWindowController {
         let hasAnyWindows = !windows.isEmpty || !dimWindows.isEmpty || floatingWindow != nil
         guard hasAnyWindows else { return }
         print("[OverlayController] Display configuration changed, updating windows")
-        showOverlay()
+
+        // The notification fires on the main queue (the main-actor executor),
+        // so it's safe to read the @MainActor-isolated AppState synchronously.
+        let (isVisible, phase) = MainActor.assumeIsolated {
+            (AppState.shared.isOverlayVisible, AppState.shared.breakPhase)
+        }
+
+        // If the break already ended, tear down any leftover windows rather than
+        // recreating a stale overlay (prevents the stuck 0:00 popup, issue #54).
+        guard isVisible else {
+            hideOverlay(animated: false)
+            return
+        }
+
+        // Re-show using the CURRENT phase so an active fullscreen break stays
+        // fullscreen on the remaining display instead of collapsing back to the
+        // floating popup (issue #54).
+        showOverlay(initialPhase: phase)
     }
 }
 
