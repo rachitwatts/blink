@@ -58,6 +58,7 @@
 		9B804C88BCA387D24866C17E /* GeneralSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F32467AA673D205206C9DF1 /* GeneralSettingsSection.swift */; };
 		A28573DB47843BB7BE40F320 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */; };
 		A2D25850B165CAA891EE1B03 /* InsightTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1EC3310B24818DC6EF078 /* InsightTipView.swift */; };
+		A9FBB884A5B0A47B01891F6B /* EyeHealthCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE030A24A519F2AE2256502 /* EyeHealthCalculatorTests.swift */; };
 		AA2FEABDDA39038956D494DA /* NudgesSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38A3D77F875EFF9BF583E79 /* NudgesSettingsSection.swift */; };
 		AB1E377A14DD944D2DFDE3F0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF6E4483329D18D25EE4C8D /* AppState.swift */; };
 		ADD6E0073DA1C9ABA1674175 /* AllTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D3A1794267E2C1A35324FC /* AllTimeView.swift */; };
@@ -142,6 +143,7 @@
 		4871F290652D844D8C3640C2 /* FunExerciseAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunExerciseAnimations.swift; sourceTree = "<group>"; };
 		4B31CDA126203664640FFF96 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		4C4B4F37A954AEE835FF6904 /* EyeHealthDeepDiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthDeepDiveView.swift; sourceTree = "<group>"; };
+		4FE030A24A519F2AE2256502 /* EyeHealthCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthCalculatorTests.swift; sourceTree = "<group>"; };
 		57A65FA8B4B84B8E0779B5E5 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
 		5805D0FFE3D68E06036E9624 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		5B91A176C55E06B7A38BDD5D /* EyeHealthInsight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeHealthInsight.swift; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 				7434DA05EFAF4851495D99EF /* BlinkTestCase.swift */,
 				26003B8275BF2BC293211CE5 /* CalendarMonitorTests.swift */,
 				7A861AE9E99A2FEDBEA068B8 /* CallDetectorTests.swift */,
+				4FE030A24A519F2AE2256502 /* EyeHealthCalculatorTests.swift */,
 				92DA841F07B9EC2729E4F8E7 /* GentleBreakPhaseTests.swift */,
 				E3C312EFDD2F0F61C9ED72CD /* NotificationOnlyBreakTests.swift */,
 				0F8DF27DF00F0429B4096228 /* NudgeSchedulerTests.swift */,
@@ -603,6 +606,7 @@
 				69198456279530A0012C3888 /* BlinkTestCase.swift in Sources */,
 				CB0504032FDD5C98EB0C9610 /* CalendarMonitorTests.swift in Sources */,
 				7543964B77E10E7367528F2A /* CallDetectorTests.swift in Sources */,
+				A9FBB884A5B0A47B01891F6B /* EyeHealthCalculatorTests.swift in Sources */,
 				BAC2733E608BC10CBD9BC018 /* GentleBreakPhaseTests.swift in Sources */,
 				62CBA8822E8695574D0A6241 /* NotificationOnlyBreakTests.swift in Sources */,
 				AE03BB7AFF911AA9F379C15E /* NudgeSchedulerTests.swift in Sources */,
