@@ -12,122 +12,8 @@ struct TodayView: View {
 
     // MARK: - Computed Stats
 
-    private var focusTimeSeconds: Int {
-        events.filter { $0.type == .sessionCompleted || $0.type == .sessionReset }
-            .compactMap { $0.durationSeconds }
-            .reduce(0, +)
-    }
-
-    private var sessionsCompleted: Int {
-        events.filter { $0.type == .sessionCompleted }.count
-    }
-
-    private var breaksCompleted: Int {
-        events.filter { $0.type == .breakCompleted }.count
-    }
-
-    private var breaksSkipped: Int {
-        events.filter { $0.type == .breakSkipped }.count
-    }
-
-    private var breakCompliancePercent: Int {
-        let total = breaksCompleted + breaksSkipped
-        guard total > 0 else { return 100 }
-        return Int((Double(breaksCompleted) / Double(total)) * 100)
-    }
-
-    private var focusTimeFormatted: String {
-        let hours = focusTimeSeconds / 3600
-        let minutes = (focusTimeSeconds % 3600) / 60
-        if hours > 0 {
-            return "\(hours)h \(minutes)m"
-        }
-        return "\(minutes)m"
-    }
-
-    // MARK: - Session Log
-
-    private var sessionLogEntries: [SessionLogEntry] {
-        var entries: [SessionLogEntry] = []
-        for event in events {
-            guard let type = event.type else { continue }
-            switch type {
-            case .sessionCompleted:
-                let duration = (event.durationSeconds ?? 0) / 60
-                entries.append(SessionLogEntry(
-                    timestamp: event.timestamp,
-                    icon: "✅",
-                    description: "\(duration)m focus → break triggered"
-                ))
-            case .sessionReset:
-                let duration = (event.durationSeconds ?? 0) / 60
-                let reason: String
-                switch event.reason {
-                case "idle_timeout": reason = "idle reset"
-                case "app_quit": reason = "app quit"
-                default: reason = "manual restart"
-                }
-                entries.append(SessionLogEntry(
-                    timestamp: event.timestamp,
-                    icon: "↩️",
-                    description: "\(duration)m focus → \(reason)"
-                ))
-            case .breakCompleted:
-                entries.append(SessionLogEntry(
-                    timestamp: event.timestamp,
-                    icon: "👁",
-                    description: "Break completed"
-                ))
-            case .breakSkipped:
-                entries.append(SessionLogEntry(
-                    timestamp: event.timestamp,
-                    icon: "⚠️",
-                    description: "Break skipped"
-                ))
-            case .breakSnoozed:
-                entries.append(SessionLogEntry(
-                    timestamp: event.timestamp,
-                    icon: "💤",
-                    description: "Break snoozed"
-                ))
-            default:
-                break
-            }
-        }
-        return entries
-    }
-
-    // MARK: - Timeline
-
-    private var timelineSegments: [TimelineSegment] {
-        var segments: [TimelineSegment] = []
-        for event in events {
-            guard let type = event.type else { continue }
-            switch type {
-            case .sessionCompleted, .sessionReset:
-                if let duration = event.durationSeconds {
-                    let start = event.timestamp.addingTimeInterval(-Double(duration))
-                    segments.append(TimelineSegment(
-                        startTime: start,
-                        endTime: event.timestamp,
-                        type: .focus
-                    ))
-                }
-            case .breakCompleted:
-                if let duration = event.durationSeconds {
-                    let start = event.timestamp.addingTimeInterval(-Double(duration))
-                    segments.append(TimelineSegment(
-                        startTime: start,
-                        endTime: event.timestamp,
-                        type: .breakTime
-                    ))
-                }
-            default:
-                break
-            }
-        }
-        return segments.sorted { $0.startTime < $1.startTime }
-    }
+    /// Pure presentation logic lives in `TodayStats` (unit-tested).
+    private var stats: TodayStats { TodayStats(events: events) }
 
     // MARK: - Body
 
@@ -157,9 +43,9 @@ struct TodayView: View {
 
                     // Stat cards
                     HStack(spacing: 12) {
-                        StatCardView(value: focusTimeFormatted, label: "Focus", sublabel: "Time")
-                        StatCardView(value: "\(sessionsCompleted)", label: "Sessions", sublabel: "Completed")
-                        StatCardView(value: "\(breakCompliancePercent)%", label: "Break", sublabel: "Compliance")
+                        StatCardView(value: stats.focusTimeFormatted, label: "Focus", sublabel: "Time")
+                        StatCardView(value: "\(stats.sessionsCompleted)", label: "Sessions", sublabel: "Completed")
+                        StatCardView(value: "\(stats.breakCompliancePercent)%", label: "Break", sublabel: "Compliance")
                         Button(action: { showEyeHealthDeepDive = true }) {
                             StatCardView(value: eyeHealthMetrics?.grade ?? "\u{2014}", label: "Eye", sublabel: "Health")
                                 .overlay(alignment: .topTrailing) {
@@ -173,12 +59,13 @@ struct TodayView: View {
                     }
 
                     // Timeline
-                    if !timelineSegments.isEmpty {
+                    let timeline = TodayStats.timelineSegments(from: events)
+                    if !timeline.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Timeline")
                                 .font(.headline)
                             TimelineView(
-                                segments: timelineSegments,
+                                segments: timeline,
                                 dayStart: Calendar.current.startOfDay(for: Date()),
                                 dayEnd: Date()
                             )
@@ -186,7 +73,7 @@ struct TodayView: View {
                     }
 
                     // Session log
-                    SessionLogView(entries: sessionLogEntries)
+                    SessionLogView(entries: TodayStats.sessionLogEntries(from: events))
 
                     // Contextual tip when eye health is poor
                     if let tip = eyeHealthMetrics?.tip {
