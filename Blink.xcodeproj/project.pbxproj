@@ -74,7 +74,9 @@
 		8D95842169BA8A842D46CFE6 /* TimerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076C7D916B815399763305AF /* TimerState.swift */; };
 		8DA01D3A11E58DE9806D9841 /* BlinkIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B300FF7997F3F7E7A3D5A032 /* BlinkIntents.swift */; };
 		93497277D4468BECCC80FE96 /* UpdaterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029B440AE9D4E364D69FD7CE /* UpdaterService.swift */; };
+		9A4CEB30B8AFE466A50FC888 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE39FCDD281244191515EEA /* Clock.swift */; };
 		9AB7927FB2F935D00B39B66A /* SyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFE8B26C6DF5391F9F4AE14 /* SyncPayload.swift */; };
+		9AE8A9072F03539ABE6FD082 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE39FCDD281244191515EEA /* Clock.swift */; };
 		9B804C88BCA387D24866C17E /* GeneralSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F32467AA673D205206C9DF1 /* GeneralSettingsSection.swift */; };
 		A28573DB47843BB7BE40F320 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0CD4E99ADAED274D4DAF2A /* AnalyticsService.swift */; };
 		A2D25850B165CAA891EE1B03 /* InsightTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B1EC3310B24818DC6EF078 /* InsightTipView.swift */; };
@@ -164,6 +166,7 @@
 		26003B8275BF2BC293211CE5 /* CalendarMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonitorTests.swift; sourceTree = "<group>"; };
 		26A391242EBB4D85082A17B4 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		289903B92CFE24D5E706A4B8 /* TimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerEngine.swift; sourceTree = "<group>"; };
+		2CE39FCDD281244191515EEA /* Clock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
 		303F5DFAB86E2C732AB3F09A /* Blink.sdef */ = {isa = PBXFileReference; path = Blink.sdef; sourceTree = "<group>"; };
 		30B61B095596200A6E6E2C1C /* ShortcutsSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsSettingsSection.swift; sourceTree = "<group>"; };
 		314045D0AFE1F20E7D551CA7 /* BreakOverlayWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakOverlayWindowController.swift; sourceTree = "<group>"; };
@@ -289,6 +292,7 @@
 		20782E60E931E1AAD4A6941C /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				2CE39FCDD281244191515EEA /* Clock.swift */,
 				BF76295D6FFC56F94BB6FA48 /* DisplayMode.swift */,
 				A4C379C782060321688D11C2 /* ICloudSyncManager.swift */,
 				D974565B929B9DFF5932A42C /* SyncAction.swift */,
@@ -707,6 +711,7 @@
 				F1810AF21BFBA9A9CA4B1353 /* BreakStyle.swift in Sources */,
 				DBDE8612F569758F6DE3F7F0 /* CalendarMonitor.swift in Sources */,
 				60F31780D9C70E0481305DD4 /* CallDetector.swift in Sources */,
+				9AE8A9072F03539ABE6FD082 /* Clock.swift in Sources */,
 				061DA0427EA238BE85F0484D /* DashboardView.swift in Sources */,
 				BDA4B6C19911FAC32890D21D /* DashboardWindowController.swift in Sources */,
 				EA597E948FD513E5202D24C1 /* DisplayMode.swift in Sources */,
@@ -774,6 +779,7 @@
 				0DADB7E2280060FFB88F5B18 /* BlinkWatchApp.swift in Sources */,
 				F89473CFF3C186DC281F2D79 /* BreakActiveView.swift in Sources */,
 				EBEC5FEE6D13F49CCBE2E0FB /* BreakEndedView.swift in Sources */,
+				9A4CEB30B8AFE466A50FC888 /* Clock.swift in Sources */,
 				2967AC701EA104579C0B4055 /* DisplayMode.swift in Sources */,
 				B1C1705753F1EE6A95A53520 /* HapticManager.swift in Sources */,
 				CDABB5F7580F1E5EB16058F2 /* ICloudSyncManager.swift in Sources */,

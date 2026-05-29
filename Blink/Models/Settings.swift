@@ -190,6 +190,11 @@ final class Settings: ObservableObject {
         _breakContentModeRaw = AppStorage(wrappedValue: BreakContentMode.guided.rawValue, "breakContentMode", store: defaults)
     }
 
+    /// Source of the current time for sync timestamps. Production uses the
+    /// wall clock; tests inject a `MutableClock` for deterministic loop-guard
+    /// and conflict-resolution behavior.
+    private var clock: NowProviding = SystemClock()
+
     #if DEBUG
     /// Point all persisted settings at an isolated store for testing.
     /// `BlinkTestCase` calls this in `setUp` with a fresh ephemeral suite,
@@ -197,6 +202,10 @@ final class Settings: ObservableObject {
     func useStoreForTesting(_ defaults: UserDefaults) {
         bindAppStorage(to: defaults)
         resetSyncState()
+    }
+
+    func setClock(_ clock: NowProviding) {
+        self.clock = clock
     }
     #endif
 
@@ -228,7 +237,7 @@ final class Settings: ObservableObject {
         guard current != lastPublishedSnapshot else { return }
         lastPublishedSnapshot = current
 
-        let now = Date().timeIntervalSince1970
+        let now = clock.now.timeIntervalSince1970
         let syncSettings = SyncSettings(
             workDurationMinutes: workDurationMinutes,
             breakDurationMinutes: breakDurationMinutes,
@@ -249,7 +258,7 @@ final class Settings: ObservableObject {
         guard remote.changedAt > lastAppliedRemoteAt,
               remote.changedAt > lastPublishedAt else { return false }
 
-        lastRemoteApplyAt = Date().timeIntervalSince1970
+        lastRemoteApplyAt = clock.now.timeIntervalSince1970
         lastAppliedRemoteAt = remote.changedAt
         workDurationMinutes = remote.workDurationMinutes
         breakDurationMinutes = remote.breakDurationMinutes

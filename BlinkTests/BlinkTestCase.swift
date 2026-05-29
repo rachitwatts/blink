@@ -20,6 +20,12 @@ class BlinkTestCase: XCTestCase {
     /// Idle provider injected into `TimerEngine` — mutate `.idleTime` per test.
     private(set) var mockIdle: MockIdleTimeProvider!
 
+    /// Call detector injected into `TimerEngine` — mutate `.callContext` per test.
+    private(set) var mockCall: MockCallDetector!
+
+    /// Calendar monitor injected into `TimerEngine` — set `.mockNextEventWithin`.
+    private(set) var mockCalendar: MockCalendarMonitor!
+
     /// The per-test ephemeral defaults suite (wiped in tearDown).
     private(set) var testDefaults: UserDefaults!
     private var suiteName: String!
@@ -37,9 +43,11 @@ class BlinkTestCase: XCTestCase {
 
         // Inject deterministic dependencies into the timer engine.
         mockIdle = MockIdleTimeProvider()
+        mockCall = MockCallDetector()
+        mockCalendar = MockCalendarMonitor()
         TimerEngine.shared.setIdleDetector(mockIdle)
-        TimerEngine.shared.setCallDetector(MockCallDetector())
-        TimerEngine.shared.setCalendarMonitor(MockCalendarMonitor())
+        TimerEngine.shared.setCallDetector(mockCall)
+        TimerEngine.shared.setCalendarMonitor(mockCalendar)
         TimerEngine.shared.setSyncManager(nil)
         InCallNudgeWindowController.suppressForTesting = true
 

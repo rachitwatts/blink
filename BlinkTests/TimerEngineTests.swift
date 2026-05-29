@@ -1,38 +1,9 @@
 import XCTest
 @testable import Blink
 
-/// Tests for TimerEngine core logic
-@MainActor
-final class TimerEngineTests: XCTestCase {
-
-    // MARK: - Properties
-
-    var mockIdle: MockIdleTimeProvider!
-
-    // MARK: - Setup
-
-    override func setUp() async throws {
-        // Reset state before each test
-        AppState.shared.reset()
-        Settings.shared.resetToDefaults()
-
-        // Inject mock dependencies
-        mockIdle = MockIdleTimeProvider()
-        TimerEngine.shared.setIdleDetector(mockIdle)
-        TimerEngine.shared.setCallDetector(MockCallDetector())
-        TimerEngine.shared.setCalendarMonitor(MockCalendarMonitor())
-        TimerEngine.shared.setSyncManager(nil)
-        InCallNudgeWindowController.suppressForTesting = true
-
-        // Reset engine internal state (shouldResetOnNextActivity)
-        TimerEngine.shared.restartSession()
-    }
-
-    override func tearDown() async throws {
-        // Clean up after each test
-        TimerEngine.shared.stop()
-        AppState.shared.reset()
-    }
+/// Tests for TimerEngine core logic.
+/// Isolation (mocks, reset, ephemeral defaults) is provided by `BlinkTestCase`.
+final class TimerEngineTests: BlinkTestCase {
 
     // MARK: - Initial State Tests
 

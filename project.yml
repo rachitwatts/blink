@@ -91,10 +91,11 @@ schemes:
       coverageTargets:
         - Blink
       targets:
-        # randomExecutionOrder stays false until the isolation foundation
-        # (P1) lands, then flips to true to surface order-dependence (P1.6).
+        # Randomized order now that the isolation foundation (BlinkTestCase +
+        # per-test UserDefaults suite) is in place — surfaces any remaining
+        # order-dependence (P1.6).
         - name: BlinkTests
-          randomExecutionOrder: false
+          randomExecutionOrder: true
   BlinkWatch:
     build:
       targets:
@@ -105,4 +106,4 @@ schemes:
         - BlinkWatch
       targets:
         - name: BlinkWatchTests
-          randomExecutionOrder: false
+          randomExecutionOrder: true

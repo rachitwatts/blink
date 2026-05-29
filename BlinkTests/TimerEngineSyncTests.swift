@@ -57,34 +57,25 @@ final class MockSyncManager: SyncManagerProtocol {
 /// Tests for TimerEngine's sync integration on macOS.
 /// Verifies that state transitions publish correct payloads and
 /// incoming watch actions trigger the right engine methods.
-@MainActor
-final class TimerEngineSyncTests: XCTestCase {
+/// Inherits isolation from `BlinkTestCase`, then swaps in a recording
+/// `MockSyncManager` (the base injects nil sync).
+final class TimerEngineSyncTests: BlinkTestCase {
 
     var mockSync: MockSyncManager!
-    var mockIdle: MockIdleTimeProvider!
 
     override func setUp() async throws {
-        AppState.shared.reset()
-        Settings.shared.resetToDefaults()
-
-        mockIdle = MockIdleTimeProvider()
-        TimerEngine.shared.setIdleDetector(mockIdle)
-        TimerEngine.shared.setCallDetector(MockCallDetector())
-        TimerEngine.shared.setCalendarMonitor(MockCalendarMonitor())
-        InCallNudgeWindowController.suppressForTesting = true
-
+        try await super.setUp()
         mockSync = MockSyncManager()
         TimerEngine.shared.setSyncManager(mockSync)
-
         TimerEngine.shared.restartSession()
+        TimerEngine.shared.stop()
         // Clear the payload from restartSession so tests start fresh
         mockSync.reset()
     }
 
     override func tearDown() async throws {
-        TimerEngine.shared.stop()
         TimerEngine.shared.setSyncManager(nil)
-        AppState.shared.reset()
+        try await super.tearDown()
     }
 
     // MARK: - State Transition Payload Tests

@@ -1,11 +1,7 @@
 import XCTest
 @testable import Blink
 
-final class TimerPresetTests: XCTestCase {
-
-    override func setUp() {
-        Settings.shared.resetToDefaults()
-    }
+final class TimerPresetTests: BlinkTestCase {
 
     // MARK: - Preset Values
 

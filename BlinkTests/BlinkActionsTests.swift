@@ -1,34 +1,9 @@
 import XCTest
 @testable import Blink
 
-/// Tests for BlinkActions dispatcher
-@MainActor
-final class BlinkActionsTests: XCTestCase {
-
-    // MARK: - Properties
-
-    var mockIdle: MockIdleTimeProvider!
-
-    // MARK: - Setup
-
-    override func setUp() async throws {
-        // Reset state before each test
-        AppState.shared.reset()
-        Settings.shared.resetToDefaults()
-
-        // Inject mock idle time provider
-        mockIdle = MockIdleTimeProvider()
-        TimerEngine.shared.setIdleDetector(mockIdle)
-
-        // Reset engine internal state (shouldResetOnNextActivity)
-        TimerEngine.shared.restartSession()
-    }
-
-    override func tearDown() async throws {
-        // Clean up after each test
-        TimerEngine.shared.stop()
-        AppState.shared.reset()
-    }
+/// Tests for BlinkActions dispatcher.
+/// Isolation (mocks, reset, ephemeral defaults) provided by `BlinkTestCase`.
+final class BlinkActionsTests: BlinkTestCase {
 
     // MARK: - Take Break Tests
 

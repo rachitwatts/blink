@@ -1,16 +1,16 @@
 import XCTest
 @testable import Blink
 
-@MainActor
-final class CallDetectorTests: XCTestCase {
+final class CallDetectorTests: BlinkTestCase {
 
     override func setUp() async throws {
-        Settings.shared.resetToDefaults()
+        try await super.setUp()
         CallDetector.shared.setCallContext(.none)
     }
 
     override func tearDown() async throws {
         CallDetector.shared.setCallContext(.none)
+        try await super.tearDown()
     }
 
     func testInitialStateIsNone() {

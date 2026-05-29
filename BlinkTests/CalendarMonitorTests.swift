@@ -1,12 +1,7 @@
 import XCTest
 @testable import Blink
 
-@MainActor
-final class CalendarMonitorTests: XCTestCase {
-
-    override func setUp() async throws {
-        Settings.shared.resetToDefaults()
-    }
+final class CalendarMonitorTests: BlinkTestCase {
 
     func testDisabledReturnsNoUpcomingEvents() {
         let monitor = CalendarMonitor.shared

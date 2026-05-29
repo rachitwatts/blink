@@ -27,6 +27,10 @@ final class TimerEngine: ObservableObject {
     private var callDetector: CallDetectorProtocol = CallDetector.shared
     private var calendarMonitor: CalendarMonitorProtocol = CalendarMonitor.shared
 
+    /// Source of the current time. Production uses the wall clock; tests can
+    /// inject a `MutableClock` for deterministic sync/deferral timing.
+    private var clock: NowProviding = SystemClock()
+
     /// Sync manager for publishing state to watch via iCloud KVS.
     /// Nil when sync is disabled (e.g., during tests).
     private var syncManager: (any SyncManagerProtocol)?
@@ -51,6 +55,10 @@ final class TimerEngine: ObservableObject {
 
     func setCalendarMonitor(_ monitor: CalendarMonitorProtocol) {
         self.calendarMonitor = monitor
+    }
+
+    func setClock(_ clock: NowProviding) {
+        self.clock = clock
     }
     #endif
 
@@ -152,7 +160,7 @@ final class TimerEngine: ObservableObject {
                 // Don't re-publish settings that came from a remote device.
                 // Check timestamp rather than a flag because the debounce fires
                 // after applyRemoteSettings returns (flag would already be cleared).
-                let timeSinceRemoteApply = Date().timeIntervalSince1970 - self.settings.lastRemoteApplyAt
+                let timeSinceRemoteApply = self.clock.now.timeIntervalSince1970 - self.settings.lastRemoteApplyAt
                 guard timeSinceRemoteApply > 1.0 else { return }
                 self.settings.publishToSync(syncManager)
             }
@@ -168,7 +176,7 @@ final class TimerEngine: ObservableObject {
     private func buildSyncPayload() -> SyncPayload {
         SyncPayload(
             timerState: appState.timerState,
-            stateChangedAt: Date().timeIntervalSince1970,
+            stateChangedAt: clock.now.timeIntervalSince1970,
             workElapsedAtChange: appState.workElapsedSeconds,
             breakRemainingAtChange: appState.breakRemainingSeconds,
             snoozeRemainingAtChange: appState.snoozeRemainingSeconds,
@@ -490,7 +498,7 @@ final class TimerEngine: ObservableObject {
         // delivered promptly when screen sharing stops, even before the full work timer expires.
         if appState.breakDeferred {
             if !callDetector.isScreenSharing {
-                let deferredSeconds = Int(Date().timeIntervalSince(deferralStartTime ?? Date()))
+                let deferredSeconds = Int(clock.now.timeIntervalSince(deferralStartTime ?? clock.now))
                 AnalyticsService.shared.recordBreakDeferralEnded(
                     totalDeferredSeconds: deferredSeconds, breakId: currentBreakId
                 )
@@ -527,7 +535,7 @@ final class TimerEngine: ObservableObject {
                 print("[TimerEngine] Screen sharing detected, deferring break")
                 appState.breakDeferred = true
                 appState.breakDeferralReason = "Screen sharing"
-                deferralStartTime = Date()
+                deferralStartTime = clock.now
             }
             if !hasDeferralBeenRecorded {
                 currentBreakId = UUID().uuidString

@@ -1,19 +1,16 @@
 import XCTest
 @testable import Blink
 
-@MainActor
-final class NudgeSchedulerTests: XCTestCase {
+final class NudgeSchedulerTests: BlinkTestCase {
 
     var scheduler: NudgeScheduler!
     var appState: AppState!
     var settings: Settings!
 
     override func setUp() async throws {
+        try await super.setUp()
         appState = AppState.shared
-        appState.reset()
-
         settings = Settings.shared
-        settings.resetToDefaults()
         settings.nudgesEnabled = true
         settings.nudgeIntervalMinutes = 1  // 60 seconds for faster tests
 
@@ -22,9 +19,8 @@ final class NudgeSchedulerTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        appState.reset()
-        settings.resetToDefaults()
         scheduler.reset()
+        try await super.tearDown()
     }
 
     // MARK: - Basic Timing Tests
