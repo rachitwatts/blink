@@ -369,7 +369,6 @@ final class TimerEngine: ObservableObject {
 
     /// Called every tick - the heart of the timer logic
     func tick() {
-        // Debug: log to file
         logToFile("tick: state=\(appState.timerState), snoozeRemaining=\(appState.snoozeRemainingSeconds)")
 
         // Periodic heartbeat for watch sync — fires in any state to keep
@@ -399,22 +398,26 @@ final class TimerEngine: ObservableObject {
         }
     }
 
-    /// Debug helper: log to file
+    /// Debug helper: append a line to a debug log file.
+    ///
+    /// No-op in release builds. Even in DEBUG it stays off unless the
+    /// `BLINK_DEBUG_LOG` environment variable points at a writable path —
+    /// this keeps the per-tick file write out of production and prevents
+    /// parallel test workers from racing on a shared `/tmp` path.
     private func logToFile(_ message: String) {
-        let logPath = "/tmp/blink_debug.log"
+        #if DEBUG
+        guard let logPath = ProcessInfo.processInfo.environment["BLINK_DEBUG_LOG"] else { return }
         let timestamp = Date().timeIntervalSince1970
         let line = "\(timestamp): \(message)\n"
-        if let data = line.data(using: .utf8) {
-            if FileManager.default.fileExists(atPath: logPath) {
-                if let handle = FileHandle(forWritingAtPath: logPath) {
-                    handle.seekToEndOfFile()
-                    handle.write(data)
-                    handle.closeFile()
-                }
-            } else {
-                FileManager.default.createFile(atPath: logPath, contents: data, attributes: nil)
-            }
+        guard let data = line.data(using: .utf8) else { return }
+        if let handle = FileHandle(forWritingAtPath: logPath) {
+            handle.seekToEndOfFile()
+            handle.write(data)
+            handle.closeFile()
+        } else {
+            FileManager.default.createFile(atPath: logPath, contents: data, attributes: nil)
         }
+        #endif
     }
 
     // MARK: - Private: State-Specific Tick Handlers

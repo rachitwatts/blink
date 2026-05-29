@@ -148,8 +148,57 @@ final class Settings: ObservableObject {
     // MARK: - Initialization
 
     private init() {
-        // Private to enforce singleton pattern
+        // Private to enforce singleton pattern.
+        // Wrappers default to UserDefaults.standard via their declarations.
     }
+
+    // MARK: - Backing Store (test isolation)
+
+    /// Re-point every persisted (@AppStorage) property at the given store.
+    ///
+    /// Production always uses `.standard` (the wrapper declarations bind it).
+    /// Tests inject an ephemeral `UserDefaults(suiteName:)` so they never
+    /// touch the real app domain and can run independently. Single source of
+    /// truth for the persisted-key list — adding a key here is the only place
+    /// it needs to be wired.
+    private func bindAppStorage(to defaults: UserDefaults) {
+        _timerPresetRaw = AppStorage(wrappedValue: TimerPreset.pomodoro.rawValue, "timerPreset", store: defaults)
+        _workDurationMinutes = AppStorage(wrappedValue: 25, "workDurationMinutes", store: defaults)
+        _breakDurationMinutes = AppStorage(wrappedValue: 5, "breakDurationMinutes", store: defaults)
+        _snoozeDurationMinutes = AppStorage(wrappedValue: 5, "snoozeDurationMinutes", store: defaults)
+        _idleIgnoreThreshold = AppStorage(wrappedValue: 60, "idleIgnoreThreshold", store: defaults)
+        _idleResetThreshold = AppStorage(wrappedValue: 300, "idleResetThreshold", store: defaults)
+        _displayModeRaw = AppStorage(wrappedValue: DisplayMode.elapsed.rawValue, "displayMode", store: defaults)
+        _soundEnabled = AppStorage(wrappedValue: false, "soundEnabled", store: defaults)
+        _lockScreenAfterBreak = AppStorage(wrappedValue: true, "lockScreenAfterBreak", store: defaults)
+        _launchAtLogin = AppStorage(wrappedValue: true, "launchAtLogin", store: defaults)
+        _hasCompletedOnboarding = AppStorage(wrappedValue: false, "hasCompletedOnboarding", store: defaults)
+        _nudgesEnabled = AppStorage(wrappedValue: true, "nudgesEnabled", store: defaults)
+        _nudgeIntervalMinutes = AppStorage(wrappedValue: 8, "nudgeIntervalMinutes", store: defaults)
+        _nudgeBlinkEnabled = AppStorage(wrappedValue: true, "nudgeBlinkEnabled", store: defaults)
+        _nudgePostureEnabled = AppStorage(wrappedValue: true, "nudgePostureEnabled", store: defaults)
+        _nudgeStretchEnabled = AppStorage(wrappedValue: true, "nudgeStretchEnabled", store: defaults)
+        _breakStyleRaw = AppStorage(wrappedValue: BreakStyle.gentle.rawValue, "breakStyle", store: defaults)
+        _callDetectionEnabled = AppStorage(wrappedValue: true, "callDetectionEnabled", store: defaults)
+        _calendarIntegrationEnabled = AppStorage(wrappedValue: false, "calendarIntegrationEnabled", store: defaults)
+        _watchedCalendarIdentifiers = AppStorage(wrappedValue: "", "watchedCalendarIdentifiers", store: defaults)
+        _calendarLeadTimeMinutes = AppStorage(wrappedValue: 3, "calendarLeadTimeMinutes", store: defaults)
+        _weeklySummaryEnabled = AppStorage(wrappedValue: true, "weeklySummaryEnabled", store: defaults)
+        _weeklySummaryDay = AppStorage(wrappedValue: 2, "weeklySummaryDay", store: defaults)
+        _weeklySummaryHour = AppStorage(wrappedValue: 9, "weeklySummaryHour", store: defaults)
+        _weeklySummaryMinute = AppStorage(wrappedValue: 0, "weeklySummaryMinute", store: defaults)
+        _breakContentModeRaw = AppStorage(wrappedValue: BreakContentMode.guided.rawValue, "breakContentMode", store: defaults)
+    }
+
+    #if DEBUG
+    /// Point all persisted settings at an isolated store for testing.
+    /// `BlinkTestCase` calls this in `setUp` with a fresh ephemeral suite,
+    /// so each test sees default values and never mutates real user prefs.
+    func useStoreForTesting(_ defaults: UserDefaults) {
+        bindAppStorage(to: defaults)
+        resetSyncState()
+    }
+    #endif
 
     // MARK: - Sync
 
@@ -241,6 +290,11 @@ final class Settings: ObservableObject {
         calendarIntegrationEnabled = false
         watchedCalendarIdentifiers = ""
         calendarLeadTimeMinutes = 3
+        resetSyncState()
+    }
+
+    /// Reset the in-memory sync bookkeeping (not persisted via @AppStorage).
+    private func resetSyncState() {
         lastPublishedAt = 0
         lastAppliedRemoteAt = 0
         lastRemoteApplyAt = 0

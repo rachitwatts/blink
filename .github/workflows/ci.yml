@@ -63,6 +63,18 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             | xcbeautify
 
+      - name: Report code coverage
+        if: always()
+        run: |
+          if [ -d build/TestResults-Unit.xcresult ]; then
+            echo "### Code coverage" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            xcrun xccov view --report --only-targets build/TestResults-Unit.xcresult >> "$GITHUB_STEP_SUMMARY" 2>&1 || true
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            # Print overall % to the log for the (future P5) ratchet to parse.
+            xcrun xccov view --report --only-targets build/TestResults-Unit.xcresult || true
+          fi
+
       - name: Find watchOS simulator
         id: watch-sim
         run: |

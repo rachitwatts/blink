@@ -52,6 +52,7 @@
 		65256C105373F4843FBE8750 /* SyncManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE4C671A4943BDB5F56525A /* SyncManagerProtocol.swift */; };
 		6763D29A256E6CD8BF40549B /* SyncPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559A948D3157A727B635AD6 /* SyncPayloadTests.swift */; };
 		686CC7D6EDC04BB96DD4E3DE /* WeeklySummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DFF544BDD0D2D0123D9F6D /* WeeklySummaryService.swift */; };
+		69198456279530A0012C3888 /* BlinkTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7434DA05EFAF4851495D99EF /* BlinkTestCase.swift */; };
 		6B12ED3083670AD2A8EC289E /* TimeFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA12D464303FF2278DCC338A /* TimeFormatting.swift */; };
 		6D59219F69C8347D7A2A4508 /* WatchAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB6CF7394F2442F2A83F872 /* WatchAppState.swift */; };
 		70B7491C3E58F0F3D8BE021E /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF789F55EB114BFCAAC4D66E /* Settings.swift */; };
@@ -194,6 +195,7 @@
 		6E8491C3E02C2563330E0344 /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
 		70D8AC94997A966A04621569 /* InCallNudgeWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InCallNudgeWindowController.swift; sourceTree = "<group>"; };
 		71BD4F44B082B1C62F6CCA35 /* HapticManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManagerTests.swift; sourceTree = "<group>"; };
+		7434DA05EFAF4851495D99EF /* BlinkTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkTestCase.swift; sourceTree = "<group>"; };
 		79026248DC53E0D92EA739A9 /* LabeledSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledSlider.swift; sourceTree = "<group>"; };
 		7A861AE9E99A2FEDBEA068B8 /* CallDetectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallDetectorTests.swift; sourceTree = "<group>"; };
 		7B03EA8B0225251705AB7B3D /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
@@ -514,6 +516,7 @@
 			isa = PBXGroup;
 			children = (
 				0894126555611FB825C1A26F /* BlinkActionsTests.swift */,
+				7434DA05EFAF4851495D99EF /* BlinkTestCase.swift */,
 				26003B8275BF2BC293211CE5 /* CalendarMonitorTests.swift */,
 				7A861AE9E99A2FEDBEA068B8 /* CallDetectorTests.swift */,
 				0F8DF27DF00F0429B4096228 /* NudgeSchedulerTests.swift */,
@@ -805,6 +808,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E10529D11D097EFEBEFE6989 /* BlinkActionsTests.swift in Sources */,
+				69198456279530A0012C3888 /* BlinkTestCase.swift in Sources */,
 				CB0504032FDD5C98EB0C9610 /* CalendarMonitorTests.swift in Sources */,
 				7543964B77E10E7367528F2A /* CallDetectorTests.swift in Sources */,
 				AE03BB7AFF911AA9F379C15E /* NudgeSchedulerTests.swift in Sources */,
