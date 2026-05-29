@@ -33,10 +33,13 @@ final class StateMachineInvariantTests: BlinkTestCase {
             XCTAssertEqual(s.timerState, .breakRunning,
                            "overlay visible outside breakRunning \(context)")
         }
-        // Snooze countdown only exists in the snooze state.
-        if s.timerState != .snoozeRunning {
-            // (snoozeRemaining may be 0 in other states; just must never be > 0
-            //  while not snoozing AND overlay shown — covered above. No extra assert.)
+        // Snooze hides the overlay (the snooze contract; #54-class).
+        if s.timerState == .snoozeRunning {
+            XCTAssertFalse(s.isOverlayVisible, "Overlay must be hidden during snooze \(context)")
+        }
+        // Work states never show the overlay.
+        if s.timerState == .workRunning || s.timerState == .workPaused {
+            XCTAssertFalse(s.isOverlayVisible, "Overlay must be hidden during work \(context)")
         }
     }
 

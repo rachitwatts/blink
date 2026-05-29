@@ -112,6 +112,13 @@ final class BreakOverlayWindowController {
     /// This is the #54-class seam: layout is computed from explicit screen
     /// frames (not a live `NSScreen.screens` read), so monitor connect/
     /// disconnect mid-break is reproducible and testable.
+    ///
+    /// `showOverlay` consumes `usesFullscreen` to pick the branch. The gentle
+    /// animated phase-transition path (`showGentleOverlay`) derives its opacity
+    /// and floating frame from the SAME `LayoutConstants` / `floatingFrame`
+    /// helpers this function uses, so the two cannot silently diverge. Routing
+    /// that animated path through this decision wholesale is a tracked
+    /// follow-up (the WindowPresenter/DisplayChangeListener refactor).
     static func calculateWindowLayout(screenFrames: [CGRect],
                                       primaryVisibleFrame: CGRect?,
                                       phase: BreakPhase,

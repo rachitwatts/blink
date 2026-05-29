@@ -60,6 +60,10 @@ final class TodayStatsTests: XCTestCase {
 
         let appQuit = TodayStats.sessionLogEntries(from: [event(.sessionReset, duration: 1500, reason: "app_quit")])
         XCTAssertTrue(appQuit.first?.description.contains("app quit") ?? false)
+
+        // An unrecognised reason falls back to "manual restart".
+        let unknown = TodayStats.sessionLogEntries(from: [event(.sessionReset, duration: 1500, reason: "??")])
+        XCTAssertTrue(unknown.first?.description.contains("manual restart") ?? false)
     }
 
     func testSessionLogIncludesAllOutcomeTypes() {
@@ -80,12 +84,19 @@ final class TodayStatsTests: XCTestCase {
     // MARK: - Timeline
 
     func testTimelineSegmentsBuiltFromDurationsAndSorted() {
+        let sessionTs = Date(timeIntervalSince1970: 1_700_000_000 + 1000)
+        let breakTs = Date(timeIntervalSince1970: 1_700_000_000 + 5000)
         let segments = TodayStats.timelineSegments(from: [
             event(.breakCompleted, duration: 300, at: 5000),
             event(.sessionCompleted, duration: 1800, at: 1000),
         ])
         XCTAssertEqual(segments.count, 2)
-        XCTAssertLessThan(segments[0].startTime, segments[1].startTime, "Segments are sorted by start time")
+        // Sorted by start time → the focus session (earlier) comes first.
+        XCTAssertEqual(segments[0].type, .focus)
+        XCTAssertEqual(segments[0].startTime, sessionTs.addingTimeInterval(-1800), "start = timestamp − duration")
+        XCTAssertEqual(segments[0].endTime, sessionTs)
+        XCTAssertEqual(segments[1].type, .breakTime)
+        XCTAssertEqual(segments[1].startTime, breakTs.addingTimeInterval(-300))
     }
 
     func testTimelineIgnoresEventsWithoutDuration() {

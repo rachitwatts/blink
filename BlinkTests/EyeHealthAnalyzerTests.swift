@@ -79,13 +79,23 @@ final class EyeHealthAnalyzerTests: BlinkTestCase {
         XCTAssertTrue(result.contains("declining_compliance"))
     }
 
-    func testWorstDayAndDecliningSkippedForTodayScope() {
-        let current = [event(.breakCompleted), event(.breakSkipped), event(.breakSkipped), event(.breakSkipped)]
-        let previous = [event(.breakCompleted), event(.breakCompleted), event(.breakCompleted), event(.breakCompleted)]
-        let result = ids(EyeHealthAnalyzer.analyze(
+    func testWorstDayAndDecliningFireForWeekButNotToday() {
+        // Fixture that genuinely satisfies the worst-day inner guards (≥2 active
+        // weekdays, ≥20pt gap) so the scope guard is the deciding factor:
+        // Monday all-completed (100%), Tuesday all-skipped (0%) → 50pt gap.
+        let current = (0..<4).map { _ in event(.breakCompleted, day: 2) }   // Monday
+                    + (0..<4).map { _ in event(.breakSkipped, day: 3) }     // Tuesday
+        let previous = (0..<4).map { _ in event(.breakCompleted, day: 2) }  // prior 100% → decline
+
+        let week = ids(EyeHealthAnalyzer.analyze(
+            events: current, settings: Settings.shared, scope: .week, previousPeriodEvents: previous))
+        XCTAssertTrue(week.contains("worst_day_compliance"), "Worst-day should fire for .week")
+        XCTAssertTrue(week.contains("declining_compliance"), "Declining should fire for .week")
+
+        let today = ids(EyeHealthAnalyzer.analyze(
             events: current, settings: Settings.shared, scope: .today, previousPeriodEvents: previous))
-        XCTAssertFalse(result.contains("declining_compliance"), "Declining is week/month/allTime only")
-        XCTAssertFalse(result.contains("worst_day_compliance"), "Worst-day is not computed for today")
+        XCTAssertFalse(today.contains("worst_day_compliance"), "Worst-day is suppressed for .today")
+        XCTAssertFalse(today.contains("declining_compliance"), "Declining is suppressed for .today")
     }
 
     func testInsightsSortedSeverestFirst() {

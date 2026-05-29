@@ -186,7 +186,8 @@ final class TimerEngineTests: BlinkTestCase {
         appState.workElapsedSeconds = 125
         appState.timerState = .workPaused
 
-        XCTAssertTrue(appState.menuBarTitle.hasPrefix("⏸"))
+        // Full title: paused prefix + the current display time (not just the glyph).
+        XCTAssertEqual(appState.menuBarTitle, "⏸ \(appState.displayTime)")
     }
 
     // MARK: - AppState Display Tests

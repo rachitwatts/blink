@@ -69,6 +69,16 @@ final class WindowLayoutTests: XCTestCase {
         XCTAssertEqual(d.floatingFrame?.size, Controller.LayoutConstants.dimmedFloatingSize)
     }
 
+    /// Guard the constants' relationship directly (so equal/inverted opacity
+    /// or non-growing floating size can't slip past the per-phase tests above,
+    /// which compare against the same constants the production reads).
+    func testDimmedPhaseIsDarkerAndLargerThanFloating() {
+        XCTAssertGreaterThan(Controller.LayoutConstants.dimmedDimOpacity,
+                             Controller.LayoutConstants.floatingDimOpacity)
+        XCTAssertGreaterThan(Controller.LayoutConstants.dimmedFloatingSize.width,
+                             Controller.LayoutConstants.floatingSize.width)
+    }
+
     func testGentleFullscreenPhaseEscalatesToFullscreen() {
         let d = layout(screens: [screenA, screenB], phase: .fullscreen, style: .gentle)
         XCTAssertTrue(d.usesFullscreen)

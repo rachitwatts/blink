@@ -106,6 +106,9 @@ final class EyeHealthCalculatorTests: XCTestCase {
 
     func testSkippedMajorityTipMentionsCounts() {
         let m = EyeHealthCalculator.calculate(from: events(started: 10, completed: 4, skipped: 6))
-        XCTAssertEqual(m.tip, "You've skipped 6 of 10 breaks. Try taking the next one \u{2014} even 30 seconds helps.")
+        // Assert the data the tip must convey (6 skipped of 10), not the exact copy.
+        let tip = m.tip ?? ""
+        XCTAssertTrue(tip.contains("6"), "Tip should name the skipped count")
+        XCTAssertTrue(tip.contains("10"), "Tip should name the total count")
     }
 }
