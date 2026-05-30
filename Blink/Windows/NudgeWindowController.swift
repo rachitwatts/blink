@@ -17,6 +17,9 @@ final class NudgeWindowController {
 
     static let shared = NudgeWindowController()
 
+    /// When true, `show` is a no-op (tests must not create real nudge panels).
+    static var suppressForTesting = false
+
     // MARK: - Properties
 
     private var panel: NSPanel?
@@ -38,6 +41,7 @@ final class NudgeWindowController {
 
     /// Show nudge panel on the active screen
     func show() {
+        guard !Self.suppressForTesting else { return }
         // Clean up any existing panel
         hide(animated: false)
 

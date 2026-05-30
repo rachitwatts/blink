@@ -1,15 +1,12 @@
 import XCTest
 @testable import Blink
 
-/// Tests for Settings persistence
-final class SettingsTests: XCTestCase {
-
-    // MARK: - Setup
-
-    override func setUp() {
-        // Reset to defaults before each test
-        Settings.shared.resetToDefaults()
-    }
+/// Tests for Settings persistence.
+///
+/// Inherits `BlinkTestCase`, which gives each test an isolated, ephemeral
+/// `UserDefaults` suite — so these tests no longer mutate the real app domain
+/// and start from default values automatically (no manual reset needed).
+final class SettingsTests: BlinkTestCase {
 
     // MARK: - Default Values Tests
 

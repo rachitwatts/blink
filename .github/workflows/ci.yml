@@ -38,6 +38,19 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
+      - name: Lint — no UserDefaults.standard in production code
+        run: |
+          # Production settings must go through an injectable store so tests
+          # stay isolated (P1). Comments are ignored.
+          matches=$(grep -rn "UserDefaults\.standard" Blink Shared --include="*.swift" \
+            | grep -vE "^[^:]+:[0-9]+:[[:space:]]*//" || true)
+          if [ -n "$matches" ]; then
+            echo "::error::UserDefaults.standard used in production code — route through Settings' injectable store."
+            echo "$matches"
+            exit 1
+          fi
+          echo "OK: no disallowed UserDefaults.standard usage."
+
       - name: Build
         run: |
           set -o pipefail
@@ -63,44 +76,19 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             | xcbeautify
 
-      - name: Find watchOS simulator
-        id: watch-sim
+      - name: Report code coverage
+        if: always()
         run: |
-          WATCH_UDID=$(xcrun simctl list devices available watchOS -j \
-            | python3 -c "import sys,json; devs=json.load(sys.stdin)['devices']; print(next(d['udid'] for rt in devs for d in devs[rt] if d.get('isAvailable')))" 2>/dev/null \
-            || echo "")
-          if [ -z "$WATCH_UDID" ]; then
-            echo "No available watchOS simulator found, falling back to name-based lookup"
-            echo "dest=platform=watchOS Simulator,name=Apple Watch Series 10 (46mm)" >> "$GITHUB_OUTPUT"
-          else
-            echo "dest=platform=watchOS Simulator,id=$WATCH_UDID" >> "$GITHUB_OUTPUT"
+          if [ -d build/TestResults-Unit.xcresult ]; then
+            echo "### Code coverage" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            xcrun xccov view --report --only-targets build/TestResults-Unit.xcresult >> "$GITHUB_STEP_SUMMARY" 2>&1 || true
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            xcrun xccov view --report --only-targets build/TestResults-Unit.xcresult || true
           fi
-          echo "Using watchOS simulator destination: $(grep dest= "$GITHUB_OUTPUT" | tail -1)"
 
-      - name: Build watchOS app
-        run: |
-          set -o pipefail
-          xcodebuild build \
-            -project Blink.xcodeproj \
-            -scheme BlinkWatch \
-            -configuration Release \
-            -destination '${{ steps.watch-sim.outputs.dest }}' \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            | xcbeautify
-
-      - name: Run watchOS unit tests
-        run: |
-          set -o pipefail
-          xcodebuild test \
-            -project Blink.xcodeproj \
-            -scheme BlinkWatch \
-            -destination '${{ steps.watch-sim.outputs.dest }}' \
-            -only-testing:BlinkWatchTests \
-            -resultBundlePath build/TestResults-Watch.xcresult \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            | xcbeautify
+      - name: Coverage ratchet (core logic layer)
+        run: ./scripts/check-coverage.sh build/TestResults-Unit.xcresult 70.0
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -109,5 +97,4 @@ jobs:
           name: test-results
           path: |
             build/TestResults-Unit.xcresult
-            build/TestResults-Watch.xcresult
           retention-days: 14

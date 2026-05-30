@@ -1,33 +1,9 @@
 import XCTest
 @testable import Blink
 
-@MainActor
-final class TimerEngineDeliveryModeTests: XCTestCase {
-
-    var mockIdle: MockIdleTimeProvider!
-    var mockCall: MockCallDetector!
-    var mockCalendar: MockCalendarMonitor!
-
-    override func setUp() async throws {
-        AppState.shared.reset()
-        Settings.shared.resetToDefaults()
-
-        mockIdle = MockIdleTimeProvider()
-        mockCall = MockCallDetector()
-        mockCalendar = MockCalendarMonitor()
-
-        TimerEngine.shared.setIdleDetector(mockIdle)
-        TimerEngine.shared.setCallDetector(mockCall)
-        TimerEngine.shared.setCalendarMonitor(mockCalendar)
-        TimerEngine.shared.setSyncManager(nil)
-        InCallNudgeWindowController.suppressForTesting = true
-        TimerEngine.shared.restartSession()
-    }
-
-    override func tearDown() async throws {
-        TimerEngine.shared.stop()
-        AppState.shared.reset()
-    }
+/// Mocks, reset, and ephemeral defaults provided by `BlinkTestCase`,
+/// including the inherited `mockIdle`/`mockCall`/`mockCalendar`.
+final class TimerEngineDeliveryModeTests: BlinkTestCase {
 
     // MARK: - Normal Break Delivery
 

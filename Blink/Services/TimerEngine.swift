@@ -1,7 +1,6 @@
 import Foundation
 import Combine
 import AppKit
-import UserNotifications
 
 /// Core timer engine that manages the work/break cycle
 ///
@@ -27,9 +26,17 @@ final class TimerEngine: ObservableObject {
     private var callDetector: CallDetectorProtocol = CallDetector.shared
     private var calendarMonitor: CalendarMonitorProtocol = CalendarMonitor.shared
 
-    /// Sync manager for publishing state to watch via iCloud KVS.
-    /// Nil when sync is disabled (e.g., during tests).
-    private var syncManager: (any SyncManagerProtocol)?
+    /// Source of the current time. Production uses the wall clock; tests can
+    /// inject a `MutableClock` for deterministic deferral timing.
+    private var clock: NowProviding = SystemClock()
+
+    /// Screen locker. Production locks the real screen; tests inject a spy
+    /// (so the test machine is never actually locked).
+    private var screenLock: ScreenLocking = SystemScreenLock()
+
+    /// Break-reminder notifier (notification-only style). Production posts real
+    /// notifications; tests inject a spy (so no OS notification is enqueued).
+    private var notifier: BreakNotifying = SystemBreakNotifier()
 
     /// Nudge scheduler for micro nudges during work
     private let nudgeScheduler = NudgeScheduler.shared
@@ -39,12 +46,6 @@ final class TimerEngine: ObservableObject {
         self.idleDetector = provider
     }
 
-    /// Replace or disable the sync manager for testing.
-    /// Pass nil to disable sync entirely.
-    func setSyncManager(_ manager: (any SyncManagerProtocol)?) {
-        self.syncManager = manager
-    }
-
     func setCallDetector(_ detector: CallDetectorProtocol) {
         self.callDetector = detector
     }
@@ -52,12 +53,23 @@ final class TimerEngine: ObservableObject {
     func setCalendarMonitor(_ monitor: CalendarMonitorProtocol) {
         self.calendarMonitor = monitor
     }
+
+    func setClock(_ clock: NowProviding) {
+        self.clock = clock
+    }
+
+    func setScreenLock(_ lock: ScreenLocking) {
+        self.screenLock = lock
+    }
+
+    func setNotifier(_ notifier: BreakNotifying) {
+        self.notifier = notifier
+    }
     #endif
 
     // MARK: - Timer State
 
     private var timerCancellable: AnyCancellable?
-    private var settingsSyncCancellable: AnyCancellable?
 
     /// Flag to reset work elapsed to 0 when user returns from long idle
     private var shouldResetOnNextActivity: Bool = false
@@ -88,92 +100,10 @@ final class TimerEngine: ObservableObject {
     /// Current polling interval
     private var currentPollingInterval: TimeInterval = 1.0
 
-    // MARK: - Sync Heartbeat
-
-    /// Accumulated time since last heartbeat publication.
-    /// Uses polling interval increments (not wall clock) so heartbeats
-    /// fire even during Mac idle periods when work time isn't advancing.
-    private var secondsSinceLastHeartbeat: TimeInterval = 0
-
     // MARK: - Initialization
 
     private init() {
         // Private to enforce singleton pattern
-    }
-
-    // MARK: - Sync
-
-    /// Set up iCloud KVS sync for watch communication.
-    /// Call once after start(). Skipped automatically when syncManager is nil (tests).
-    func setupSync() {
-        guard syncManager == nil else { return } // Already configured (e.g., injected in tests)
-        let manager = ICloudSyncManager()
-        syncManager = manager
-        configureSyncCallbacks()
-        observeSettingsChanges()
-        manager.startObserving()
-        // Publish initial timer state so watch picks up current Mac state.
-        // Do NOT publish settings here — it stamps a fresh changedAt that
-        // blocks newer remote settings from being applied. Settings sync
-        // naturally via the Combine observer when the user changes them.
-        publishSyncPayload()
-    }
-
-    /// Wire up callbacks for incoming watch actions and settings.
-    private func configureSyncCallbacks() {
-        syncManager?.onWatchActionReceived = { [weak self] action in
-            Task { @MainActor in
-                guard let self else { return }
-                switch action.action {
-                case .snooze:
-                    self.snoozeBreak()
-                case .skipBreak:
-                    self.skipBreak()
-                }
-            }
-        }
-
-        syncManager?.onSettingsReceived = { [weak self] remote in
-            Task { @MainActor in
-                guard let self else { return }
-                self.settings.applyRemoteSettings(remote)
-            }
-        }
-    }
-
-    /// Observe Settings changes via Combine and publish to iCloud KVS.
-    /// Skips publishing when the change originated from a remote sync
-    /// (to prevent infinite publish → receive → publish loops).
-    private func observeSettingsChanges() {
-        settingsSyncCancellable = settings.objectWillChange
-            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
-            .sink { [weak self] _ in
-                guard let self, let syncManager = self.syncManager else { return }
-                // Don't re-publish settings that came from a remote device.
-                // Check timestamp rather than a flag because the debounce fires
-                // after applyRemoteSettings returns (flag would already be cleared).
-                let timeSinceRemoteApply = Date().timeIntervalSince1970 - self.settings.lastRemoteApplyAt
-                guard timeSinceRemoteApply > 1.0 else { return }
-                self.settings.publishToSync(syncManager)
-            }
-    }
-
-    /// Build and publish the current timer state to iCloud KVS.
-    private func publishSyncPayload() {
-        guard let syncManager else { return }
-        syncManager.publishTimerState(buildSyncPayload())
-    }
-
-    /// Build a SyncPayload from the current app state.
-    private func buildSyncPayload() -> SyncPayload {
-        SyncPayload(
-            timerState: appState.timerState,
-            stateChangedAt: Date().timeIntervalSince1970,
-            workElapsedAtChange: appState.workElapsedSeconds,
-            breakRemainingAtChange: appState.breakRemainingSeconds,
-            snoozeRemainingAtChange: appState.snoozeRemainingSeconds,
-            sourceDevice: "mac"
-        )
     }
 
     // MARK: - Public API: Lifecycle
@@ -186,7 +116,6 @@ final class TimerEngine: ObservableObject {
             return
         }
         print("[TimerEngine] Starting with \(activePollingInterval)s interval")
-        secondsSinceLastHeartbeat = 0
         scheduleTimer(interval: activePollingInterval)
     }
 
@@ -207,13 +136,11 @@ final class TimerEngine: ObservableObject {
             print("[TimerEngine] Pausing")
             appState.timerState = .workPaused
             AnalyticsService.shared.recordPauseToggled(newState: "paused")
-            publishSyncPayload()
 
         case .workPaused:
             print("[TimerEngine] Resuming")
             appState.timerState = .workRunning
             AnalyticsService.shared.recordPauseToggled(newState: "resumed")
-            publishSyncPayload()
 
         case .breakRunning, .snoozeRunning:
             // Cannot pause during break or snooze
@@ -248,9 +175,7 @@ final class TimerEngine: ObservableObject {
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
-        secondsSinceLastHeartbeat = 0
         scheduleTimer(interval: activePollingInterval)
-        publishSyncPayload()
     }
 
     /// Manually trigger a break (Start Break Now)
@@ -298,7 +223,6 @@ final class TimerEngine: ObservableObject {
             snoozeDuration: settings.snoozeDurationSeconds,
             breakId: currentBreakId
         )
-        publishSyncPayload()
 
         // Switch to active polling for accurate snooze countdown
         scheduleTimer(interval: activePollingInterval)
@@ -322,7 +246,6 @@ final class TimerEngine: ObservableObject {
         }
         appState.timerState = .breakRunning
         appState.isOverlayVisible = true
-        publishSyncPayload()
     }
 
     /// Skip the current break and start a new work session
@@ -345,7 +268,6 @@ final class TimerEngine: ObservableObject {
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
-        publishSyncPayload()
 
         // Switch to active polling for new work session
         scheduleTimer(interval: activePollingInterval)
@@ -369,18 +291,7 @@ final class TimerEngine: ObservableObject {
 
     /// Called every tick - the heart of the timer logic
     func tick() {
-        // Debug: log to file
         logToFile("tick: state=\(appState.timerState), snoozeRemaining=\(appState.snoozeRemainingSeconds)")
-
-        // Periodic heartbeat for watch sync — fires in any state to keep
-        // the watch from flipping to offline/local mode during Mac idle.
-        // Uses polling interval (not work time) so it fires even when the
-        // Mac isn't incrementing work elapsed (medium idle, paused, break).
-        secondsSinceLastHeartbeat += currentPollingInterval
-        if secondsSinceLastHeartbeat >= 10 {
-            secondsSinceLastHeartbeat = 0
-            publishSyncPayload()
-        }
 
         switch appState.timerState {
         case .workRunning:
@@ -399,22 +310,26 @@ final class TimerEngine: ObservableObject {
         }
     }
 
-    /// Debug helper: log to file
+    /// Debug helper: append a line to a debug log file.
+    ///
+    /// No-op in release builds. Even in DEBUG it stays off unless the
+    /// `BLINK_DEBUG_LOG` environment variable points at a writable path —
+    /// this keeps the per-tick file write out of production and prevents
+    /// parallel test workers from racing on a shared `/tmp` path.
     private func logToFile(_ message: String) {
-        let logPath = "/tmp/blink_debug.log"
+        #if DEBUG
+        guard let logPath = ProcessInfo.processInfo.environment["BLINK_DEBUG_LOG"] else { return }
         let timestamp = Date().timeIntervalSince1970
         let line = "\(timestamp): \(message)\n"
-        if let data = line.data(using: .utf8) {
-            if FileManager.default.fileExists(atPath: logPath) {
-                if let handle = FileHandle(forWritingAtPath: logPath) {
-                    handle.seekToEndOfFile()
-                    handle.write(data)
-                    handle.closeFile()
-                }
-            } else {
-                FileManager.default.createFile(atPath: logPath, contents: data, attributes: nil)
-            }
+        guard let data = line.data(using: .utf8) else { return }
+        if let handle = FileHandle(forWritingAtPath: logPath) {
+            handle.seekToEndOfFile()
+            handle.write(data)
+            handle.closeFile()
+        } else {
+            FileManager.default.createFile(atPath: logPath, contents: data, attributes: nil)
         }
+        #endif
     }
 
     // MARK: - Private: State-Specific Tick Handlers
@@ -487,7 +402,7 @@ final class TimerEngine: ObservableObject {
         // delivered promptly when screen sharing stops, even before the full work timer expires.
         if appState.breakDeferred {
             if !callDetector.isScreenSharing {
-                let deferredSeconds = Int(Date().timeIntervalSince(deferralStartTime ?? Date()))
+                let deferredSeconds = Int(clock.now.timeIntervalSince(deferralStartTime ?? clock.now))
                 AnalyticsService.shared.recordBreakDeferralEnded(
                     totalDeferredSeconds: deferredSeconds, breakId: currentBreakId
                 )
@@ -524,7 +439,7 @@ final class TimerEngine: ObservableObject {
                 print("[TimerEngine] Screen sharing detected, deferring break")
                 appState.breakDeferred = true
                 appState.breakDeferralReason = "Screen sharing"
-                deferralStartTime = Date()
+                deferralStartTime = clock.now
             }
             if !hasDeferralBeenRecorded {
                 currentBreakId = UUID().uuidString
@@ -546,7 +461,6 @@ final class TimerEngine: ObservableObject {
             InCallNudgeWindowController.shared.show(duration: 4)
             appState.workElapsedSeconds = 0
             nudgeScheduler.resetTimer()
-            publishSyncPayload()
             return
         }
 
@@ -572,14 +486,39 @@ final class TimerEngine: ObservableObject {
         guard settings.breakStyle == .gentle else { return }
 
         appState.breakElapsedSeconds += 1
-        let elapsed = appState.breakElapsedSeconds
+        let newPhase = Self.computePhase(
+            elapsed: appState.breakElapsedSeconds,
+            current: appState.breakPhase
+        )
+        if newPhase != appState.breakPhase {
+            print("[TimerEngine] Gentle break → \(newPhase) phase")
+            appState.breakPhase = newPhase
+        }
+    }
 
-        if elapsed == 10 && appState.breakPhase == .floating {
-            print("[TimerEngine] Gentle break → dimmed phase")
-            appState.breakPhase = .dimmed
-        } else if elapsed == 20 && appState.breakPhase == .dimmed {
-            print("[TimerEngine] Gentle break → fullscreen phase")
-            appState.breakPhase = .fullscreen
+    // MARK: - Gentle Break Phase Progression
+
+    /// Seconds into a gentle break at which the overlay dims.
+    static let gentleDimmedThreshold = 10
+
+    /// Seconds into a gentle break at which the overlay goes fullscreen.
+    static let gentleFullscreenThreshold = 20
+
+    /// Pure phase progression for gentle breaks.
+    ///
+    /// Uses `>=` thresholds (not `==`) so a skipped tick — e.g. timer
+    /// coalescing during system sleep — can't strand a phase at its exact
+    /// boundary value (the root of issues #48/#50). The current-phase guard
+    /// keeps escalation forward-only and one stage per tick:
+    /// floating → dimmed (≥10s) → fullscreen (≥20s).
+    static func computePhase(elapsed: Int, current: BreakPhase) -> BreakPhase {
+        switch current {
+        case .floating:
+            return elapsed >= gentleDimmedThreshold ? .dimmed : .floating
+        case .dimmed:
+            return elapsed >= gentleFullscreenThreshold ? .fullscreen : .dimmed
+        case .fullscreen:
+            return .fullscreen
         }
     }
 
@@ -600,7 +539,6 @@ final class TimerEngine: ObservableObject {
             }
             appState.timerState = .breakRunning
             appState.isOverlayVisible = true
-            publishSyncPayload()
         }
     }
 
@@ -618,12 +556,11 @@ final class TimerEngine: ObservableObject {
                 trigger: isManual ? "manual" : "auto",
                 configuredDuration: configuredBreakDuration
             )
-            sendBreakNotification()
+            notifier.sendBreakNotification(soundEnabled: settings.soundEnabled)
             appState.workElapsedSeconds = 0
             nudgeScheduler.resetTimer()
             appState.timerState = .workRunning
             shouldResetOnNextActivity = false
-            publishSyncPayload()
             scheduleTimer(interval: activePollingInterval)
             return
         }
@@ -644,7 +581,6 @@ final class TimerEngine: ObservableObject {
         }
 
         appState.isOverlayVisible = true
-        publishSyncPayload()
 
         if settings.soundEnabled {
             playBreakSound()
@@ -672,7 +608,7 @@ final class TimerEngine: ObservableObject {
         if settings.lockScreenAfterBreak {
             let isIdle = idleDetector.getIdleTime() >= TimeInterval(settings.idleIgnoreThreshold)
             if isIdle {
-                ScreenLockService.lockScreen()
+                screenLock.lockScreen()
             }
         }
 
@@ -683,29 +619,9 @@ final class TimerEngine: ObservableObject {
         appState.timerState = .workRunning
         appState.isOverlayVisible = false
         shouldResetOnNextActivity = false
-        publishSyncPayload()
 
         // Switch to active polling for new work session
         scheduleTimer(interval: activePollingInterval)
-    }
-
-    // MARK: - Private: Notification-Only Mode
-
-    private func sendBreakNotification() {
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound]) { granted, _ in
-            guard granted else { return }
-            let content = UNMutableNotificationContent()
-            content.title = "Time for a break"
-            content.body = "Look away from the screen. Blink. Breathe."
-            content.sound = Settings.shared.soundEnabled ? .default : nil
-            let request = UNNotificationRequest(
-                identifier: "blink-break-\(UUID().uuidString)",
-                content: content,
-                trigger: nil
-            )
-            center.add(request)
-        }
     }
 
     // MARK: - Private: Adaptive Polling

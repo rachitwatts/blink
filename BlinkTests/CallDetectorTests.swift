@@ -1,16 +1,16 @@
 import XCTest
 @testable import Blink
 
-@MainActor
-final class CallDetectorTests: XCTestCase {
+final class CallDetectorTests: BlinkTestCase {
 
     override func setUp() async throws {
-        Settings.shared.resetToDefaults()
+        try await super.setUp()
         CallDetector.shared.setCallContext(.none)
     }
 
     override func tearDown() async throws {
         CallDetector.shared.setCallContext(.none)
+        try await super.tearDown()
     }
 
     func testInitialStateIsNone() {
@@ -38,14 +38,16 @@ final class CallDetectorTests: XCTestCase {
         XCTAssertTrue(detector.isScreenSharing)
     }
 
-    func testDisabledCallDetectionReportsNone() {
+    func testDisabledCallDetectionPollResetsToNone() {
         let detector = CallDetector.shared
-        Settings.shared.callDetectionEnabled = false
+        // Simulate a prior on-call state, then disable detection and poll:
+        // the gate must force the context back to .none.
         detector.setCallContext(.onCall)
+        Settings.shared.callDetectionEnabled = false
 
-        // Even though context is set, isOnCall/isScreenSharing check settings
-        // The poll() method would reset to .none, but setCallContext bypasses poll
-        // This tests the raw state — the TimerEngine checks settings.callDetectionEnabled
-        XCTAssertEqual(detector.callContext, .onCall)
+        detector.pollForTesting()
+
+        XCTAssertEqual(detector.callContext, .none)
+        XCTAssertFalse(detector.isOnCall)
     }
 }

@@ -148,68 +148,59 @@ final class Settings: ObservableObject {
     // MARK: - Initialization
 
     private init() {
-        // Private to enforce singleton pattern
+        // Private to enforce singleton pattern.
+        // Wrappers default to UserDefaults.standard via their declarations.
     }
 
-    // MARK: - Sync
+    // MARK: - Backing Store (test isolation)
 
-    /// Timestamp of the last local settings change that was published.
-    /// Used to prevent infinite sync loops: when we receive a remote settings
-    /// payload that we ourselves published, we ignore it.
-    var lastPublishedAt: TimeInterval = 0
-
-    /// Timestamp of the last applied remote settings.
-    /// Used for conflict resolution: only apply if the remote timestamp is newer.
-    private(set) var lastAppliedRemoteAt: TimeInterval = 0
-
-    /// Timestamp of the last remote settings apply.
-    /// The debounced Combine observer checks this to avoid re-publishing
-    /// settings that arrived from sync (isApplyingRemote was insufficient
-    /// because defer clears it before the 500ms debounce fires).
-    private(set) var lastRemoteApplyAt: TimeInterval = 0
-
-    /// Snapshot of last published synced values. Prevents redundant publishes
-    /// when only non-synced properties (soundEnabled, etc.) change.
-    private var lastPublishedSnapshot: (Int, Int, Int, String) = (0, 0, 0, "")
-
-    /// Publish current settings to iCloud KVS for the watch to receive.
-    /// Skips the publish if synced values haven't changed since last publish.
-    func publishToSync(_ syncManager: any SyncManagerProtocol) {
-        let current = (workDurationMinutes, breakDurationMinutes, snoozeDurationMinutes, displayMode.rawValue)
-        guard current != lastPublishedSnapshot else { return }
-        lastPublishedSnapshot = current
-
-        let now = Date().timeIntervalSince1970
-        let syncSettings = SyncSettings(
-            workDurationMinutes: workDurationMinutes,
-            breakDurationMinutes: breakDurationMinutes,
-            snoozeDurationMinutes: snoozeDurationMinutes,
-            displayMode: displayMode.rawValue,
-            changedAt: now
-        )
-        lastPublishedAt = now
-        syncManager.publishSettings(syncSettings)
+    /// Re-point every persisted (@AppStorage) property at the given store.
+    ///
+    /// Production always uses `.standard` (the wrapper declarations bind it).
+    /// Tests inject an ephemeral `UserDefaults(suiteName:)` so they never
+    /// touch the real app domain and can run independently. Single source of
+    /// truth for the persisted-key list — adding a key here is the only place
+    /// it needs to be wired.
+    private func bindAppStorage(to defaults: UserDefaults) {
+        _timerPresetRaw = AppStorage(wrappedValue: TimerPreset.pomodoro.rawValue, "timerPreset", store: defaults)
+        _workDurationMinutes = AppStorage(wrappedValue: 25, "workDurationMinutes", store: defaults)
+        _breakDurationMinutes = AppStorage(wrappedValue: 5, "breakDurationMinutes", store: defaults)
+        _snoozeDurationMinutes = AppStorage(wrappedValue: 5, "snoozeDurationMinutes", store: defaults)
+        _idleIgnoreThreshold = AppStorage(wrappedValue: 60, "idleIgnoreThreshold", store: defaults)
+        _idleResetThreshold = AppStorage(wrappedValue: 300, "idleResetThreshold", store: defaults)
+        _displayModeRaw = AppStorage(wrappedValue: DisplayMode.elapsed.rawValue, "displayMode", store: defaults)
+        _soundEnabled = AppStorage(wrappedValue: false, "soundEnabled", store: defaults)
+        _lockScreenAfterBreak = AppStorage(wrappedValue: true, "lockScreenAfterBreak", store: defaults)
+        _launchAtLogin = AppStorage(wrappedValue: true, "launchAtLogin", store: defaults)
+        _hasCompletedOnboarding = AppStorage(wrappedValue: false, "hasCompletedOnboarding", store: defaults)
+        _nudgesEnabled = AppStorage(wrappedValue: true, "nudgesEnabled", store: defaults)
+        _nudgeIntervalMinutes = AppStorage(wrappedValue: 8, "nudgeIntervalMinutes", store: defaults)
+        _nudgeBlinkEnabled = AppStorage(wrappedValue: true, "nudgeBlinkEnabled", store: defaults)
+        _nudgePostureEnabled = AppStorage(wrappedValue: true, "nudgePostureEnabled", store: defaults)
+        _nudgeStretchEnabled = AppStorage(wrappedValue: true, "nudgeStretchEnabled", store: defaults)
+        _breakStyleRaw = AppStorage(wrappedValue: BreakStyle.gentle.rawValue, "breakStyle", store: defaults)
+        _callDetectionEnabled = AppStorage(wrappedValue: true, "callDetectionEnabled", store: defaults)
+        _calendarIntegrationEnabled = AppStorage(wrappedValue: false, "calendarIntegrationEnabled", store: defaults)
+        _watchedCalendarIdentifiers = AppStorage(wrappedValue: "", "watchedCalendarIdentifiers", store: defaults)
+        _calendarLeadTimeMinutes = AppStorage(wrappedValue: 3, "calendarLeadTimeMinutes", store: defaults)
+        _weeklySummaryEnabled = AppStorage(wrappedValue: true, "weeklySummaryEnabled", store: defaults)
+        _weeklySummaryDay = AppStorage(wrappedValue: 2, "weeklySummaryDay", store: defaults)
+        _weeklySummaryHour = AppStorage(wrappedValue: 9, "weeklySummaryHour", store: defaults)
+        _weeklySummaryMinute = AppStorage(wrappedValue: 0, "weeklySummaryMinute", store: defaults)
+        _breakContentModeRaw = AppStorage(wrappedValue: BreakContentMode.guided.rawValue, "breakContentMode", store: defaults)
     }
 
-    /// Apply settings received from the watch (or another device).
-    /// Only applies if the remote timestamp is newer than the last applied remote settings.
-    /// Returns true if settings were applied, false if they were ignored (stale).
-    @discardableResult
-    func applyRemoteSettings(_ remote: SyncSettings) -> Bool {
-        // Reject if remote is older than what we last applied or last published locally
-        guard remote.changedAt > lastAppliedRemoteAt,
-              remote.changedAt > lastPublishedAt else { return false }
-
-        lastRemoteApplyAt = Date().timeIntervalSince1970
-        lastAppliedRemoteAt = remote.changedAt
-        workDurationMinutes = remote.workDurationMinutes
-        breakDurationMinutes = remote.breakDurationMinutes
-        snoozeDurationMinutes = remote.snoozeDurationMinutes
-        displayMode = DisplayMode(rawValue: remote.displayMode) ?? .elapsed
-        // Update snapshot so non-synced property changes don't trigger re-publish
-        lastPublishedSnapshot = (workDurationMinutes, breakDurationMinutes, snoozeDurationMinutes, displayMode.rawValue)
-        return true
+    /// Source of the current time for sync timestamps. Production uses the
+    /// wall clock; tests inject a `MutableClock` for deterministic loop-guard
+    /// and conflict-resolution behavior.
+    #if DEBUG
+    /// Point all persisted settings at an isolated store for testing.
+    /// `BlinkTestCase` calls this in `setUp` with a fresh ephemeral suite,
+    /// so each test sees default values and never mutates real user prefs.
+    func useStoreForTesting(_ defaults: UserDefaults) {
+        bindAppStorage(to: defaults)
     }
+    #endif
 
     // MARK: - Reset
 
@@ -241,9 +232,5 @@ final class Settings: ObservableObject {
         calendarIntegrationEnabled = false
         watchedCalendarIdentifiers = ""
         calendarLeadTimeMinutes = 3
-        lastPublishedAt = 0
-        lastAppliedRemoteAt = 0
-        lastRemoteApplyAt = 0
-        lastPublishedSnapshot = (0, 0, 0, "")
     }
 }

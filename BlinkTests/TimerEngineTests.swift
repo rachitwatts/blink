@@ -1,38 +1,9 @@
 import XCTest
 @testable import Blink
 
-/// Tests for TimerEngine core logic
-@MainActor
-final class TimerEngineTests: XCTestCase {
-
-    // MARK: - Properties
-
-    var mockIdle: MockIdleTimeProvider!
-
-    // MARK: - Setup
-
-    override func setUp() async throws {
-        // Reset state before each test
-        AppState.shared.reset()
-        Settings.shared.resetToDefaults()
-
-        // Inject mock dependencies
-        mockIdle = MockIdleTimeProvider()
-        TimerEngine.shared.setIdleDetector(mockIdle)
-        TimerEngine.shared.setCallDetector(MockCallDetector())
-        TimerEngine.shared.setCalendarMonitor(MockCalendarMonitor())
-        TimerEngine.shared.setSyncManager(nil)
-        InCallNudgeWindowController.suppressForTesting = true
-
-        // Reset engine internal state (shouldResetOnNextActivity)
-        TimerEngine.shared.restartSession()
-    }
-
-    override func tearDown() async throws {
-        // Clean up after each test
-        TimerEngine.shared.stop()
-        AppState.shared.reset()
-    }
+/// Tests for TimerEngine core logic.
+/// Isolation (mocks, reset, ephemeral defaults) is provided by `BlinkTestCase`.
+final class TimerEngineTests: BlinkTestCase {
 
     // MARK: - Initial State Tests
 
@@ -215,7 +186,8 @@ final class TimerEngineTests: XCTestCase {
         appState.workElapsedSeconds = 125
         appState.timerState = .workPaused
 
-        XCTAssertTrue(appState.menuBarTitle.hasPrefix("⏸"))
+        // Full title: paused prefix + the current display time (not just the glyph).
+        XCTAssertEqual(appState.menuBarTitle, "⏸ \(appState.displayTime)")
     }
 
     // MARK: - AppState Display Tests
@@ -529,38 +501,39 @@ final class TimerEngineTests: XCTestCase {
 
     // MARK: - Lock Screen Tests
 
-    func testCompleteBreakConditionWhenEnabledAndIdle() {
-        let settings = Settings.shared
+    // These exercise completeBreak()'s real lock behavior via an injected spy
+    // (the previous versions only re-computed the predicate in the test body,
+    // and would have passed even if completeBreak never locked).
 
-        // Given: Setting enabled, user is idle (above threshold)
-        settings.lockScreenAfterBreak = true
-        mockIdle.idleTime = 120  // Well above idleIgnoreThreshold (60s)
+    func testCompleteBreakLocksScreenWhenEnabledAndIdle() {
+        Settings.shared.lockScreenAfterBreak = true
+        mockIdle.idleTime = 120  // above idleIgnoreThreshold (60s)
+        AppState.shared.timerState = .breakRunning
 
-        // Verify the idle condition matches what completeBreak() checks
-        let isIdle = mockIdle.getIdleTime() >= TimeInterval(settings.idleIgnoreThreshold)
-        XCTAssertTrue(isIdle, "User should be considered idle when idle time exceeds threshold")
-        XCTAssertTrue(settings.lockScreenAfterBreak, "Setting should be enabled")
+        TimerEngine.shared.completeBreak()
+
+        XCTAssertEqual(mockScreenLock.lockCount, 1, "Should lock when enabled and idle")
+        XCTAssertEqual(AppState.shared.timerState, .workRunning)
     }
 
-    func testCompleteBreakConditionWhenEnabledAndActive() {
-        let settings = Settings.shared
+    func testCompleteBreakDoesNotLockWhenUserActive() {
+        Settings.shared.lockScreenAfterBreak = true
+        mockIdle.idleTime = 5  // below threshold → user is active
+        AppState.shared.timerState = .breakRunning
 
-        // Given: Setting enabled, user is active (below threshold)
-        settings.lockScreenAfterBreak = true
-        mockIdle.idleTime = 5  // Well below idleIgnoreThreshold (60s)
+        TimerEngine.shared.completeBreak()
 
-        let isIdle = mockIdle.getIdleTime() >= TimeInterval(settings.idleIgnoreThreshold)
-        XCTAssertFalse(isIdle, "User should be considered active when idle time is below threshold")
+        XCTAssertEqual(mockScreenLock.lockCount, 0, "Must not lock while the user is active")
     }
 
-    func testCompleteBreakConditionWhenDisabled() {
-        let settings = Settings.shared
+    func testCompleteBreakDoesNotLockWhenDisabled() {
+        Settings.shared.lockScreenAfterBreak = false
+        mockIdle.idleTime = 120  // idle, but the setting is off
+        AppState.shared.timerState = .breakRunning
 
-        // Given: Setting disabled
-        settings.lockScreenAfterBreak = false
+        TimerEngine.shared.completeBreak()
 
-        // Lock condition should short-circuit regardless of idle state
-        XCTAssertFalse(settings.lockScreenAfterBreak, "Setting should be disabled")
+        XCTAssertEqual(mockScreenLock.lockCount, 0, "Must not lock when the setting is disabled")
     }
 
     func testLockScreenSettingDefaultsToTrue() {

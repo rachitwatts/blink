@@ -49,9 +49,8 @@ struct BlinkApp: App {
         // Start Sparkle updater early so automatic checks begin immediately
         _ = UpdaterService.shared
 
-        // Start timer engine and iCloud KVS sync
+        // Start timer engine
         TimerEngine.shared.start()
-        TimerEngine.shared.setupSync()
 
         // Start call detection and calendar monitoring
         CallDetector.shared.start()
