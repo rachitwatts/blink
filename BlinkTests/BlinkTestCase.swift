@@ -31,6 +31,10 @@ class BlinkTestCase: XCTestCase {
     /// machine; assert `.lockCount`.
     private(set) var mockScreenLock: SpyScreenLock!
 
+    /// Spy break-notifier injected into `TimerEngine` — never posts a real OS
+    /// notification; assert `.sendCount`.
+    private(set) var mockNotifier: SpyBreakNotifier!
+
     /// The per-test ephemeral defaults suite (wiped in tearDown).
     private(set) var testDefaults: UserDefaults!
     private var suiteName: String!
@@ -62,10 +66,12 @@ class BlinkTestCase: XCTestCase {
         mockCall = MockCallDetector()
         mockCalendar = MockCalendarMonitor()
         mockScreenLock = SpyScreenLock()
+        mockNotifier = SpyBreakNotifier()
         TimerEngine.shared.setIdleDetector(mockIdle)
         TimerEngine.shared.setCallDetector(mockCall)
         TimerEngine.shared.setCalendarMonitor(mockCalendar)
         TimerEngine.shared.setScreenLock(mockScreenLock)
+        TimerEngine.shared.setNotifier(mockNotifier)
 
         // Suppress ALL real window creation. The unit-test bundle is hosted by
         // the live Blink.app, whose Combine sinks turn AppState flags into real

@@ -1,7 +1,6 @@
 import Foundation
 import Combine
 import AppKit
-import UserNotifications
 
 /// Core timer engine that manages the work/break cycle
 ///
@@ -35,6 +34,10 @@ final class TimerEngine: ObservableObject {
     /// (so the test machine is never actually locked).
     private var screenLock: ScreenLocking = SystemScreenLock()
 
+    /// Break-reminder notifier (notification-only style). Production posts real
+    /// notifications; tests inject a spy (so no OS notification is enqueued).
+    private var notifier: BreakNotifying = SystemBreakNotifier()
+
     /// Nudge scheduler for micro nudges during work
     private let nudgeScheduler = NudgeScheduler.shared
 
@@ -57,6 +60,10 @@ final class TimerEngine: ObservableObject {
 
     func setScreenLock(_ lock: ScreenLocking) {
         self.screenLock = lock
+    }
+
+    func setNotifier(_ notifier: BreakNotifying) {
+        self.notifier = notifier
     }
     #endif
 
@@ -549,7 +556,7 @@ final class TimerEngine: ObservableObject {
                 trigger: isManual ? "manual" : "auto",
                 configuredDuration: configuredBreakDuration
             )
-            sendBreakNotification()
+            notifier.sendBreakNotification(soundEnabled: settings.soundEnabled)
             appState.workElapsedSeconds = 0
             nudgeScheduler.resetTimer()
             appState.timerState = .workRunning
@@ -615,25 +622,6 @@ final class TimerEngine: ObservableObject {
 
         // Switch to active polling for new work session
         scheduleTimer(interval: activePollingInterval)
-    }
-
-    // MARK: - Private: Notification-Only Mode
-
-    private func sendBreakNotification() {
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound]) { granted, _ in
-            guard granted else { return }
-            let content = UNMutableNotificationContent()
-            content.title = "Time for a break"
-            content.body = "Look away from the screen. Blink. Breathe."
-            content.sound = Settings.shared.soundEnabled ? .default : nil
-            let request = UNNotificationRequest(
-                identifier: "blink-break-\(UUID().uuidString)",
-                content: content,
-                trigger: nil
-            )
-            center.add(request)
-        }
     }
 
     // MARK: - Private: Adaptive Polling

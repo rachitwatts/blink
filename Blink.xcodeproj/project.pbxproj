@@ -15,6 +15,7 @@
 		0E24AFE6BCA37A99C1353ED6 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C0F6ED6E05F4BC9F8B451C /* MenuBarView.swift */; };
 		1E2F745E906AEB2961EFE55D /* GentleBreakFloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C7FC37D5BD933ACB0CBE325 /* GentleBreakFloatingView.swift */; };
 		1FE36C49979D50150D7AFD3A /* HeatmapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0FEB2A9AB2CD68D70760DDB /* HeatmapView.swift */; };
+		229A2656D3852ADC568E69E8 /* BreakNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 063A3CEBAB53BAC904A28714 /* BreakNotifier.swift */; };
 		2327C480BFC12A3D088D9ECF /* BreakContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4277C159181D74EE1B020457 /* BreakContentProvider.swift */; };
 		239DA3995A595C8B35324A35 /* Blink.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 303F5DFAB86E2C732AB3F09A /* Blink.sdef */; };
 		25F8E55421DC2B55922B6CC4 /* BlinkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DBB159CA5CB427CCCADEF /* BlinkApp.swift */; };
@@ -119,6 +120,7 @@
 		00F1991D869152E867145645 /* BreakOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakOverlayView.swift; sourceTree = "<group>"; };
 		029B440AE9D4E364D69FD7CE /* UpdaterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdaterService.swift; sourceTree = "<group>"; };
 		042F0A8FB8FFCCA764D5F39F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		063A3CEBAB53BAC904A28714 /* BreakNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakNotifier.swift; sourceTree = "<group>"; };
 		076C7D916B815399763305AF /* TimerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerState.swift; sourceTree = "<group>"; };
 		0894126555611FB825C1A26F /* BlinkActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkActionsTests.swift; sourceTree = "<group>"; };
 		09724DF6F5CDF7095DC9581A /* NotificationsSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsSection.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				E88F147877081BA043EF2625 /* BlinkActions.swift */,
 				B300FF7997F3F7E7A3D5A032 /* BlinkIntents.swift */,
 				4277C159181D74EE1B020457 /* BreakContentProvider.swift */,
+				063A3CEBAB53BAC904A28714 /* BreakNotifier.swift */,
 				86202CD39470DC5BB2C88032 /* CalendarMonitor.swift */,
 				6D9C87A5FDE3AFD4D2F5E291 /* CallDetector.swift */,
 				96BCA52CE10433682051D232 /* EyeHealthAnalyzer.swift */,
@@ -554,6 +557,7 @@
 				2327C480BFC12A3D088D9ECF /* BreakContentProvider.swift in Sources */,
 				B06407FA399B0DD103F30C31 /* BreakExercise.swift in Sources */,
 				4806DA026C385EA1A3006E7C /* BreakExerciseView.swift in Sources */,
+				229A2656D3852ADC568E69E8 /* BreakNotifier.swift in Sources */,
 				4B26E93519E8DE2DDA88C7D0 /* BreakOverlayView.swift in Sources */,
 				632246D9CEF3901FD1BCF5BE /* BreakOverlayWindowController.swift in Sources */,
 				64D617C91635DB6046A6C625 /* BreakPhase.swift in Sources */,

@@ -26,3 +26,13 @@ final class SpyScreenLock: ScreenLocking {
     private(set) var lockCount = 0
     func lockScreen() { lockCount += 1 }
 }
+
+/// Records break-notification requests instead of posting real OS notifications.
+final class SpyBreakNotifier: BreakNotifying {
+    private(set) var sendCount = 0
+    private(set) var lastSoundEnabled: Bool?
+    func sendBreakNotification(soundEnabled: Bool) {
+        sendCount += 1
+        lastSoundEnabled = soundEnabled
+    }
+}

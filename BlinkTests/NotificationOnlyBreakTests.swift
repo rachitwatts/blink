@@ -23,6 +23,7 @@ final class NotificationOnlyBreakTests: BlinkTestCase {
         XCTAssertEqual(AppState.shared.timerState, .workRunning, "Must stay in work, never breakRunning")
         XCTAssertFalse(AppState.shared.isOverlayVisible, "Notification-only must not show an overlay")
         XCTAssertEqual(AppState.shared.breakRemainingSeconds, 0, "Break countdown must not start")
+        XCTAssertEqual(mockNotifier.sendCount, 1, "A break reminder notification should be sent")
     }
 
     func testAutoNotificationOnlyResetsWorkElapsed() {
@@ -45,5 +46,6 @@ final class NotificationOnlyBreakTests: BlinkTestCase {
         XCTAssertEqual(AppState.shared.timerState, .workRunning)
         XCTAssertFalse(AppState.shared.isOverlayVisible)
         XCTAssertEqual(AppState.shared.workElapsedSeconds, 0)
+        XCTAssertEqual(mockNotifier.sendCount, 1, "Manual notification-only break still sends the reminder")
     }
 }
