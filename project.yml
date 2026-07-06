@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: com.rachitwatts
   deploymentTarget:
     macOS: "14.0"
+    visionOS: "2.0"
 
 packages:
   Sparkle:
@@ -47,7 +48,43 @@ targets:
       MACOSX_DEPLOYMENT_TARGET: "14.0"
       GENERATE_INFOPLIST_FILE: YES
 
+  BlinkVision:
+    type: application
+    platform: visionOS
+    sources:
+      - BlinkVision
+      - path: Blink/Services
+        excludes:
+          - "BlinkActions.swift"
+          - "BlinkIntents.swift"
+          - "HotkeyManager.swift"
+          - "LaunchAtLoginManager.swift"
+          - "ScreenLockService.swift"
+          - "ScriptCommands.swift"
+          - "UpdaterService.swift"
+          - "WeeklySummaryService.swift"
+      - path: Blink/Models
+      - Shared
+    settings:
+      PRODUCT_NAME: BlinkVision
+      PRODUCT_BUNDLE_IDENTIFIER: com.watts.blinkvision
+      INFOPLIST_FILE: BlinkVision/Info.plist
+      SWIFT_VERSION: "5.9"
+      XROS_DEPLOYMENT_TARGET: "2.0"
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      CURRENT_PROJECT_VERSION: "15"
+      MARKETING_VERSION: "2.7.0"
+      GENERATE_INFOPLIST_FILE: NO
+      CODE_SIGN_STYLE: Automatic
+      CODE_SIGN_IDENTITY: "Apple Development"
+      DEVELOPMENT_TEAM: 87AMBUKU99
+      CODE_SIGN_ENTITLEMENTS: BlinkVision/BlinkVision.entitlements
+
 schemes:
+  BlinkVision:
+    build:
+      targets:
+        BlinkVision: all
   Blink:
     build:
       targets:
