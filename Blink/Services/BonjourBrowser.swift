@@ -161,7 +161,7 @@ final class BonjourBrowser {
                 let state = try decoder.decode(BlinkSyncState.self, from: jsonData)
                 if !leaderDecided {
                     let localElapsed = AppState.shared.workElapsedSeconds
-                    isLeader = localElapsed >= state.workElapsedSeconds
+                    isLeader = localElapsed > state.workElapsedSeconds
                     leaderDecided = true
                     print("[BonjourBrowser] Leader decided: \(isLeader ? "visionOS" : "Mac") (local=\(localElapsed) remote=\(state.workElapsedSeconds))")
                 }

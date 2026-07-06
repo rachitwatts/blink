@@ -24,4 +24,14 @@ struct SystemScreenLock: ScreenLocking {
     func lockScreen() {}
 }
 
+/// No-op calendar monitor for visionOS (no EventKit access)
+@MainActor
+final class CalendarMonitor: ObservableObject, CalendarMonitorProtocol {
+    static let shared = CalendarMonitor()
+    private init() {}
+    func start() {}
+    func stop() {}
+    func nextEventStartsWithin(minutes: Int) -> Bool { false }
+}
+
 #endif

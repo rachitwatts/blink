@@ -79,5 +79,7 @@ enum SyncMerge {
         appState.breakRemainingSeconds = remote.breakRemainingSeconds
         appState.snoozeRemainingSeconds = remote.snoozeRemainingSeconds
         appState.isOverlayVisible = remote.isOverlayVisible
+        Settings.shared.workDurationMinutes = remote.workDurationSeconds / 60
+        Settings.shared.breakDurationMinutes = remote.breakDurationSeconds / 60
     }
 }

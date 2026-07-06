@@ -12,8 +12,11 @@ struct VolumetricTimerView: View {
     private let outerRadius: Float = 0.07
     private let dotRadius: Float = 0.004
 
-    @State private var lastLitCount: Int = -1
-    @State private var lastColorIndex: Int = -1
+    private class RenderState {
+        var lastLitCount: Int = -1
+        var lastColorIndex: Int = -1
+    }
+    @State private var renderState = RenderState()
 
     var body: some View {
         RealityView { content, attachments in
@@ -65,7 +68,7 @@ struct VolumetricTimerView: View {
             let progress = appState.isOverlayVisible ? 1.0 : appState.workProgress
             let litCount = Int(Double(dotCount) * progress)
 
-            if colorIndex != lastColorIndex {
+            if colorIndex != renderState.lastColorIndex {
                 if let orb = root.findEntity(named: "outerOrb") as? ModelEntity {
                     orb.model?.materials = [makeOrbMaterial(color)]
                 }
@@ -79,7 +82,7 @@ struct VolumetricTimerView: View {
                 fill.scale = SIMD3<Float>(repeating: fillScale / 0.01)
             }
 
-            if litCount != lastLitCount || colorIndex != lastColorIndex {
+            if litCount != renderState.lastLitCount || colorIndex != renderState.lastColorIndex {
                 if let ring = root.findEntity(named: "progressRing") {
                     let litMat = makeLitDotMaterial(color)
                     let dimMat = makeDimDotMaterial()
@@ -92,10 +95,8 @@ struct VolumetricTimerView: View {
                 }
             }
 
-            DispatchQueue.main.async {
-                lastLitCount = litCount
-                lastColorIndex = colorIndex
-            }
+            renderState.lastLitCount = litCount
+            renderState.lastColorIndex = colorIndex
         } attachments: {
             Attachment(id: "timeDisplay") {
                 Text(appState.displayTime)

@@ -3,7 +3,7 @@ import SwiftUI
 struct VisionTimerView: View {
 
     @ObservedObject private var appState = AppState.shared
-    @ObservedObject private var timerEngine = TimerEngine.shared
+    private let timerEngine = TimerEngine.shared
     @ObservedObject private var settings = Settings.shared
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismissWindow) private var dismissWindow

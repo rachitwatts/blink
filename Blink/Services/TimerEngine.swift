@@ -294,15 +294,11 @@ final class TimerEngine: ObservableObject {
     /// Called every tick - the heart of the timer logic
     func tick() {
         #if os(visionOS)
-        let browser = BonjourBrowser.shared
-        if browser.isSynced && !browser.isLeader {
-            browser.broadcastCurrentState()
+        if BonjourBrowser.shared.isSynced && !BonjourBrowser.shared.isLeader {
             return
         }
         #elseif os(macOS)
-        let advertiser = BonjourAdvertiser.shared
-        if advertiser.hasClients && !advertiser.isLeader {
-            advertiser.broadcastCurrentState()
+        if BonjourAdvertiser.shared.hasClients && !BonjourAdvertiser.shared.isLeader {
             return
         }
         #endif
@@ -328,7 +324,7 @@ final class TimerEngine: ObservableObject {
         #if os(macOS)
         BonjourAdvertiser.shared.broadcastCurrentState()
         #elseif os(visionOS)
-        browser.broadcastCurrentState()
+        BonjourBrowser.shared.broadcastCurrentState()
         #endif
     }
 

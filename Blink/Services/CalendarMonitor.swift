@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import EventKit
 import Combine
@@ -100,3 +101,4 @@ final class CalendarMonitor: ObservableObject, CalendarMonitorProtocol {
     }
     #endif
 }
+#endif
