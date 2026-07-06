@@ -62,7 +62,7 @@ struct HeatmapView: View {
             }
         }
         .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
+        .background(Color.platformControlBackground)
         .cornerRadius(8)
     }
 
@@ -85,7 +85,7 @@ struct HeatmapView: View {
 
     private func colorForLevel(_ level: Int) -> Color {
         switch level {
-        case 0: return Color(nsColor: .separatorColor).opacity(0.3)
+        case 0: return Color.platformSeparator.opacity(0.3)
         case 1: return .green.opacity(0.3)
         case 2: return .green.opacity(0.5)
         case 3: return .green.opacity(0.7)

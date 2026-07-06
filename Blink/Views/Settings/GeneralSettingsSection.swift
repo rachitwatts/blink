@@ -64,12 +64,14 @@ struct GeneralSettingsSection: View {
 
             Divider()
 
+            #if os(macOS)
             // Launch at login toggle
             Toggle("Launch Blink at login", isOn: $settings.launchAtLogin)
                 .toggleStyle(.switch)
                 .onChange(of: settings.launchAtLogin) { _, newValue in
                     LaunchAtLoginManager.shared.setEnabled(newValue)
                 }
+            #endif
         }
     }
 

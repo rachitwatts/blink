@@ -1,9 +1,13 @@
 import SwiftUI
+#if os(macOS)
 import EventKit
+#endif
 
 struct IntegrationsSettingsSection: View {
     @ObservedObject var settings: Settings
+    #if os(macOS)
     @ObservedObject private var calendarMonitor = CalendarMonitor.shared
+    #endif
 
     private var leadTimeBinding: Binding<Double> {
         Binding(
@@ -29,6 +33,7 @@ struct IntegrationsSettingsSection: View {
                     .foregroundStyle(.secondary)
             }
 
+            #if os(macOS)
             Divider()
 
             // MARK: - Calendar Integration
@@ -50,9 +55,11 @@ struct IntegrationsSettingsSection: View {
                     calendarDetails
                 }
             }
+            #endif
         }
     }
 
+    #if os(macOS)
     @ViewBuilder
     private var calendarDetails: some View {
         let status = calendarMonitor.authorizationStatus
@@ -134,4 +141,5 @@ struct IntegrationsSettingsSection: View {
         }
         settings.watchedCalendarIdentifiers = ids.sorted().joined(separator: ",")
     }
+    #endif
 }

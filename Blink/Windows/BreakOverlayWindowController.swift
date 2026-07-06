@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import SwiftUI
 import Combine
@@ -419,3 +420,5 @@ final class KeyableHostingView<Content: View>: NSHostingView<Content> {
 extension Notification.Name {
     static let breakOverlayEscPressed = Notification.Name("breakOverlayEscPressed")
 }
+
+#endif

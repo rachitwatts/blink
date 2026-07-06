@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import ServiceManagement
 
@@ -69,3 +70,5 @@ final class LaunchAtLoginManager {
         }
     }
 }
+
+#endif

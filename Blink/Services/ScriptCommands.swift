@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 
 /// AppleScript command: `tell application "Blink" to take break`
@@ -35,3 +36,4 @@ class GetStatusCommand: NSScriptCommand {
         }
     }
 }
+#endif

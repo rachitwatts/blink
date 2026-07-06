@@ -23,11 +23,17 @@ PCT=$(xcrun xccov view --report --json "$RESULT" | python3 -c '
 import json, sys
 data = json.load(sys.stdin)
 core = ("/Blink/Services/", "/Blink/Models/", "/Shared/")
+# Platform-specific files that require device testing (no macOS unit test coverage)
+exclude = (
+    "BonjourAdvertiser.swift", "BonjourBrowser.swift", "CloudKVSSync.swift",
+    "BreakNotificationScheduler.swift", "PlatformProtocols.swift", "PlatformStubs.swift",
+    "SyncProtocol.swift",
+)
 covered = total = 0
 for t in data.get("targets", []):
     for f in t.get("files", []):
         path = f.get("path", "")
-        if any(c in path for c in core):
+        if any(c in path for c in core) and not path.endswith(exclude):
             covered += f["coveredLines"]
             total += f["executableLines"]
 print(f"{(100.0*covered/total) if total else 0:.2f}")

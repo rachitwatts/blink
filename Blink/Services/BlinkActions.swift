@@ -80,7 +80,9 @@ enum BlinkActions {
             return BlinkActionResult(success: true, message: message)
 
         case .dashboard:
+            #if os(macOS)
             DashboardWindowController.shared.showDashboard(tab: .week)
+            #endif
             return BlinkActionResult(success: true, message: "Dashboard opened to Week view")
         }
     }

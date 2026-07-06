@@ -34,7 +34,7 @@ struct DashboardView: View {
                             .padding(.vertical, 8)
                             .background(
                                 selectedTab == tab
-                                    ? Color(nsColor: .controlBackgroundColor)
+                                    ? Color.platformControlBackground
                                     : Color.clear
                             )
                             .cornerRadius(6)
@@ -45,7 +45,7 @@ struct DashboardView: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
-            .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color.platformWindowBackground)
 
             Divider()
 

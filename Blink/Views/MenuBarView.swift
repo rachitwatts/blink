@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 
 /// Menu bar dropdown content
@@ -87,7 +88,9 @@ struct MenuBarView: View {
             // MARK: Quit
 
             Button("Quit Blink") {
+                #if os(macOS)
                 NSApplication.shared.terminate(nil)
+                #endif
             }
             .keyboardShortcut("q")
         }
@@ -120,3 +123,4 @@ struct MenuBarView: View {
     MenuBarView()
         .frame(width: 200)
 }
+#endif

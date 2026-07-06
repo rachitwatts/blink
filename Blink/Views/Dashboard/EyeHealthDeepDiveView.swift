@@ -130,7 +130,7 @@ struct EyeHealthDeepDiveView: View {
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color(nsColor: .separatorColor).opacity(0.3))
+                        .fill(Color.platformSeparator.opacity(0.3))
                         .frame(height: 8)
 
                     RoundedRectangle(cornerRadius: 4)
@@ -199,7 +199,7 @@ struct EyeHealthDeepDiveView: View {
             .buttonStyle(.plain)
         }
         .padding(12)
-        .background(Color(nsColor: .controlBackgroundColor))
+        .background(Color.platformControlBackground)
         .cornerRadius(8)
     }
 

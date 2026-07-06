@@ -1,5 +1,7 @@
 import SwiftUI
+#if os(macOS)
 import AppKit
+#endif
 
 /// First-launch onboarding view
 ///
@@ -134,11 +136,16 @@ struct OnboardingView: View {
     // MARK: - Helpers
 
     private func isAccessibilityEnabled() -> Bool {
+        #if os(macOS)
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: false] as CFDictionary
         return AXIsProcessTrustedWithOptions(options)
+        #else
+        return false
+        #endif
     }
 
     private func requestAccessibilityPermission() {
+        #if os(macOS)
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         let granted = AXIsProcessTrustedWithOptions(options)
 
@@ -146,11 +153,11 @@ struct OnboardingView: View {
             shortcutsEnabled = true
             HotkeyManager.shared.startListening()
         } else {
-            // Open System Settings if prompt didn't work
             if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
                 NSWorkspace.shared.open(url)
             }
         }
+        #endif
     }
 }
 

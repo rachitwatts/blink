@@ -1,3 +1,4 @@
+#if os(macOS)
 import SwiftUI
 import SwiftData
 import Combine
@@ -51,6 +52,12 @@ struct BlinkApp: App {
 
         // Start timer engine
         TimerEngine.shared.start()
+
+        // Start Bonjour advertiser for Vision Pro sync
+        BonjourAdvertiser.shared.start()
+
+        // Start iCloud KVS sync for cross-device settings
+        CloudKVSSync.shared.start()
 
         // Start call detection and calendar monitoring
         CallDetector.shared.start()
@@ -227,3 +234,5 @@ final class BlinkAppStorage {
     var cancellables = Set<AnyCancellable>()
     private init() {}
 }
+
+#endif

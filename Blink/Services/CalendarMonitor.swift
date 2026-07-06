@@ -1,11 +1,7 @@
+#if os(macOS)
 import Foundation
 import EventKit
 import Combine
-
-@MainActor
-protocol CalendarMonitorProtocol: AnyObject {
-    func nextEventStartsWithin(minutes: Int) -> Bool
-}
 
 @MainActor
 final class CalendarMonitor: ObservableObject, CalendarMonitorProtocol {
@@ -105,3 +101,4 @@ final class CalendarMonitor: ObservableObject, CalendarMonitorProtocol {
     }
     #endif
 }
+#endif

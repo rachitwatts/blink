@@ -31,7 +31,7 @@ struct StatCardView: View {
         }
         .frame(minWidth: 100, maxWidth: .infinity)
         .padding(.vertical, 16)
-        .background(Color(nsColor: .controlBackgroundColor))
+        .background(Color.platformControlBackground)
         .cornerRadius(8)
     }
 }

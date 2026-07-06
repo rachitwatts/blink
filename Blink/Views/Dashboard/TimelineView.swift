@@ -33,7 +33,7 @@ struct TimelineView: View {
                 ZStack(alignment: .leading) {
                     // Background
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color(nsColor: .separatorColor).opacity(0.3))
+                        .fill(Color.platformSeparator.opacity(0.3))
 
                     // Segments
                     ForEach(segments) { segment in
@@ -55,7 +55,7 @@ struct TimelineView: View {
             HStack(spacing: 16) {
                 LegendItem(color: .blue, label: "Focus")
                 LegendItem(color: .green.opacity(0.6), label: "Break")
-                LegendItem(color: Color(nsColor: .separatorColor), label: "Idle")
+                LegendItem(color: Color.platformSeparator, label: "Idle")
             }
             .font(.caption2)
         }
@@ -65,7 +65,7 @@ struct TimelineView: View {
         switch type {
         case .focus: return .blue
         case .breakTime: return .green.opacity(0.6)
-        case .idle: return Color(nsColor: .separatorColor)
+        case .idle: return Color.platformSeparator
         }
     }
 }

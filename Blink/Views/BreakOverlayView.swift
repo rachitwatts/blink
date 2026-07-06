@@ -1,5 +1,11 @@
 import SwiftUI
 
+#if os(visionOS)
+extension Notification.Name {
+    static let breakOverlayEscPressed = Notification.Name("breakOverlayEscPressed")
+}
+#endif
+
 /// Full-screen break overlay content
 ///
 /// Shows countdown timer, calming message, and snooze/skip buttons.

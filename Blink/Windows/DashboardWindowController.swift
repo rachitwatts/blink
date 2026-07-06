@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import SwiftUI
 import SwiftData
@@ -81,3 +82,5 @@ final class DashboardWindowController {
         window.contentViewController = NSHostingController(rootView: dashboardView)
     }
 }
+
+#endif

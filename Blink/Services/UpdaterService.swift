@@ -1,3 +1,4 @@
+#if os(macOS)
 import Foundation
 import Sparkle
 
@@ -22,3 +23,5 @@ final class UpdaterService: ObservableObject {
         updaterController.updater.canCheckForUpdates
     }
 }
+
+#endif

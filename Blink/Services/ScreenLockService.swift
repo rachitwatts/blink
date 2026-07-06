@@ -1,11 +1,6 @@
+#if os(macOS)
 import Foundation
 import Darwin
-
-/// Abstraction over locking the screen, so TimerEngine can be tested without
-/// actually locking the machine (a spy records calls instead).
-protocol ScreenLocking {
-    func lockScreen()
-}
 
 /// Production implementation backed by `ScreenLockService`.
 struct SystemScreenLock: ScreenLocking {
@@ -39,3 +34,5 @@ struct ScreenLockService {
         lock()
     }
 }
+
+#endif
