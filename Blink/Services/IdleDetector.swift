@@ -1,10 +1,6 @@
+#if os(macOS)
 import Foundation
 import CoreGraphics
-
-/// Protocol for providing idle time, enabling test injection
-protocol IdleTimeProvider {
-    func getIdleTime() -> TimeInterval
-}
 
 /// Service for detecting system-wide idle time
 ///
@@ -58,3 +54,5 @@ final class IdleDetector: IdleTimeProvider {
         return getIdleTime() >= threshold
     }
 }
+
+#endif

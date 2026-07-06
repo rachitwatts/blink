@@ -1,6 +1,8 @@
 import Foundation
 import Combine
+#if os(macOS)
 import AppKit
+#endif
 
 /// Core timer engine that manages the work/break cycle
 ///
@@ -291,6 +293,20 @@ final class TimerEngine: ObservableObject {
 
     /// Called every tick - the heart of the timer logic
     func tick() {
+        #if os(visionOS)
+        let browser = BonjourBrowser.shared
+        if browser.isSynced && !browser.isLeader {
+            browser.broadcastCurrentState()
+            return
+        }
+        #elseif os(macOS)
+        let advertiser = BonjourAdvertiser.shared
+        if advertiser.hasClients && !advertiser.isLeader {
+            advertiser.broadcastCurrentState()
+            return
+        }
+        #endif
+
         logToFile("tick: state=\(appState.timerState), snoozeRemaining=\(appState.snoozeRemainingSeconds)")
 
         switch appState.timerState {
@@ -308,6 +324,12 @@ final class TimerEngine: ObservableObject {
         case .snoozeRunning:
             handleSnoozeRunningTick()
         }
+
+        #if os(macOS)
+        BonjourAdvertiser.shared.broadcastCurrentState()
+        #elseif os(visionOS)
+        browser.broadcastCurrentState()
+        #endif
     }
 
     /// Debug helper: append a line to a debug log file.
@@ -458,7 +480,9 @@ final class TimerEngine: ObservableObject {
                 configuredDuration: settings.workDurationSeconds
             )
             AnalyticsService.shared.recordInCallNudgeShown(breakId: currentBreakId)
+            #if os(macOS)
             InCallNudgeWindowController.shared.show(duration: 4)
+            #endif
             appState.workElapsedSeconds = 0
             nudgeScheduler.resetTimer()
             return
@@ -643,7 +667,8 @@ final class TimerEngine: ObservableObject {
 
     /// Play the break notification sound
     private func playBreakSound() {
-        // Use system sound "Glass" - a gentle chime
+        #if os(macOS)
         NSSound(named: "Glass")?.play()
+        #endif
     }
 }

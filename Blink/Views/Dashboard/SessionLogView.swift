@@ -55,7 +55,7 @@ struct SessionLogView: View {
             }
         }
         .padding()
-        .background(Color(nsColor: .controlBackgroundColor))
+        .background(Color.platformControlBackground)
         .cornerRadius(8)
     }
 }

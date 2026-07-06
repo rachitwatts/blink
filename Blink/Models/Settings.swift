@@ -1,11 +1,15 @@
 import Foundation
 import SwiftUI
+import Combine
 
 /// Centralized settings storage using UserDefaults via @AppStorage
 ///
 /// Usage: Access via `Settings.shared` singleton
 /// All properties automatically persist to UserDefaults
 final class Settings: ObservableObject {
+
+    // @AppStorage doesn't synthesize ObservableObject; provide it explicitly
+    let objectWillChange = ObservableObjectPublisher()
 
     // MARK: - Singleton
 

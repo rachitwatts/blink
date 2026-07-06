@@ -93,7 +93,9 @@ struct IntegrationsSettingsSection: View {
                                     toggleCalendar(calendar.calendarIdentifier, checked: checked)
                                 }
                             ))
+                            #if os(macOS)
                             .toggleStyle(.checkbox)
+                            #endif
                         }
                     }
                 }

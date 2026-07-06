@@ -1,20 +1,8 @@
+#if os(macOS)
 import Foundation
 import AVFoundation
 import CoreAudio
 import Combine
-
-enum CallContext {
-    case none
-    case onCall
-    case screenSharing
-}
-
-@MainActor
-protocol CallDetectorProtocol: AnyObject {
-    var callContext: CallContext { get }
-    var isOnCall: Bool { get }
-    var isScreenSharing: Bool { get }
-}
 
 @MainActor
 final class CallDetector: ObservableObject, CallDetectorProtocol {
@@ -143,3 +131,5 @@ final class CallDetector: ObservableObject, CallDetectorProtocol {
     }
     #endif
 }
+
+#endif

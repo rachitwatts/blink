@@ -1,5 +1,7 @@
 import SwiftUI
+#if os(macOS)
 import AppKit
+#endif
 
 /// Keyboard shortcuts section: read-only display + permission status
 struct ShortcutsSettingsSection: View {
@@ -41,11 +43,16 @@ struct ShortcutsSettingsSection: View {
     }
 
     private func isAccessibilityEnabled() -> Bool {
+        #if os(macOS)
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: false] as CFDictionary
         return AXIsProcessTrustedWithOptions(options)
+        #else
+        return false
+        #endif
     }
 
     private func requestAccessibilityPermission() {
+        #if os(macOS)
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         let granted = AXIsProcessTrustedWithOptions(options)
 
@@ -56,6 +63,7 @@ struct ShortcutsSettingsSection: View {
                 NSWorkspace.shared.open(url)
             }
         }
+        #endif
     }
 }
 

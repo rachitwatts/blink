@@ -3,11 +3,6 @@ import EventKit
 import Combine
 
 @MainActor
-protocol CalendarMonitorProtocol: AnyObject {
-    func nextEventStartsWithin(minutes: Int) -> Bool
-}
-
-@MainActor
 final class CalendarMonitor: ObservableObject, CalendarMonitorProtocol {
 
     static let shared = CalendarMonitor()

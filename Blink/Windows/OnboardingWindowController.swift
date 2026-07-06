@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import SwiftUI
 
@@ -77,3 +78,5 @@ final class OnboardingWindowController {
         print("[Onboarding] Closed onboarding window")
     }
 }
+
+#endif

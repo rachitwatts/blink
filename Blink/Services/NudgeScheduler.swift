@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 /// Manages micro nudge timing during work sessions
 ///
@@ -11,6 +12,8 @@ import Foundation
 /// Usage: Call `NudgeScheduler.shared.tick()` from TimerEngine during active work
 @MainActor
 final class NudgeScheduler: ObservableObject {
+
+    let objectWillChange = ObservableObjectPublisher()
 
     // MARK: - Singleton
 

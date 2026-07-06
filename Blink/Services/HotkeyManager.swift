@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import Carbon
 
@@ -147,3 +148,5 @@ final class HotkeyManager {
         }
     }
 }
+
+#endif

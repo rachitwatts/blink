@@ -1,5 +1,7 @@
 import SwiftUI
+#if os(macOS)
 import AppKit
+#endif
 
 /// Settings view with sidebar navigation and Liquid Glass styling
 struct SettingsView: View {
@@ -22,7 +24,7 @@ struct SettingsView: View {
                     .padding(24)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .background(Color(nsColor: .windowBackgroundColor))
+            .background(Color.platformWindowBackground)
             .animation(.easeInOut(duration: 0.15), value: selectedSection)
         }
         .frame(width: 700, height: 480)

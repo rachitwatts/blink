@@ -1,3 +1,4 @@
+#if os(macOS)
 import AppKit
 import SwiftUI
 
@@ -161,3 +162,5 @@ final class NudgeWindowController {
         panel = nil
     }
 }
+
+#endif
