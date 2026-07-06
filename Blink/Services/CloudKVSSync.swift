@@ -7,6 +7,7 @@ final class CloudKVSSync {
     static let shared = CloudKVSSync()
 
     private let kvs = NSUbiquitousKeyValueStore.default
+    private let defaults: UserDefaults
     private var cancellables = Set<AnyCancellable>()
     private var isSyncingFromCloud = false
 
@@ -37,7 +38,9 @@ final class CloudKVSSync {
         "breakContentMode": String.self,
     ]
 
-    private init() {}
+    private init(defaults: UserDefaults = .init(suiteName: Bundle.main.bundleIdentifier ?? "com.watts.blink") ?? .init()) {
+        self.defaults = defaults
+    }
 
     func start() {
         #if os(visionOS)
@@ -80,7 +83,7 @@ final class CloudKVSSync {
         isSyncingFromCloud = true
         defer { isSyncingFromCloud = false }
 
-        let defaults = UserDefaults.standard
+        let defaults = self.defaults
         for key in Self.syncedKeys.keys {
             guard let cloudValue = kvs.object(forKey: key) else { continue }
             let localValue = defaults.object(forKey: key)
@@ -108,7 +111,7 @@ final class CloudKVSSync {
     private func pushToCloud() {
         guard !isSyncingFromCloud else { return }
 
-        let defaults = UserDefaults.standard
+        let defaults = self.defaults
         var changed = false
         for key in Self.syncedKeys.keys {
             let localValue = defaults.object(forKey: key)
